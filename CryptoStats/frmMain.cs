@@ -34,38 +34,65 @@ namespace CryptoStats
                 }
             }
 
+            this.Cursor = Cursors.WaitCursor;
             LoadConfig();
 
-            //Task.Run(() =>
-            //{
-                var workerStats = GetWorkerStats(machines);
-                var workersInfo = GetWorkersInfo(workerStats, true);
-                DisplayWorkerGraph(workerStats[workerTree.SelectedNode.Text], workersInfo[0].MinHash, workersInfo[0].MaxHash);
+            var workerStats = GetWorkerStats(machines);
+            var workersInfo = GetWorkersInfo(workerStats, true);
+            DisplayWorkerGraph(workerStats[workerTree.SelectedNode.Text], workersInfo[0].MinHash, workersInfo[0].MaxHash);
 
+            GetStatsAndBalance();
+            this.Cursor = Cursors.Default;
+        }
+
+        private void GetStatsAndBalance()
+        {
+            try
+            {
                 var rewards24 = GetEzilStats(ezilWallet);
                 float eth = rewards24.Where(c => c.coin.Equals("eth")).Sum(s => s.amount);
                 float zil = rewards24.Where(c => c.coin.Equals("zil")).Sum(s => s.amount);
+                txtEth24h.Text = eth.ToString();
+                txtZil24h.Text = zil.ToString();
 
                 var balances = GetBalances(ezilWallet);
+                lblEthBalance.Text = $"Unpaid ETH: {balances.eth}";
+                lblZilBalance.Text = $"Unpaid ZIL: {balances.zil}";
+
+                DisplayRewardGridInfo(rewards24);
 
                 Display24hEarnings(eth, zil, balances);
-                DisplayRewardGridInfo(rewards24);
-            //});
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void LoadConfig()
         {
             machines = JsonConvert.DeserializeObject<List<Machine>>(Properties.Settings.Default.Machines);
             apiKey = Properties.Settings.Default.CoinApiKey;
-            ezilWallet = JsonConvert.DeserializeObject<Wallet>(Properties.Settings.Default.EzilWallet);
+            ezilWallet = JsonConvert.DeserializeObject<Wallet>(Properties.Settings.Default.EzilWallet);      
         }
 
         private static EzilBalance GetBalances(Wallet ezilWallet)
         {
-            EzilAPI ezilAPI = new EzilAPI(ezilWallet.Eth, ezilWallet.Zil);
-            string response = ezilAPI.GetBalances();
-            var balances = JsonConvert.DeserializeObject<EzilBalance>(response);
-            return balances;
+            try
+            {
+                EzilAPI ezilAPI = new EzilAPI(ezilWallet.Eth, ezilWallet.Zil);
+                string response = ezilAPI.GetBalances();
+                var balances = JsonConvert.DeserializeObject<EzilBalance>(response);
+                return balances;
+            }
+            catch (Exception ex)
+            {
+                if (ex is AggregateException)
+                {
+                    throw new Exception($"Cannot retrieve Ezil Wallet balance. Make sure that your wallet addresses are correct.{Environment.NewLine}{ex.InnerException.Message}");
+                }
+                throw new Exception($"Cannot retrieve Ezil Wallet balance. Make sure that your wallet addresses are correct.{Environment.NewLine}{ex.Message}");
+            }
         }
 
         private List<WorkerInfo> GetWorkersInfo(Dictionary<string, TRexSummary> workerStats, bool updateTotalHash = true)
@@ -77,8 +104,8 @@ namespace CryptoStats
                 {
                     WorkerName = worker.Key,
                     HashPower = worker.Value.hashrate,
-                    MaxHash = worker.Value.velocities.hashrate.Max(c => c[1]),
-                    MinHash = worker.Value.velocities.hashrate.Min(c => c[1])
+                    MaxHash = (worker.Value.velocities == null ? 0 : worker.Value.velocities.hashrate.Max(c => c[1])),
+                    MinHash = (worker.Value.velocities == null ? 0 : worker.Value.velocities.hashrate.Min(c => c[1]))
                 });
             }
 
@@ -145,24 +172,31 @@ namespace CryptoStats
 
         private void Display24hEarnings(float eth, float zil, EzilBalance balances)
         {
-            CoinListings coinListings = GetCryptoPrices(apiKey);
-            float ethPrice = coinListings.data.Where(d => d.symbol.Equals("ETH")).FirstOrDefault().quote.USD.price;
-            float zilPrice = coinListings.data.Where(d => d.symbol.Equals("ZIL")).FirstOrDefault().quote.USD.price;
-            txtEth24h.Text = eth.ToString();
-            txtZil24h.Text = zil.ToString();
-            float ethValue = ethPrice * eth;
-            float zilValue = zilPrice * zil;
-            lblEthUsd.Text = $"= ${ethValue:0.00} @ ${ethPrice:0.00}";
-            lblZilUsd.Text = $"= ${zilValue:0.00} @ ${zilPrice:0.00}";
-            lblTotal.Text = $"= ${(ethValue + zilValue):0.00}/d, {((ethValue + zilValue) * 7):0.00}/w, {((ethValue + zilValue) * 30):0.00}/m, {((ethValue + zilValue) * 365):0.00}/y";
+            try
+            {
+                CoinListings coinListings = GetCryptoPrices(apiKey);
+                float ethPrice = coinListings.data.Where(d => d.symbol.Equals("ETH")).FirstOrDefault().quote.USD.price;
+                float zilPrice = coinListings.data.Where(d => d.symbol.Equals("ZIL")).FirstOrDefault().quote.USD.price;
+                float ethValue = ethPrice * eth;
+                float zilValue = zilPrice * zil;
+                lblEthUsd.Text = $"= ${ethValue:0.00} @ ${ethPrice:0.00}";
+                lblZilUsd.Text = $"= ${zilValue:0.00} @ ${zilPrice:0.00}";
+                lblTotal.Text = $"= ${(ethValue + zilValue):0.00}/d, {((ethValue + zilValue) * 7):0.00}/w, {((ethValue + zilValue) * 30):0.00}/m, {((ethValue + zilValue) * 365):0.00}/y";
 
-            float ethBalanceValue = balances.eth * ethPrice;
-            float zilBalanceValue = balances.zil * zilPrice;
-            lblEthBalance.Text = $"Unpaid ETH: {balances.eth}"; 
-            lblEthValue.Text = $"({ethBalanceValue:0.00} USD)";
-            lblZilBalance.Text = $"Unpaid ZIL: {balances.zil}"; 
-            lblZilValue.Text = $"({zilBalanceValue:0.00} USD)";
-            lblTotalBalance.Text = $"= ({(ethBalanceValue + zilBalanceValue):0.00} USD)";
+                float ethBalanceValue = balances.eth * ethPrice;
+                float zilBalanceValue = balances.zil * zilPrice;
+                lblEthValue.Text = $"({ethBalanceValue:0.00} USD)";
+                lblZilValue.Text = $"({zilBalanceValue:0.00} USD)";
+                lblTotalBalance.Text = $"= ({(ethBalanceValue + zilBalanceValue):0.00} USD)";
+            }
+            catch (Exception ex)
+            {
+                if (ex is AggregateException)
+                {
+                    throw new Exception($"Cannot retrieve cryptocurrency prices. Make sure that the API key is correct.{Environment.NewLine}{ex.InnerException.Message}");
+                }
+                throw new Exception($"Cannot retrieve cryptocurrency prices. Make sure that the API key is correct.{Environment.NewLine}{ex.Message}");
+            }
         }
 
         private static CoinListings GetCryptoPrices(string apiKey)
@@ -175,29 +209,40 @@ namespace CryptoStats
 
         private static List<EzilReward> GetEzilStats(Wallet ezilWallet)
         {
-            EzilAPI ezilAPI = new EzilAPI(ezilWallet.Eth, ezilWallet.Zil);
-            List<EzilReward> ezilRewards = new List<EzilReward>();
-            int page = 1;
-            do
+            try
             {
-                string response = ezilAPI.GetRewards(page++, 999, "eth");
-                var rewards = JsonConvert.DeserializeObject<List<EzilReward>>(response);
-                ezilRewards.AddRange(rewards/*.Where(r => r.coin.Equals("eth"))*/);
-            } while (ezilRewards.Min(c => c.created_at) >= DateTime.UtcNow.AddDays(-1));
+                EzilAPI ezilAPI = new EzilAPI(ezilWallet.Eth, ezilWallet.Zil);
+                List<EzilReward> ezilRewards = new List<EzilReward>();
+                int page = 1;
+                do
+                {
+                    string response = ezilAPI.GetRewards(page++, 999, "eth");
+                    var rewards = JsonConvert.DeserializeObject<List<EzilReward>>(response);
+                    ezilRewards.AddRange(rewards/*.Where(r => r.coin.Equals("eth"))*/);
+                } while (ezilRewards.Min(c => c.created_at) >= DateTime.UtcNow.AddDays(-1));
 
-            var rewards24 = ezilRewards.Where(r => r.created_at >= DateTime.UtcNow.AddDays(-1)).ToList();
+                var rewards24 = ezilRewards.Where(r => r.created_at >= DateTime.UtcNow.AddDays(-1)).ToList();
 
-            page = 1;
-            ezilRewards.Clear();
-            do
+                page = 1;
+                ezilRewards.Clear();
+                do
+                {
+                    string response = ezilAPI.GetRewards(page++, 999, "zil");
+                    var rewards = JsonConvert.DeserializeObject<List<EzilReward>>(response);
+                    ezilRewards.AddRange(rewards/*.Where(r => r.coin.Equals("eth"))*/);
+                } while (ezilRewards.Min(c => c.created_at) >= DateTime.UtcNow.AddDays(-1));
+                rewards24.AddRange(ezilRewards.Where(r => r.created_at >= DateTime.UtcNow.AddDays(-1)).ToList());
+
+                return rewards24;
+            }
+            catch (Exception ex)
             {
-                string response = ezilAPI.GetRewards(page++, 999, "zil");
-                var rewards = JsonConvert.DeserializeObject<List<EzilReward>>(response);
-                ezilRewards.AddRange(rewards/*.Where(r => r.coin.Equals("eth"))*/);
-            } while (ezilRewards.Min(c => c.created_at) >= DateTime.UtcNow.AddDays(-1));
-            rewards24.AddRange(ezilRewards.Where(r => r.created_at >= DateTime.UtcNow.AddDays(-1)).ToList());
-
-            return rewards24;
+                if (ex is AggregateException)
+                {
+                    throw new Exception($"Cannot retrieve Ezil Wallet details. Make sure that your wallet addresses are correct.{Environment.NewLine}{ex.InnerException.Message}");
+                }
+                throw new Exception($"Cannot retrieve Ezil Wallet details. Make sure that your wallet addresses are correct.{Environment.NewLine}{ex.Message}");
+            }
         }
 
         private Dictionary<string, TRexSummary> GetWorkerStats(List<Machine> machines, bool reloadTree = true)
@@ -206,7 +251,14 @@ namespace CryptoStats
 
             foreach (var machine in machines)
             {
-                workerStats.Add($"{machine}", TRexAPI.GetFullSummary(machine.Host));
+                try
+                {
+                    workerStats.Add(machine.ToString(), TRexAPI.GetFullSummary(machine.Host));
+                }
+                catch 
+                {
+                    workerStats.Add($"{machine} - OFFLINE", new TRexSummary());
+                }
             }
 
             if (reloadTree)
@@ -220,9 +272,12 @@ namespace CryptoStats
                         workerTree.SelectedNode = workerNode;
                     }
 
-                    foreach (var gpu in workerStat.Value.gpus)
+                    if (workerStat.Value.gpus != null)
                     {
-                        workerNode.Nodes.Add($"{gpu.vendor} {gpu.name}: Hash={(gpu.hashrate / 1000000d):0.00}MH/s Temp={gpu.temperature}°C Power={gpu.power}W Efficiency={gpu.efficiency}");
+                        foreach (var gpu in workerStat.Value.gpus)
+                        {
+                            workerNode.Nodes.Add($"{gpu.vendor} {gpu.name}: Hash={(gpu.hashrate / 1000000d):0.00}MH/s Temp={gpu.temperature}°C Power={gpu.power}W Efficiency={gpu.efficiency}");
+                        }
                     }
                     workerNode.Expand();
                 }
@@ -244,7 +299,10 @@ namespace CryptoStats
         }
         private void cmdRefeshGraph_Click(object sender, EventArgs e)
         {
+            this.Cursor = Cursors.WaitCursor;
+
             RefreshTree();
+            this.Cursor = Cursors.Default;
         }
 
         private void RefreshTree()
@@ -258,18 +316,16 @@ namespace CryptoStats
 
         private void cmdRefreshRewards_Click(object sender, EventArgs e)
         {
-            var rewards24 = GetEzilStats(ezilWallet);
-            float eth = rewards24.Where(c => c.coin.Equals("eth")).Sum(s => s.amount);
-            float zil = rewards24.Where(c => c.coin.Equals("zil")).Sum(s => s.amount);
+            this.Cursor = Cursors.WaitCursor;
 
-            var balances = GetBalances(ezilWallet);
-
-            Display24hEarnings(eth, zil, balances);
-            DisplayRewardGridInfo(rewards24);
+            GetStatsAndBalance();
+            this.Cursor = Cursors.Default;
         }
 
         private void cmdCombineGraphs_Click(object sender, EventArgs e)
         {
+            this.Cursor = Cursors.WaitCursor;
+
             var pens = new List<Pen>() { Pens.Blue, Pens.Red, Pens.DarkGreen, Pens.Orange };
             var workerStats = GetWorkerStats(machines, true);
             var workersInfo = GetWorkersInfo(workerStats);
@@ -285,6 +341,7 @@ namespace CryptoStats
                 DisplayWorkerGraph(workerStat.Value, minHash, maxHash, pens[i++], 2, printTimeStamp);
                 printTimeStamp = false;
             }
+            this.Cursor = Cursors.Default;
         }
 
         private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
@@ -295,6 +352,18 @@ namespace CryptoStats
                 LoadConfig();
                 RefreshTree();
             }
+        }
+
+        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            StringBuilder aboutText = new StringBuilder();
+            aboutText.AppendLine("Ezil Estimator");
+            aboutText.AppendLine("Displays Ezil and T-Rex statistics from their respectives APIs and performs day/week/month/year estimates based on the last 24h data.");
+            aboutText.AppendLine();
+            aboutText.AppendLine("Developed by Tulio Gonçalves. ©2021");
+            aboutText.AppendLine("https://github.com/TulioAdriano/EzilEstimator");
+
+            MessageBox.Show(aboutText.ToString(), "About", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
     }
 

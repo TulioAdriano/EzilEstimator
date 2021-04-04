@@ -68,7 +68,7 @@
             this.dataGridView.Name = "dataGridView";
             this.dataGridView.RowHeadersVisible = false;
             this.dataGridView.RowHeadersWidth = 82;
-            this.dataGridView.Size = new System.Drawing.Size(969, 772);
+            this.dataGridView.Size = new System.Drawing.Size(1035, 772);
             this.dataGridView.TabIndex = 0;
             // 
             // label1
@@ -143,7 +143,7 @@
             // 
             // cmdRefreshRewards
             // 
-            this.cmdRefreshRewards.Location = new System.Drawing.Point(2455, 298);
+            this.cmdRefreshRewards.Location = new System.Drawing.Point(2521, 298);
             this.cmdRefreshRewards.Margin = new System.Windows.Forms.Padding(6);
             this.cmdRefreshRewards.Name = "cmdRefreshRewards";
             this.cmdRefreshRewards.Size = new System.Drawing.Size(150, 46);
@@ -166,7 +166,7 @@
             // lblHashPower
             // 
             this.lblHashPower.AutoSize = true;
-            this.lblHashPower.Location = new System.Drawing.Point(21, 620);
+            this.lblHashPower.Location = new System.Drawing.Point(15, 579);
             this.lblHashPower.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.lblHashPower.Name = "lblHashPower";
             this.lblHashPower.Size = new System.Drawing.Size(262, 25);
@@ -249,7 +249,7 @@
             this.helpToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(2625, 40);
+            this.menuStrip1.Size = new System.Drawing.Size(2686, 42);
             this.menuStrip1.TabIndex = 13;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -286,14 +286,15 @@
             this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.aboutToolStripMenuItem});
             this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
-            this.helpToolStripMenuItem.Size = new System.Drawing.Size(85, 36);
+            this.helpToolStripMenuItem.Size = new System.Drawing.Size(85, 38);
             this.helpToolStripMenuItem.Text = "&Help";
             // 
             // aboutToolStripMenuItem
             // 
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(214, 44);
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(359, 44);
             this.aboutToolStripMenuItem.Text = "&About";
+            this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
             // lblZilValue
             // 
@@ -319,7 +320,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(192F, 192F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(2625, 1144);
+            this.ClientSize = new System.Drawing.Size(2686, 1144);
             this.Controls.Add(this.lblEthValue);
             this.Controls.Add(this.lblZilValue);
             this.Controls.Add(this.lblTotalBalance);
