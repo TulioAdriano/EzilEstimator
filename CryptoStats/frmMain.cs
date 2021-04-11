@@ -16,6 +16,7 @@ namespace CryptoStats
         List<Machine> machines = new List<Machine>();
         string apiKey = string.Empty;
         Wallet ezilWallet = new Wallet();
+        private double hashPower;
 
         public frmMain()
         {
@@ -105,19 +106,27 @@ namespace CryptoStats
                     WorkerName = worker.Key,
                     HashPower = worker.Value.hashrate,
                     MaxHash = (worker.Value.velocities == null ? 0 : worker.Value.velocities.hashrate.Max(c => c[1])),
-                    MinHash = (worker.Value.velocities == null ? 0 : worker.Value.velocities.hashrate.Min(c => c[1]))
+                    MinHash = (worker.Value.velocities == null ? 0 : worker.Value.velocities.hashrate.Min(c => c[1])),
+                    PowerUsage = (long)Math.Round( worker.Value.velocities.power.Average(c=>c[1]))
                 });
             }
 
             if (updateTotalHash)
             {
-                lblHashPower.Text = $"Total Hash Power: {(workersInfo.Sum(c => c.HashPower) / 1000000d):0.00} MH/s";
+                hashPower = (workersInfo.Sum(c => c.HashPower) / 1000000d);
+                lblHashPower.Text = $"Total Hash Rate: {hashPower:0.00} MH/s";
+                lblPowerUsage.Text= $"Total Power Usage: {(workersInfo.Sum(c => c.PowerUsage) / 1000d):0.00} KW/h";
             }
 
             return workersInfo;
         }
 
         private void DisplayWorkerGraph(TRexSummary workerStat, long minHash, long maxHash, Pen pen = null, int zoom = 2, bool printTimeStamp = true)
+        {
+            DisplayWorkerGraph(workerStat.velocities.hashrate, minHash, maxHash, pen, zoom, printTimeStamp);
+        }
+
+        private void DisplayWorkerGraph(List<long[]> hashrate, long minHash, long maxHash, Pen pen = null, int zoom = 2, bool printTimeStamp = true)
         {
             Pen graphPen = pen ?? Pens.Black;
             var font = new Font("Arial", 8);
@@ -127,14 +136,14 @@ namespace CryptoStats
             }
             using (var gfx = Graphics.FromImage(picWorkerGraph.Image))
             {
-                int space = (int)Math.Round((800d * zoom) / workerStat.velocities.hashrate.Count());
-                int timeStep = workerStat.velocities.hashrate.Count() / 4;
+                int space = (int)Math.Round((800d * zoom) / hashrate.Count());
+                int timeStep = hashrate.Count() / 4;
                 List<int> timeSteps = new List<int>() { 0, timeStep, timeStep * 2, timeStep * 3 };
                 int x = 0;
                 int y = 0;
                 long hashDiff = maxHash - minHash;
                 int i = 0;
-                foreach (var hash in workerStat.velocities.hashrate)
+                foreach (var hash in hashrate)
                 {
                     int newY = (180 * zoom) - (int)(Math.Round(((double)(hash[1] - minHash) / (double)hashDiff) * (180 * zoom)));
                     gfx.DrawLine(graphPen, x, y, x + space, newY);
@@ -148,7 +157,7 @@ namespace CryptoStats
                 }
                 if (printTimeStamp)
                 {
-                    var lastTimeStamp = DateTimeOffset.FromUnixTimeSeconds(workerStat.velocities.hashrate.Last()[0]).DateTime.ToLocalTime();
+                    var lastTimeStamp = DateTimeOffset.FromUnixTimeSeconds(hashrate.Last()[0]).DateTime.ToLocalTime();
                     gfx.DrawString($"{lastTimeStamp.ToShortDateString()} {lastTimeStamp.ToShortTimeString()}", font, Brushes.Red, x, (180 * zoom));
                 }
 
@@ -174,9 +183,15 @@ namespace CryptoStats
         {
             try
             {
-                CoinListings coinListings = GetCryptoPrices(apiKey);
-                float ethPrice = coinListings.data.Where(d => d.symbol.Equals("ETH")).FirstOrDefault().quote.USD.price;
-                float zilPrice = coinListings.data.Where(d => d.symbol.Equals("ZIL")).FirstOrDefault().quote.USD.price;
+                //CoinListings coinListings = GetCryptoPrices(apiKey);
+                //float ethPrice = coinListings.data.Where(d => d.symbol.Equals("ETH")).FirstOrDefault().quote.USD.price;
+                //float zilPrice = coinListings.data.Where(d => d.symbol.Equals("ZIL")).FirstOrDefault().quote.USD.price;
+                MinerstatsAPI minerstatsAPI = new MinerstatsAPI();
+                var coinInfoList = minerstatsAPI.GetCoinInfo(new string[] { "ETH", "ZIL" });
+                var coinInfoCurrEth = coinInfoList.Where(d => d.coin.Equals("ETH")).FirstOrDefault();
+
+                float ethPrice = coinInfoList.Where(d => d.coin.Equals("ETH")).FirstOrDefault().price;
+                float zilPrice = coinInfoList.Where(d => d.coin.Equals("ZIL")).FirstOrDefault().price;
                 float ethValue = ethPrice * eth;
                 float zilValue = zilPrice * zil;
                 lblEthUsd.Text = $"= ${ethValue:0.00} @ ${ethPrice:0.00}";
@@ -188,14 +203,24 @@ namespace CryptoStats
                 lblEthValue.Text = $"({ethBalanceValue:0.00} USD)";
                 lblZilValue.Text = $"({zilBalanceValue:0.00} USD)";
                 lblTotalBalance.Text = $"= ({(ethBalanceValue + zilBalanceValue):0.00} USD)";
+
+                var coinInfo24 = minerstatsAPI.GetCoinHistory();
+                lblNetHash.Text = $"Network Hashrate: {coinInfoCurrEth.network_hashrate/1000000000000} TH/s";
+                lblBlockReward.Text = $"Block Reward: {coinInfoCurrEth.reward_block} ETH";
+                float ethCur = ((coinInfoCurrEth.reward * 1000000 * 0.99f) * 24) * (float)hashPower;
+                lblEthCurProfit.Text = $"Current Profitability: {ethCur} ETH ({ethCur * ethPrice:0.00} USD)";
+                float eth24h = ((coinInfo24.reward * 1000000 * 0.99f) * 24) * (float)hashPower;
+                lblEthProfit.Text = $"24h Profitability: {eth24h} ETH ({eth24h * ethPrice:0.00} USD)";
+                float ezilDiff = eth - eth24h;
+                lblEzilDiff.Text = $"Difference to Ezil: {ezilDiff} ETH ({ezilDiff * ethPrice:0.00} USD)";
             }
             catch (Exception ex)
             {
                 if (ex is AggregateException)
                 {
-                    throw new Exception($"Cannot retrieve cryptocurrency prices. Make sure that the API key is correct.{Environment.NewLine}{ex.InnerException.Message}");
+                    throw new Exception($"Cannot retrieve cryptocurrency prices. Try again later.{Environment.NewLine}{ex.InnerException.Message}");
                 }
-                throw new Exception($"Cannot retrieve cryptocurrency prices. Make sure that the API key is correct.{Environment.NewLine}{ex.Message}");
+                throw new Exception($"Cannot retrieve cryptocurrency prices. Try again later.{Environment.NewLine}{ex.Message}");
             }
         }
 
@@ -253,11 +278,15 @@ namespace CryptoStats
             {
                 try
                 {
-                    workerStats.Add(machine.ToString(), TRexAPI.GetFullSummary(machine.Host));
+                    if (machine.Enabled)
+                    {
+                        workerStats.Add(machine.ToString(), TRexAPI.GetFullSummary(machine.Host));
+                    }
                 }
-                catch 
+                catch
                 {
                     workerStats.Add($"{machine} - OFFLINE", new TRexSummary());
+                    machine.Enabled = false;
                 }
             }
 
@@ -365,6 +394,59 @@ namespace CryptoStats
 
             MessageBox.Show(aboutText.ToString(), "About", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
+
+        private void cmdMergeGraphs_Click(object sender, EventArgs e)
+        {
+            List<long[]> hashRates = new List<long[]>();
+            DateTime utcNow = DateTime.UtcNow;
+            var trexData = GetWorkerStats(machines, false);
+            int granularity = (int)txtGranularity.Value;
+            for (int seconds = 3600; seconds > 0; seconds-= granularity)
+            {
+                var timeStart = utcNow.AddSeconds(-seconds);
+                var timeEnd = timeStart.AddSeconds(granularity);
+
+                long hashRate = 0;
+                foreach (var item in trexData)
+                {
+                    var worker = item.Value;
+                    if (item.Value.velocities == null)
+                    {
+                        continue;
+                    }
+                    var result = worker.velocities.hashrate.Where(c => c[0] >= timeStart.ToUnixTimeSeconds()
+                                                                     && c[0] <= timeEnd.ToUnixTimeSeconds());
+                    if (result.Count().Equals(0)) 
+                    { 
+                        continue; 
+                    }
+                    
+                    var avgRate = result.Average(c => c[1]);
+                    hashRate += (long)Math.Round(avgRate);
+                }
+
+                hashRates.Add(new long[2] { timeStart.ToUnixTimeSeconds(), hashRate });
+            }
+
+            DisplayWorkerGraph(hashRates, hashRates.Min(c => c[1]), hashRates.Max(c => c[1]));
+        }
+
+        private void dataGridView_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            if (e.Value is DateTime)
+            {
+                DateTime value = (DateTime)e.Value;
+                switch (value.Kind)
+                {
+                    case DateTimeKind.Unspecified:
+                        e.Value = DateTime.SpecifyKind(value, DateTimeKind.Utc).ToLocalTime();
+                        break;
+                    case DateTimeKind.Utc:
+                        e.Value = value.ToLocalTime();
+                        break;
+                }
+            }
+        }
     }
 
     public static class Extensions
@@ -393,6 +475,11 @@ namespace CryptoStats
         }
 
         public long MinHash
+        {
+            get; set;
+        }
+
+        public long PowerUsage
         {
             get; set;
         }

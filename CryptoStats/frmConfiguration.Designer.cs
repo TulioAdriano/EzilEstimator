@@ -33,7 +33,7 @@ namespace CryptoStats
             this.cmdAddMachine = new System.Windows.Forms.Button();
             this.cmdOk = new System.Windows.Forms.Button();
             this.cmdCancel = new System.Windows.Forms.Button();
-            this.Machines = new System.Windows.Forms.GroupBox();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.txtNickname = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -45,7 +45,7 @@ namespace CryptoStats
             this.txtEth = new System.Windows.Forms.TextBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.txtApiKey = new System.Windows.Forms.TextBox();
-            this.Machines.SuspendLayout();
+            this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.SuspendLayout();
@@ -90,20 +90,20 @@ namespace CryptoStats
             this.cmdCancel.Text = "Cancel";
             this.cmdCancel.UseVisualStyleBackColor = true;
             // 
-            // Machines
+            // groupBox1
             // 
-            this.Machines.Controls.Add(this.txtNickname);
-            this.Machines.Controls.Add(this.label4);
-            this.Machines.Controls.Add(this.label3);
-            this.Machines.Controls.Add(this.txtHost);
-            this.Machines.Controls.Add(this.lstMachines);
-            this.Machines.Controls.Add(this.cmdAddMachine);
-            this.Machines.Location = new System.Drawing.Point(12, 230);
-            this.Machines.Name = "Machines";
-            this.Machines.Size = new System.Drawing.Size(674, 321);
-            this.Machines.TabIndex = 3;
-            this.Machines.TabStop = false;
-            this.Machines.Text = "groupBox1";
+            this.groupBox1.Controls.Add(this.txtNickname);
+            this.groupBox1.Controls.Add(this.label4);
+            this.groupBox1.Controls.Add(this.label3);
+            this.groupBox1.Controls.Add(this.txtHost);
+            this.groupBox1.Controls.Add(this.lstMachines);
+            this.groupBox1.Controls.Add(this.cmdAddMachine);
+            this.groupBox1.Location = new System.Drawing.Point(12, 230);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(674, 321);
+            this.groupBox1.TabIndex = 3;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Machines (T-Rex)";
             // 
             // txtNickname
             // 
@@ -192,7 +192,7 @@ namespace CryptoStats
             this.groupBox3.Size = new System.Drawing.Size(674, 82);
             this.groupBox3.TabIndex = 4;
             this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "CoinMarketCap API Key";
+            this.groupBox3.Text = "CoinMarketCap API Key (Currently Unused)";
             // 
             // txtApiKey
             // 
@@ -211,7 +211,7 @@ namespace CryptoStats
             this.ClientSize = new System.Drawing.Size(697, 636);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
-            this.Controls.Add(this.Machines);
+            this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.cmdCancel);
             this.Controls.Add(this.cmdOk);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
@@ -221,8 +221,8 @@ namespace CryptoStats
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Configuration";
             this.Load += new System.EventHandler(this.frmConfiguration_Load);
-            this.Machines.ResumeLayout(false);
-            this.Machines.PerformLayout();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             this.groupBox3.ResumeLayout(false);
@@ -237,7 +237,7 @@ namespace CryptoStats
         private System.Windows.Forms.Button cmdAddMachine;
         private System.Windows.Forms.Button cmdOk;
         private System.Windows.Forms.Button cmdCancel;
-        private System.Windows.Forms.GroupBox Machines;
+        private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;

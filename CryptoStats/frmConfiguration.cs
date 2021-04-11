@@ -93,14 +93,14 @@ namespace CryptoStats
                 return;
             }
 
-            if (txtApiKey.Text.Trim().Equals(string.Empty))
-            {
-                if (MessageBox.Show("Without the API key you won't be able to see prices for ETH and ZIL.",
-                                    "Attention", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning).Equals(DialogResult.Cancel))
-                {
-                    return;
-                }
-            }
+            //if (txtApiKey.Text.Trim().Equals(string.Empty))
+            //{
+            //    if (MessageBox.Show("Without the API key you won't be able to see prices for ETH and ZIL.",
+            //                        "Attention", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning).Equals(DialogResult.Cancel))
+            //    {
+            //        return;
+            //    }
+            //}
 
             Properties.Settings.Default.Machines = JsonConvert.SerializeObject(machines);
             Properties.Settings.Default.CoinApiKey = apiKey;

@@ -55,26 +55,41 @@
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.lblZilValue = new System.Windows.Forms.Label();
             this.lblEthValue = new System.Windows.Forms.Label();
+            this.cmdMergeGraphs = new System.Windows.Forms.Button();
+            this.txtGranularity = new System.Windows.Forms.NumericUpDown();
+            this.label3 = new System.Windows.Forms.Label();
+            this.lblPowerUsage = new System.Windows.Forms.Label();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.lblEthProfit = new System.Windows.Forms.Label();
+            this.lblEzilDiff = new System.Windows.Forms.Label();
+            this.lblNetHash = new System.Windows.Forms.Label();
+            this.lblBlockReward = new System.Windows.Forms.Label();
+            this.lblEthCurProfit = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picWorkerGraph)).BeginInit();
             this.menuStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.txtGranularity)).BeginInit();
+            this.groupBox1.SuspendLayout();
+            this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
             // dataGridView
             // 
             this.dataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView.Location = new System.Drawing.Point(1636, 356);
+            this.dataGridView.Location = new System.Drawing.Point(1636, 392);
             this.dataGridView.Margin = new System.Windows.Forms.Padding(6);
             this.dataGridView.Name = "dataGridView";
             this.dataGridView.RowHeadersVisible = false;
             this.dataGridView.RowHeadersWidth = 82;
-            this.dataGridView.Size = new System.Drawing.Size(1035, 772);
+            this.dataGridView.Size = new System.Drawing.Size(1035, 736);
             this.dataGridView.TabIndex = 0;
+            this.dataGridView.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.dataGridView_CellFormatting);
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(1656, 66);
+            this.label1.Location = new System.Drawing.Point(9, 32);
             this.label1.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(201, 25);
@@ -83,7 +98,7 @@
             // 
             // txtEth24h
             // 
-            this.txtEth24h.Location = new System.Drawing.Point(1870, 60);
+            this.txtEth24h.Location = new System.Drawing.Point(223, 26);
             this.txtEth24h.Margin = new System.Windows.Forms.Padding(6);
             this.txtEth24h.Name = "txtEth24h";
             this.txtEth24h.Size = new System.Drawing.Size(330, 31);
@@ -92,7 +107,7 @@
             // lblEthUsd
             // 
             this.lblEthUsd.AutoSize = true;
-            this.lblEthUsd.Location = new System.Drawing.Point(2216, 66);
+            this.lblEthUsd.Location = new System.Drawing.Point(569, 32);
             this.lblEthUsd.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.lblEthUsd.Name = "lblEthUsd";
             this.lblEthUsd.Size = new System.Drawing.Size(92, 25);
@@ -102,7 +117,7 @@
             // lblEntryCount
             // 
             this.lblEntryCount.AutoSize = true;
-            this.lblEntryCount.Location = new System.Drawing.Point(1631, 325);
+            this.lblEntryCount.Location = new System.Drawing.Point(1631, 361);
             this.lblEntryCount.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblEntryCount.Name = "lblEntryCount";
             this.lblEntryCount.Size = new System.Drawing.Size(95, 25);
@@ -126,13 +141,13 @@
             this.workerTree.Location = new System.Drawing.Point(15, 60);
             this.workerTree.Margin = new System.Windows.Forms.Padding(6);
             this.workerTree.Name = "workerTree";
-            this.workerTree.Size = new System.Drawing.Size(1120, 513);
+            this.workerTree.Size = new System.Drawing.Size(1047, 513);
             this.workerTree.TabIndex = 6;
             this.workerTree.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.workerTree_AfterSelect);
             // 
             // cmdRefeshGraph
             // 
-            this.cmdRefeshGraph.Location = new System.Drawing.Point(1151, 60);
+            this.cmdRefeshGraph.Location = new System.Drawing.Point(912, 579);
             this.cmdRefeshGraph.Margin = new System.Windows.Forms.Padding(6);
             this.cmdRefeshGraph.Name = "cmdRefeshGraph";
             this.cmdRefeshGraph.Size = new System.Drawing.Size(150, 46);
@@ -143,7 +158,7 @@
             // 
             // cmdRefreshRewards
             // 
-            this.cmdRefreshRewards.Location = new System.Drawing.Point(2521, 298);
+            this.cmdRefreshRewards.Location = new System.Drawing.Point(2521, 334);
             this.cmdRefreshRewards.Margin = new System.Windows.Forms.Padding(6);
             this.cmdRefreshRewards.Name = "cmdRefreshRewards";
             this.cmdRefreshRewards.Size = new System.Drawing.Size(150, 46);
@@ -154,12 +169,12 @@
             // 
             // cmdCombineGraphs
             // 
-            this.cmdCombineGraphs.Location = new System.Drawing.Point(1391, 672);
+            this.cmdCombineGraphs.Location = new System.Drawing.Point(1157, 672);
             this.cmdCombineGraphs.Margin = new System.Windows.Forms.Padding(6);
             this.cmdCombineGraphs.Name = "cmdCombineGraphs";
             this.cmdCombineGraphs.Size = new System.Drawing.Size(222, 46);
             this.cmdCombineGraphs.TabIndex = 7;
-            this.cmdCombineGraphs.Text = "Combine All Graphs";
+            this.cmdCombineGraphs.Text = "Overlay Graphs";
             this.cmdCombineGraphs.UseVisualStyleBackColor = true;
             this.cmdCombineGraphs.Click += new System.EventHandler(this.cmdCombineGraphs_Click);
             // 
@@ -169,14 +184,14 @@
             this.lblHashPower.Location = new System.Drawing.Point(15, 579);
             this.lblHashPower.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.lblHashPower.Name = "lblHashPower";
-            this.lblHashPower.Size = new System.Drawing.Size(262, 25);
+            this.lblHashPower.Size = new System.Drawing.Size(247, 25);
             this.lblHashPower.TabIndex = 9;
-            this.lblHashPower.Text = "Total Hash Power: 0 MH/s";
+            this.lblHashPower.Text = "Total Hash Rate: 0 MH/s";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(1656, 109);
+            this.label2.Location = new System.Drawing.Point(9, 75);
             this.label2.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(189, 25);
@@ -185,7 +200,7 @@
             // 
             // txtZil24h
             // 
-            this.txtZil24h.Location = new System.Drawing.Point(1870, 103);
+            this.txtZil24h.Location = new System.Drawing.Point(223, 69);
             this.txtZil24h.Margin = new System.Windows.Forms.Padding(6);
             this.txtZil24h.Name = "txtZil24h";
             this.txtZil24h.Size = new System.Drawing.Size(330, 31);
@@ -194,7 +209,7 @@
             // lblZilUsd
             // 
             this.lblZilUsd.AutoSize = true;
-            this.lblZilUsd.Location = new System.Drawing.Point(2216, 109);
+            this.lblZilUsd.Location = new System.Drawing.Point(569, 75);
             this.lblZilUsd.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.lblZilUsd.Name = "lblZilUsd";
             this.lblZilUsd.Size = new System.Drawing.Size(92, 25);
@@ -204,7 +219,7 @@
             // lblTotal
             // 
             this.lblTotal.AutoSize = true;
-            this.lblTotal.Location = new System.Drawing.Point(2216, 148);
+            this.lblTotal.Location = new System.Drawing.Point(569, 114);
             this.lblTotal.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.lblTotal.Name = "lblTotal";
             this.lblTotal.Size = new System.Drawing.Size(92, 25);
@@ -214,7 +229,7 @@
             // lblEthBalance
             // 
             this.lblEthBalance.AutoSize = true;
-            this.lblEthBalance.Location = new System.Drawing.Point(1656, 184);
+            this.lblEthBalance.Location = new System.Drawing.Point(9, 150);
             this.lblEthBalance.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.lblEthBalance.Name = "lblEthBalance";
             this.lblEthBalance.Size = new System.Drawing.Size(152, 25);
@@ -224,7 +239,7 @@
             // lblZilBalance
             // 
             this.lblZilBalance.AutoSize = true;
-            this.lblZilBalance.Location = new System.Drawing.Point(1656, 224);
+            this.lblZilBalance.Location = new System.Drawing.Point(9, 190);
             this.lblZilBalance.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.lblZilBalance.Name = "lblZilBalance";
             this.lblZilBalance.Size = new System.Drawing.Size(140, 25);
@@ -233,10 +248,10 @@
             // 
             // lblTotalBalance
             // 
-            this.lblTotalBalance.Location = new System.Drawing.Point(1807, 262);
+            this.lblTotalBalance.Location = new System.Drawing.Point(160, 228);
             this.lblTotalBalance.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.lblTotalBalance.Name = "lblTotalBalance";
-            this.lblTotalBalance.Size = new System.Drawing.Size(247, 39);
+            this.lblTotalBalance.Size = new System.Drawing.Size(247, 28);
             this.lblTotalBalance.TabIndex = 12;
             this.lblTotalBalance.Text = "= (0.00 USD)";
             this.lblTotalBalance.TextAlign = System.Drawing.ContentAlignment.TopRight;
@@ -249,7 +264,7 @@
             this.helpToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(2686, 42);
+            this.menuStrip1.Size = new System.Drawing.Size(2686, 40);
             this.menuStrip1.TabIndex = 13;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -286,19 +301,19 @@
             this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.aboutToolStripMenuItem});
             this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
-            this.helpToolStripMenuItem.Size = new System.Drawing.Size(85, 38);
+            this.helpToolStripMenuItem.Size = new System.Drawing.Size(85, 36);
             this.helpToolStripMenuItem.Text = "&Help";
             // 
             // aboutToolStripMenuItem
             // 
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(359, 44);
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(214, 44);
             this.aboutToolStripMenuItem.Text = "&About";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
             // lblZilValue
             // 
-            this.lblZilValue.Location = new System.Drawing.Point(1910, 224);
+            this.lblZilValue.Location = new System.Drawing.Point(263, 190);
             this.lblZilValue.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.lblZilValue.Name = "lblZilValue";
             this.lblZilValue.Size = new System.Drawing.Size(144, 38);
@@ -308,7 +323,7 @@
             // 
             // lblEthValue
             // 
-            this.lblEthValue.Location = new System.Drawing.Point(1910, 184);
+            this.lblEthValue.Location = new System.Drawing.Point(263, 150);
             this.lblEthValue.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.lblEthValue.Name = "lblEthValue";
             this.lblEthValue.Size = new System.Drawing.Size(144, 40);
@@ -316,30 +331,156 @@
             this.lblEthValue.Text = "(0.00 USD)";
             this.lblEthValue.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
+            // cmdMergeGraphs
+            // 
+            this.cmdMergeGraphs.Location = new System.Drawing.Point(1391, 672);
+            this.cmdMergeGraphs.Margin = new System.Windows.Forms.Padding(6);
+            this.cmdMergeGraphs.Name = "cmdMergeGraphs";
+            this.cmdMergeGraphs.Size = new System.Drawing.Size(222, 46);
+            this.cmdMergeGraphs.TabIndex = 7;
+            this.cmdMergeGraphs.Text = "Merge Graphs";
+            this.cmdMergeGraphs.UseVisualStyleBackColor = true;
+            this.cmdMergeGraphs.Click += new System.EventHandler(this.cmdMergeGraphs_Click);
+            // 
+            // txtGranularity
+            // 
+            this.txtGranularity.Location = new System.Drawing.Point(1499, 632);
+            this.txtGranularity.Maximum = new decimal(new int[] {
+            60,
+            0,
+            0,
+            0});
+            this.txtGranularity.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.txtGranularity.Name = "txtGranularity";
+            this.txtGranularity.Size = new System.Drawing.Size(114, 31);
+            this.txtGranularity.TabIndex = 14;
+            this.txtGranularity.Value = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(1391, 637);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(102, 25);
+            this.label3.TabIndex = 15;
+            this.label3.Text = "Seconds:";
+            // 
+            // lblPowerUsage
+            // 
+            this.lblPowerUsage.AutoSize = true;
+            this.lblPowerUsage.Location = new System.Drawing.Point(383, 579);
+            this.lblPowerUsage.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
+            this.lblPowerUsage.Name = "lblPowerUsage";
+            this.lblPowerUsage.Size = new System.Drawing.Size(208, 25);
+            this.lblPowerUsage.TabIndex = 9;
+            this.lblPowerUsage.Text = "Total Power: 0 KW/h";
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.label1);
+            this.groupBox1.Controls.Add(this.label2);
+            this.groupBox1.Controls.Add(this.txtEth24h);
+            this.groupBox1.Controls.Add(this.lblEthValue);
+            this.groupBox1.Controls.Add(this.txtZil24h);
+            this.groupBox1.Controls.Add(this.lblZilValue);
+            this.groupBox1.Controls.Add(this.lblEthUsd);
+            this.groupBox1.Controls.Add(this.lblTotalBalance);
+            this.groupBox1.Controls.Add(this.lblZilUsd);
+            this.groupBox1.Controls.Add(this.lblZilBalance);
+            this.groupBox1.Controls.Add(this.lblTotal);
+            this.groupBox1.Controls.Add(this.lblEthBalance);
+            this.groupBox1.Location = new System.Drawing.Point(1636, 60);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(1038, 265);
+            this.groupBox1.TabIndex = 16;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Live Stats";
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.lblEzilDiff);
+            this.groupBox2.Controls.Add(this.lblNetHash);
+            this.groupBox2.Controls.Add(this.lblBlockReward);
+            this.groupBox2.Controls.Add(this.lblEthCurProfit);
+            this.groupBox2.Controls.Add(this.lblEthProfit);
+            this.groupBox2.Location = new System.Drawing.Point(1071, 60);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(542, 265);
+            this.groupBox2.TabIndex = 17;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Minerstats Data";
+            // 
+            // lblEthProfit
+            // 
+            this.lblEthProfit.AutoSize = true;
+            this.lblEthProfit.Location = new System.Drawing.Point(6, 190);
+            this.lblEthProfit.Name = "lblEthProfit";
+            this.lblEthProfit.Size = new System.Drawing.Size(446, 25);
+            this.lblEthProfit.TabIndex = 0;
+            this.lblEthProfit.Text = "24h Profitability: 0.0000000 ETH (00.00 USD)";
+            // 
+            // lblEzilDiff
+            // 
+            this.lblEzilDiff.AutoSize = true;
+            this.lblEzilDiff.Location = new System.Drawing.Point(6, 230);
+            this.lblEzilDiff.Name = "lblEzilDiff";
+            this.lblEzilDiff.Size = new System.Drawing.Size(461, 25);
+            this.lblEzilDiff.TabIndex = 1;
+            this.lblEzilDiff.Text = "Difference to Ezil: 0.0000000 ETH (00.00 USD)";
+            // 
+            // lblNetHash
+            // 
+            this.lblNetHash.AutoSize = true;
+            this.lblNetHash.Location = new System.Drawing.Point(6, 32);
+            this.lblNetHash.Name = "lblNetHash";
+            this.lblNetHash.Size = new System.Drawing.Size(312, 25);
+            this.lblNetHash.TabIndex = 0;
+            this.lblNetHash.Text = "Network Hashrate: 000.00 TH/s";
+            // 
+            // lblBlockReward
+            // 
+            this.lblBlockReward.AutoSize = true;
+            this.lblBlockReward.Location = new System.Drawing.Point(6, 75);
+            this.lblBlockReward.Name = "lblBlockReward";
+            this.lblBlockReward.Size = new System.Drawing.Size(306, 25);
+            this.lblBlockReward.TabIndex = 0;
+            this.lblBlockReward.Text = "Block Reward: 0.0000000 ETH";
+            // 
+            // lblEthCurProfit
+            // 
+            this.lblEthCurProfit.AutoSize = true;
+            this.lblEthCurProfit.Location = new System.Drawing.Point(6, 150);
+            this.lblEthCurProfit.Name = "lblEthCurProfit";
+            this.lblEthCurProfit.Size = new System.Drawing.Size(481, 25);
+            this.lblEthCurProfit.TabIndex = 0;
+            this.lblEthCurProfit.Text = "Current Profitability: 0.0000000 ETH (00.00 USD)";
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(192F, 192F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(2686, 1144);
-            this.Controls.Add(this.lblEthValue);
-            this.Controls.Add(this.lblZilValue);
-            this.Controls.Add(this.lblTotalBalance);
-            this.Controls.Add(this.lblZilBalance);
-            this.Controls.Add(this.lblEthBalance);
+            this.Controls.Add(this.groupBox2);
+            this.Controls.Add(this.groupBox1);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.txtGranularity);
+            this.Controls.Add(this.lblPowerUsage);
             this.Controls.Add(this.lblHashPower);
             this.Controls.Add(this.cmdRefreshRewards);
+            this.Controls.Add(this.cmdMergeGraphs);
             this.Controls.Add(this.cmdCombineGraphs);
             this.Controls.Add(this.cmdRefeshGraph);
             this.Controls.Add(this.workerTree);
             this.Controls.Add(this.picWorkerGraph);
             this.Controls.Add(this.lblEntryCount);
-            this.Controls.Add(this.lblTotal);
-            this.Controls.Add(this.lblZilUsd);
-            this.Controls.Add(this.lblEthUsd);
-            this.Controls.Add(this.txtZil24h);
-            this.Controls.Add(this.txtEth24h);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.label1);
             this.Controls.Add(this.dataGridView);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
@@ -351,6 +492,11 @@
             ((System.ComponentModel.ISupportInitialize)(this.picWorkerGraph)).EndInit();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.txtGranularity)).EndInit();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -385,6 +531,17 @@
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
         private System.Windows.Forms.Label lblZilValue;
         private System.Windows.Forms.Label lblEthValue;
+        private System.Windows.Forms.Button cmdMergeGraphs;
+        private System.Windows.Forms.NumericUpDown txtGranularity;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label lblPowerUsage;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.Label lblEzilDiff;
+        private System.Windows.Forms.Label lblNetHash;
+        private System.Windows.Forms.Label lblBlockReward;
+        private System.Windows.Forms.Label lblEthProfit;
+        private System.Windows.Forms.Label lblEthCurProfit;
     }
 }
 

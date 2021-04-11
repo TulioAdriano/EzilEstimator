@@ -186,7 +186,7 @@ namespace CryptoStats
 
     public class Velocities
     {
-        public long[][] hashrate
+        public List<long[]> hashrate
         {
             get; set;
         }
