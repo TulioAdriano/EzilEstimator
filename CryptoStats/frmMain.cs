@@ -189,6 +189,7 @@ namespace CryptoStats
                 MinerstatsAPI minerstatsAPI = new MinerstatsAPI();
                 var coinInfoList = minerstatsAPI.GetCoinInfo(new string[] { "ETH", "ZIL" });
                 var coinInfoCurrEth = coinInfoList.Where(d => d.coin.Equals("ETH")).FirstOrDefault();
+                var coinInfoCurrZil = coinInfoList.Where(d => d.coin.Equals("ZIL")).FirstOrDefault();
 
                 float ethPrice = coinInfoList.Where(d => d.coin.Equals("ETH")).FirstOrDefault().price;
                 float zilPrice = coinInfoList.Where(d => d.coin.Equals("ZIL")).FirstOrDefault().price;
@@ -204,15 +205,25 @@ namespace CryptoStats
                 lblZilValue.Text = $"({zilBalanceValue:0.00} USD)";
                 lblTotalBalance.Text = $"= ({(ethBalanceValue + zilBalanceValue):0.00} USD)";
 
-                var coinInfo24 = minerstatsAPI.GetCoinHistory();
+                var coinInfoEth24 = minerstatsAPI.GetCoinHistory("ETH");
                 lblNetHash.Text = $"Network Hashrate: {coinInfoCurrEth.network_hashrate/1000000000000} TH/s";
                 lblBlockReward.Text = $"Block Reward: {coinInfoCurrEth.reward_block} ETH";
                 float ethCur = ((coinInfoCurrEth.reward * 1000000 * 0.99f) * 24) * (float)hashPower;
                 lblEthCurProfit.Text = $"Current Profitability: {ethCur} ETH ({ethCur * ethPrice:0.00} USD)";
-                float eth24h = ((coinInfo24.reward * 1000000 * 0.99f) * 24) * (float)hashPower;
+                float eth24h = ((coinInfoEth24.reward * 1000000 * 0.99f) * 24) * (float)hashPower;
                 lblEthProfit.Text = $"24h Profitability: {eth24h} ETH ({eth24h * ethPrice:0.00} USD)";
                 float ezilDiff = eth - eth24h;
                 lblEzilDiff.Text = $"Difference to Ezil: {ezilDiff} ETH ({ezilDiff * ethPrice:0.00} USD)";
+
+                var coinInfoZil24 = minerstatsAPI.GetCoinHistory("ZIL");
+                lblZilNetHash.Text = $"Network Hashrate: {coinInfoCurrZil.network_hashrate / 1000000000000}";
+                lblZilBlockReward.Text = $"Block Reward: {coinInfoCurrZil.reward_block} ZIL";
+                float zilCur = ((coinInfoCurrZil.reward * 1000000 * 0.99f) * 24) * (float)hashPower;
+                lblZilCurProfit.Text = $"Current Profitability: {zilCur} ZIL ({zilCur * zilPrice:0.00} USD)";
+                float zil24h = ((coinInfoZil24.reward * 1000000 * 0.99f) * (24*((1f/60)*2))) * (float)hashPower;
+                lblZilProfit.Text = $"24h Profitability: {zil24h} ZIL ({zil24h * zilPrice:0.00} USD)";
+                float ezilZilDiff = zil - zil24h;
+                lblZilEzilDiff.Text = $"Difference to Ezil: {ezilZilDiff} ZIL ({ezilZilDiff * zilPrice:0.00} USD)";
             }
             catch (Exception ex)
             {

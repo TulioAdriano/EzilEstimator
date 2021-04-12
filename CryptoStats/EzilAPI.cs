@@ -48,6 +48,21 @@ namespace CryptoStats
 
             return response;
         }
+
+        public string GetHistoricalStats()
+        {
+            string response = string.Empty;
+            string timeFrom = DateTime.UtcNow.AddDays(-1).ToString("yyyy-MM-ddTHH-mm-ss.fffZ");
+            string timeTo = DateTime.UtcNow.ToString("yyyy-MM-ddTHH-mm-ss.fffZ");
+
+            using (HttpClient httpClient = new HttpClient())
+            {
+                string request = $"https://stats.ezil.me/historical_stats/{ethAddress}.{zilAddress}?time_from={timeFrom}&time_to={timeTo}";
+                response = httpClient.GetStringAsync(new Uri(request)).Result;
+            }
+
+            return response;
+        }
     }
 
     public class EzilReward
@@ -98,6 +113,45 @@ namespace CryptoStats
         }
     }
 
+    public class EzilStats
+    {
+        public DateTime time
+        {
+            get; set;
+        }
+        public int long_average_hashrate
+        {
+            get; set;
+        }
+        public int short_average_hashrate
+        {
+            get; set;
+        }
+        public int reported_hashrate
+        {
+            get; set;
+        }
+        public int rejected_shares_count
+        {
+            get; set;
+        }
+        public int invalid_shares_count
+        {
+            get; set;
+        }
+        public int stale_shares_count
+        {
+            get; set;
+        }
+        public int accepted_shares_count
+        {
+            get; set;
+        }
+        public int workers_count
+        {
+            get; set;
+        }
+    }
 }
 
 

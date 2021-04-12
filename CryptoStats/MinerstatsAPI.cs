@@ -46,7 +46,7 @@ namespace CryptoStats
                 var response = httpClient.GetStringAsync(new Uri(request)).Result;
                 var coinsHistoryResponse = JObject.Parse(response);
                 long oneDay = DateTime.UtcNow.AddDays(-1).ToUnixTimeSeconds();
-                var items = coinsHistoryResponse["ETH"].Children().Where(c => Convert.ToInt64(((JProperty)c).Name) >= oneDay).Children();
+                var items = coinsHistoryResponse[coin].Children().Where(c => Convert.ToInt64(((JProperty)c).Name) >= oneDay).Children();
                 var result = items.Average(c => (decimal)c[0]);
 
                 coinInfo = new CoinInfo()
