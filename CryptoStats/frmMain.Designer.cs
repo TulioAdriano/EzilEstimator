@@ -66,12 +66,13 @@
             this.lblNetHash = new System.Windows.Forms.Label();
             this.lblBlockReward = new System.Windows.Forms.Label();
             this.lblEthCurProfit = new System.Windows.Forms.Label();
-            this.lblZilProfit = new System.Windows.Forms.Label();
-            this.lblZilCurProfit = new System.Windows.Forms.Label();
-            this.lblZilBlockReward = new System.Windows.Forms.Label();
-            this.lblZilNetHash = new System.Windows.Forms.Label();
-            this.lblZilEzilDiff = new System.Windows.Forms.Label();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.lblStaleShares = new System.Windows.Forms.Label();
+            this.lblInvalidShares = new System.Windows.Forms.Label();
+            this.lblAcceptedShares = new System.Windows.Forms.Label();
+            this.lblSharesRatio = new System.Windows.Forms.Label();
+            this.rdo24h = new System.Windows.Forms.RadioButton();
+            this.rdo48h = new System.Windows.Forms.RadioButton();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picWorkerGraph)).BeginInit();
             this.menuStrip1.SuspendLayout();
@@ -470,64 +471,79 @@
             this.lblEthCurProfit.TabIndex = 0;
             this.lblEthCurProfit.Text = "Current Profitability: 0.0000000 ETH (00.00 USD)";
             // 
-            // lblZilProfit
-            // 
-            this.lblZilProfit.AutoSize = true;
-            this.lblZilProfit.Location = new System.Drawing.Point(6, 190);
-            this.lblZilProfit.Name = "lblZilProfit";
-            this.lblZilProfit.Size = new System.Drawing.Size(446, 25);
-            this.lblZilProfit.TabIndex = 0;
-            this.lblZilProfit.Text = "24h Profitability: 0.0000000 ETH (00.00 USD)";
-            // 
-            // lblZilCurProfit
-            // 
-            this.lblZilCurProfit.AutoSize = true;
-            this.lblZilCurProfit.Location = new System.Drawing.Point(6, 150);
-            this.lblZilCurProfit.Name = "lblZilCurProfit";
-            this.lblZilCurProfit.Size = new System.Drawing.Size(481, 25);
-            this.lblZilCurProfit.TabIndex = 0;
-            this.lblZilCurProfit.Text = "Current Profitability: 0.0000000 ETH (00.00 USD)";
-            // 
-            // lblZilBlockReward
-            // 
-            this.lblZilBlockReward.AutoSize = true;
-            this.lblZilBlockReward.Location = new System.Drawing.Point(6, 75);
-            this.lblZilBlockReward.Name = "lblZilBlockReward";
-            this.lblZilBlockReward.Size = new System.Drawing.Size(306, 25);
-            this.lblZilBlockReward.TabIndex = 0;
-            this.lblZilBlockReward.Text = "Block Reward: 0.0000000 ETH";
-            // 
-            // lblZilNetHash
-            // 
-            this.lblZilNetHash.AutoSize = true;
-            this.lblZilNetHash.Location = new System.Drawing.Point(6, 32);
-            this.lblZilNetHash.Name = "lblZilNetHash";
-            this.lblZilNetHash.Size = new System.Drawing.Size(312, 25);
-            this.lblZilNetHash.TabIndex = 0;
-            this.lblZilNetHash.Text = "Network Hashrate: 000.00 TH/s";
-            // 
-            // lblZilEzilDiff
-            // 
-            this.lblZilEzilDiff.AutoSize = true;
-            this.lblZilEzilDiff.Location = new System.Drawing.Point(6, 230);
-            this.lblZilEzilDiff.Name = "lblZilEzilDiff";
-            this.lblZilEzilDiff.Size = new System.Drawing.Size(461, 25);
-            this.lblZilEzilDiff.TabIndex = 1;
-            this.lblZilEzilDiff.Text = "Difference to Ezil: 0.0000000 ETH (00.00 USD)";
-            // 
             // groupBox3
             // 
-            this.groupBox3.Controls.Add(this.lblZilEzilDiff);
-            this.groupBox3.Controls.Add(this.lblZilNetHash);
-            this.groupBox3.Controls.Add(this.lblZilBlockReward);
-            this.groupBox3.Controls.Add(this.lblZilCurProfit);
-            this.groupBox3.Controls.Add(this.lblZilProfit);
-            this.groupBox3.Location = new System.Drawing.Point(1071, 339);
+            this.groupBox3.Controls.Add(this.rdo48h);
+            this.groupBox3.Controls.Add(this.rdo24h);
+            this.groupBox3.Controls.Add(this.lblInvalidShares);
+            this.groupBox3.Controls.Add(this.lblAcceptedShares);
+            this.groupBox3.Controls.Add(this.lblSharesRatio);
+            this.groupBox3.Controls.Add(this.lblStaleShares);
+            this.groupBox3.Location = new System.Drawing.Point(1071, 331);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(542, 265);
-            this.groupBox3.TabIndex = 17;
+            this.groupBox3.Size = new System.Drawing.Size(542, 273);
+            this.groupBox3.TabIndex = 18;
             this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "Minerstats Data (Zilliqa)";
+            this.groupBox3.Text = "Ezil Historic Stats";
+            // 
+            // lblStaleShares
+            // 
+            this.lblStaleShares.AutoSize = true;
+            this.lblStaleShares.Location = new System.Drawing.Point(6, 127);
+            this.lblStaleShares.Name = "lblStaleShares";
+            this.lblStaleShares.Size = new System.Drawing.Size(213, 25);
+            this.lblStaleShares.TabIndex = 0;
+            this.lblStaleShares.Text = "Total Stale Shares: 0";
+            // 
+            // lblInvalidShares
+            // 
+            this.lblInvalidShares.AutoSize = true;
+            this.lblInvalidShares.Location = new System.Drawing.Point(6, 170);
+            this.lblInvalidShares.Name = "lblInvalidShares";
+            this.lblInvalidShares.Size = new System.Drawing.Size(226, 25);
+            this.lblInvalidShares.TabIndex = 0;
+            this.lblInvalidShares.Text = "Total Invalid Shares: 0";
+            // 
+            // lblAcceptedShares
+            // 
+            this.lblAcceptedShares.AutoSize = true;
+            this.lblAcceptedShares.Location = new System.Drawing.Point(6, 84);
+            this.lblAcceptedShares.Name = "lblAcceptedShares";
+            this.lblAcceptedShares.Size = new System.Drawing.Size(254, 25);
+            this.lblAcceptedShares.TabIndex = 0;
+            this.lblAcceptedShares.Text = "Total Accepted Shares: 0";
+            // 
+            // lblSharesRatio
+            // 
+            this.lblSharesRatio.AutoSize = true;
+            this.lblSharesRatio.Location = new System.Drawing.Point(6, 213);
+            this.lblSharesRatio.Name = "lblSharesRatio";
+            this.lblSharesRatio.Size = new System.Drawing.Size(234, 25);
+            this.lblSharesRatio.TabIndex = 0;
+            this.lblSharesRatio.Text = "Stale Shares Ratio: 0%";
+            // 
+            // rdo24h
+            // 
+            this.rdo24h.AutoSize = true;
+            this.rdo24h.Checked = true;
+            this.rdo24h.Location = new System.Drawing.Point(11, 34);
+            this.rdo24h.Name = "rdo24h";
+            this.rdo24h.Size = new System.Drawing.Size(79, 29);
+            this.rdo24h.TabIndex = 1;
+            this.rdo24h.TabStop = true;
+            this.rdo24h.Text = "24h";
+            this.rdo24h.UseVisualStyleBackColor = true;
+            this.rdo24h.CheckedChanged += new System.EventHandler(this.rdo24h_CheckedChanged);
+            // 
+            // rdo48h
+            // 
+            this.rdo48h.AutoSize = true;
+            this.rdo48h.Location = new System.Drawing.Point(119, 34);
+            this.rdo48h.Name = "rdo48h";
+            this.rdo48h.Size = new System.Drawing.Size(79, 29);
+            this.rdo48h.TabIndex = 1;
+            this.rdo48h.Text = "48h";
+            this.rdo48h.UseVisualStyleBackColor = true;
             // 
             // frmMain
             // 
@@ -611,12 +627,13 @@
         private System.Windows.Forms.Label lblBlockReward;
         private System.Windows.Forms.Label lblEthProfit;
         private System.Windows.Forms.Label lblEthCurProfit;
-        private System.Windows.Forms.Label lblZilProfit;
-        private System.Windows.Forms.Label lblZilCurProfit;
-        private System.Windows.Forms.Label lblZilBlockReward;
-        private System.Windows.Forms.Label lblZilNetHash;
-        private System.Windows.Forms.Label lblZilEzilDiff;
         private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.Label lblInvalidShares;
+        private System.Windows.Forms.Label lblAcceptedShares;
+        private System.Windows.Forms.Label lblSharesRatio;
+        private System.Windows.Forms.Label lblStaleShares;
+        private System.Windows.Forms.RadioButton rdo48h;
+        private System.Windows.Forms.RadioButton rdo24h;
     }
 }
 

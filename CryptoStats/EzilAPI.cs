@@ -49,10 +49,10 @@ namespace CryptoStats
             return response;
         }
 
-        public string GetHistoricalStats()
+        public string GetHistoricalStats(int timeFrame)
         {
             string response = string.Empty;
-            string timeFrom = DateTime.UtcNow.AddDays(-1).ToString("yyyy-MM-ddTHH-mm-ss.fffZ");
+            string timeFrom = DateTime.UtcNow.AddHours(-timeFrame).ToString("yyyy-MM-ddTHH-mm-ss.fffZ");
             string timeTo = DateTime.UtcNow.ToString("yyyy-MM-ddTHH-mm-ss.fffZ");
 
             using (HttpClient httpClient = new HttpClient())

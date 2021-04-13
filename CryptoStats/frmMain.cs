@@ -60,6 +60,17 @@ namespace CryptoStats
                 lblEthBalance.Text = $"Unpaid ETH: {balances.eth}";
                 lblZilBalance.Text = $"Unpaid ZIL: {balances.zil}";
 
+                int timeFrame = rdo24h.Checked ? 24 : 48;
+                var history = GetHistory(ezilWallet, timeFrame);
+                var acceptedShares = history.Sum(c => c.accepted_shares_count);
+                var staleShares = history.Sum(c => c.stale_shares_count);
+                var invalidShares = history.Sum(c => c.invalid_shares_count);
+                var staleRatio = (staleShares / ((double)(acceptedShares + staleShares + invalidShares)));
+                lblAcceptedShares.Text = $"Total Accepted Shares: {acceptedShares}";
+                lblStaleShares.Text = $"Total Stale Shares: {staleShares}";
+                lblInvalidShares.Text = $"Total Invalid Shares: {invalidShares}";
+                lblSharesRatio.Text = $"Stale Shares Ratio: {staleRatio:P2}";
+
                 DisplayRewardGridInfo(rewards24);
 
                 Display24hEarnings(eth, zil, balances);
@@ -67,6 +78,25 @@ namespace CryptoStats
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private List<EzilStats> GetHistory(Wallet ezilWallet, int timeFrame)
+        {
+            try
+            {
+                EzilAPI ezilAPI = new EzilAPI(ezilWallet.Eth, ezilWallet.Zil);
+                string response = ezilAPI.GetHistoricalStats(timeFrame);
+                var ezilStats = JsonConvert.DeserializeObject<List<EzilStats>>(response);
+                return ezilStats;
+            }
+            catch (Exception ex)
+            {
+                if (ex is AggregateException)
+                {
+                    throw new Exception($"Cannot retrieve Ezil history. Make sure that your wallet addresses are correct.{Environment.NewLine}{ex.InnerException.Message}");
+                }
+                throw new Exception($"Cannot retrieve Ezil history. Make sure that your wallet addresses are correct.{Environment.NewLine}{ex.Message}");
             }
         }
 
@@ -101,6 +131,10 @@ namespace CryptoStats
             var workersInfo = new List<WorkerInfo>();
             foreach (var worker in workerStats)
             {
+                if (worker.Key.ToLower().Contains("offline"))
+                {
+                    continue;
+                }
                 workersInfo.Add(new WorkerInfo()
                 {
                     WorkerName = worker.Key,
@@ -189,7 +223,6 @@ namespace CryptoStats
                 MinerstatsAPI minerstatsAPI = new MinerstatsAPI();
                 var coinInfoList = minerstatsAPI.GetCoinInfo(new string[] { "ETH", "ZIL" });
                 var coinInfoCurrEth = coinInfoList.Where(d => d.coin.Equals("ETH")).FirstOrDefault();
-                var coinInfoCurrZil = coinInfoList.Where(d => d.coin.Equals("ZIL")).FirstOrDefault();
 
                 float ethPrice = coinInfoList.Where(d => d.coin.Equals("ETH")).FirstOrDefault().price;
                 float zilPrice = coinInfoList.Where(d => d.coin.Equals("ZIL")).FirstOrDefault().price;
@@ -214,16 +247,6 @@ namespace CryptoStats
                 lblEthProfit.Text = $"24h Profitability: {eth24h} ETH ({eth24h * ethPrice:0.00} USD)";
                 float ezilDiff = eth - eth24h;
                 lblEzilDiff.Text = $"Difference to Ezil: {ezilDiff} ETH ({ezilDiff * ethPrice:0.00} USD)";
-
-                var coinInfoZil24 = minerstatsAPI.GetCoinHistory("ZIL");
-                lblZilNetHash.Text = $"Network Hashrate: {coinInfoCurrZil.network_hashrate / 1000000000000}";
-                lblZilBlockReward.Text = $"Block Reward: {coinInfoCurrZil.reward_block} ZIL";
-                float zilCur = ((coinInfoCurrZil.reward * 1000000 * 0.99f) * 24) * (float)hashPower;
-                lblZilCurProfit.Text = $"Current Profitability: {zilCur} ZIL ({zilCur * zilPrice:0.00} USD)";
-                float zil24h = ((coinInfoZil24.reward * 1000000 * 0.99f) * (24*((1f/60)*2))) * (float)hashPower;
-                lblZilProfit.Text = $"24h Profitability: {zil24h} ZIL ({zil24h * zilPrice:0.00} USD)";
-                float ezilZilDiff = zil - zil24h;
-                lblZilEzilDiff.Text = $"Difference to Ezil: {ezilZilDiff} ZIL ({ezilZilDiff * zilPrice:0.00} USD)";
             }
             catch (Exception ex)
             {
@@ -457,6 +480,13 @@ namespace CryptoStats
                         break;
                 }
             }
+        }
+
+        private void rdo24h_CheckedChanged(object sender, EventArgs e)
+        {
+            this.Cursor = Cursors.WaitCursor;
+            GetStatsAndBalance();
+            this.Cursor = Cursors.Default;
         }
     }
 
