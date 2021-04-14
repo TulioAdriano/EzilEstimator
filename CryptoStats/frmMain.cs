@@ -34,13 +34,19 @@ namespace CryptoStats
                     Application.Exit();
                 }
             }
+        }
 
+        private void frmMain_Shown(object sender, EventArgs e)
+        {
             this.Cursor = Cursors.WaitCursor;
             LoadConfig();
 
             var workerStats = GetWorkerStats(machines);
             var workersInfo = GetWorkersInfo(workerStats, true);
-            DisplayWorkerGraph(workerStats[workerTree.SelectedNode.Text], workersInfo[0].MinHash, workersInfo[0].MaxHash);
+            if (workersInfo != null && workersInfo.Count > 0)
+            {
+                DisplayWorkerGraph(workerStats[workerTree.SelectedNode.Text], workersInfo[0].MinHash, workersInfo[0].MaxHash);
+            }
 
             GetStatsAndBalance();
             this.Cursor = Cursors.Default;
@@ -206,9 +212,6 @@ namespace CryptoStats
             dataGridView.DataSource = rewards24;
             dataGridView.Columns[0].DefaultCellStyle.Format =
             dataGridView.Columns[3].DefaultCellStyle.Format = "0.#################################";
-            //dataGridView.Columns[0].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
-            //dataGridView.Columns[3].AutoSizeMode = true;
-            dataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
 
             lblEntryCount.Text = $"{rewards24.Count} entries";
         }
@@ -370,11 +373,18 @@ namespace CryptoStats
 
         private void RefreshTree()
         {
-            var selectedNodeKey = workerTree.SelectedNode.Text;
+            string selectedNodeKey = string.Empty;
+            if (workerTree.SelectedNode != null)
+            {
+                selectedNodeKey = workerTree.SelectedNode.Text;
+            }
+
             var workersStats = GetWorkerStats(machines, true);
             var workerInfo = GetWorkersInfo(workersStats).Where(c => c.WorkerName.Equals(selectedNodeKey)).FirstOrDefault();
-
-            DisplayWorkerGraph(workersStats[selectedNodeKey], workerInfo.MinHash, workerInfo.MaxHash);
+            if (workerInfo != null && !selectedNodeKey.Equals(string.Empty))
+            {
+                DisplayWorkerGraph(workersStats[selectedNodeKey], workerInfo.MinHash, workerInfo.MaxHash);
+            }
         }
 
         private void cmdRefreshRewards_Click(object sender, EventArgs e)

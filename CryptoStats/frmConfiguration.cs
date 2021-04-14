@@ -113,7 +113,7 @@ namespace CryptoStats
 
         private void lstMachines_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode.Equals(Keys.Delete))
+            if (e.KeyCode.Equals(Keys.Delete) && lstMachines.SelectedIndex >= 0)
             {
                 machines.RemoveAt(lstMachines.SelectedIndex);
                 lstMachines.Items.Remove(lstMachines.SelectedItem);
