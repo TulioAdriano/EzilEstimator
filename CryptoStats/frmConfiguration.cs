@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -65,6 +66,11 @@ namespace CryptoStats
             if (txtHost.Text.Trim().Equals(string.Empty))
             {
                 MessageBox.Show("Host name cannot be empty.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            if (txtHost.Text.Trim().IndexOfAny(Path.GetInvalidFileNameChars()) >= 0)
+            {
+                MessageBox.Show("Invalid host name. Please type the computer name or IP Address only.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 

@@ -409,7 +409,7 @@ namespace CryptoStats
         {
             this.Cursor = Cursors.WaitCursor;
 
-            var pens = new List<Pen>() { Pens.Blue, Pens.Red, Pens.DarkGreen, Pens.Orange };
+            var pens = new List<Pen>() { Pens.Blue, Pens.Red, Pens.DarkGreen, Pens.Orange, Pens.Violet };
             var workerStats = GetWorkerStats(machines, true);
             var workersInfo = GetWorkersInfo(workerStats);
 
@@ -421,7 +421,7 @@ namespace CryptoStats
             bool printTimeStamp = true;
             foreach (var workerStat in workerStats)
             {
-                DisplayWorkerGraph(workerStat.Value, minHash, maxHash, pens[i++], 2, printTimeStamp);
+                DisplayWorkerGraph(workerStat.Value, minHash, maxHash, pens[(i++ % 5)], 2, printTimeStamp);
                 printTimeStamp = false;
             }
             this.Cursor = Cursors.Default;
