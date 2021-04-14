@@ -63,6 +63,19 @@ namespace CryptoStats
 
             return response;
         }
+
+        public string GetCurrentStats(bool includeReported = true)
+        {
+            string response = string.Empty;
+
+            using (HttpClient httpClient = new HttpClient())
+            {
+                string request = $"https://stats.ezil.me/current_stats/{ethAddress}.{zilAddress}{(includeReported ? "/reported" : string.Empty)}";
+                response = httpClient.GetStringAsync(new Uri(request)).Result;
+            }
+
+            return response;
+        }
     }
 
     public class EzilReward
@@ -152,6 +165,96 @@ namespace CryptoStats
             get; set;
         }
     }
+
+
+    public class EzilCurrentStats
+    {
+        public Eth eth
+        {
+            get; set;
+        }
+        public Etc etc
+        {
+            get; set;
+        }
+        public string last_share_coin
+        {
+            get; set;
+        }
+        public long current_hashrate
+        {
+            get; set;
+        }
+        public long average_hashrate
+        {
+            get; set;
+        }
+        public int last_share_timestamp
+        {
+            get; set;
+        }
+        public long reported_hashrate
+        {
+            get; set;
+        }
+    }
+
+    public class Eth
+    {
+        public int current_hashrate
+        {
+            get; set;
+        }
+        public int average_hashrate
+        {
+            get; set;
+        }
+        public int last_share_timestamp
+        {
+            get; set;
+        }
+        public string last_share_coin
+        {
+            get; set;
+        }
+        public string wallet
+        {
+            get; set;
+        }
+        public int reported_hashrate
+        {
+            get; set;
+        }
+    }
+
+    public class Etc
+    {
+        public int current_hashrate
+        {
+            get; set;
+        }
+        public int average_hashrate
+        {
+            get; set;
+        }
+        public int last_share_timestamp
+        {
+            get; set;
+        }
+        public string last_share_coin
+        {
+            get; set;
+        }
+        public string wallet
+        {
+            get; set;
+        }
+        public int reported_hashrate
+        {
+            get; set;
+        }
+    }
+
 }
 
 

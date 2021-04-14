@@ -73,6 +73,7 @@
             this.lblSharesRatio = new System.Windows.Forms.Label();
             this.rdo24h = new System.Windows.Forms.RadioButton();
             this.rdo48h = new System.Windows.Forms.RadioButton();
+            this.lblAverageHashrate = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picWorkerGraph)).BeginInit();
             this.menuStrip1.SuspendLayout();
@@ -95,7 +96,7 @@
             this.dataGridView.Name = "dataGridView";
             this.dataGridView.RowHeadersVisible = false;
             this.dataGridView.RowHeadersWidth = 82;
-            this.dataGridView.Size = new System.Drawing.Size(1035, 773);
+            this.dataGridView.Size = new System.Drawing.Size(1073, 773);
             this.dataGridView.TabIndex = 0;
             this.dataGridView.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.dataGridView_CellFormatting);
             // 
@@ -171,7 +172,7 @@
             // 
             // cmdRefreshRewards
             // 
-            this.cmdRefreshRewards.Location = new System.Drawing.Point(2521, 334);
+            this.cmdRefreshRewards.Location = new System.Drawing.Point(2559, 334);
             this.cmdRefreshRewards.Margin = new System.Windows.Forms.Padding(6);
             this.cmdRefreshRewards.Name = "cmdRefreshRewards";
             this.cmdRefreshRewards.Size = new System.Drawing.Size(150, 46);
@@ -277,7 +278,7 @@
             this.helpToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(2686, 40);
+            this.menuStrip1.Size = new System.Drawing.Size(2724, 40);
             this.menuStrip1.TabIndex = 13;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -412,7 +413,7 @@
             this.groupBox1.Controls.Add(this.lblEthBalance);
             this.groupBox1.Location = new System.Drawing.Point(1636, 60);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(1038, 265);
+            this.groupBox1.Size = new System.Drawing.Size(1073, 265);
             this.groupBox1.TabIndex = 16;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Live Stats";
@@ -478,6 +479,7 @@
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.lblAverageHashrate);
             this.groupBox3.Controls.Add(this.rdo48h);
             this.groupBox3.Controls.Add(this.rdo24h);
             this.groupBox3.Controls.Add(this.lblInvalidShares);
@@ -486,7 +488,7 @@
             this.groupBox3.Controls.Add(this.lblStaleShares);
             this.groupBox3.Location = new System.Drawing.Point(1071, 331);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(542, 273);
+            this.groupBox3.Size = new System.Drawing.Size(542, 296);
             this.groupBox3.TabIndex = 18;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Ezil Historic Stats";
@@ -550,11 +552,20 @@
             this.rdo48h.Text = "48h";
             this.rdo48h.UseVisualStyleBackColor = true;
             // 
+            // lblAverageHashrate
+            // 
+            this.lblAverageHashrate.AutoSize = true;
+            this.lblAverageHashrate.Location = new System.Drawing.Point(6, 256);
+            this.lblAverageHashrate.Name = "lblAverageHashrate";
+            this.lblAverageHashrate.Size = new System.Drawing.Size(321, 25);
+            this.lblAverageHashrate.TabIndex = 2;
+            this.lblAverageHashrate.Text = "Average Hash Rate = 0.00 MH/s";
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(192F, 192F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(2686, 1180);
+            this.ClientSize = new System.Drawing.Size(2724, 1180);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
@@ -571,8 +582,10 @@
             this.Controls.Add(this.lblEntryCount);
             this.Controls.Add(this.dataGridView);
             this.Controls.Add(this.menuStrip1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MainMenuStrip = this.menuStrip1;
             this.Margin = new System.Windows.Forms.Padding(4);
+            this.MaximizeBox = false;
             this.Name = "frmMain";
             this.Text = "Jamirocoin Ezil Estimator";
             this.Load += new System.EventHandler(this.frmMain_Load);
@@ -640,6 +653,7 @@
         private System.Windows.Forms.Label lblStaleShares;
         private System.Windows.Forms.RadioButton rdo48h;
         private System.Windows.Forms.RadioButton rdo24h;
+        private System.Windows.Forms.Label lblAverageHashrate;
     }
 }
 

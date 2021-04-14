@@ -16,7 +16,6 @@ namespace CryptoStats
         List<Machine> machines = new List<Machine>();
         string apiKey = string.Empty;
         Wallet ezilWallet = new Wallet();
-        private double hashPower;
 
         public frmMain()
         {
@@ -153,7 +152,7 @@ namespace CryptoStats
 
             if (updateTotalHash)
             {
-                hashPower = (workersInfo.Sum(c => c.HashPower) / 1000000d);
+                double hashPower = (workersInfo.Sum(c => c.HashPower) / 1000000d);
                 lblHashPower.Text = $"Total Hash Rate: {hashPower:0.00} MH/s";
                 lblPowerUsage.Text= $"Total Power Usage: {(workersInfo.Sum(c => c.PowerUsage) / 1000d):0.00} KW/h";
             }
@@ -242,14 +241,17 @@ namespace CryptoStats
                 lblTotalBalance.Text = $"= ({(ethBalanceValue + zilBalanceValue):0.00} USD)";
 
                 var coinInfoEth24 = minerstatsAPI.GetCoinHistory("ETH");
+                var currentStats = GetCurrentStats();
+                long averageHash = currentStats.average_hashrate;
                 lblNetHash.Text = $"Network Hashrate: {coinInfoCurrEth.network_hashrate/1000000000000} TH/s";
                 lblBlockReward.Text = $"Block Reward: {coinInfoCurrEth.reward_block} ETH";
-                float ethCur = ((coinInfoCurrEth.reward * 1000000 * 0.99f) * 24) * (float)hashPower;
+                float ethCur = ((coinInfoCurrEth.reward * 0.99f) * 24) * averageHash;
                 lblEthCurProfit.Text = $"Current Profitability: {ethCur} ETH ({ethCur * ethPrice:0.00} USD)";
-                float eth24h = ((coinInfoEth24.reward * 1000000 * 0.99f) * 24) * (float)hashPower;
+                float eth24h = ((coinInfoEth24.reward * 0.99f) * 24) * averageHash;
                 lblEthProfit.Text = $"24h Profitability: {eth24h} ETH ({eth24h * ethPrice:0.00} USD)";
                 float ezilDiff = eth - eth24h;
                 lblEzilDiff.Text = $"Difference to Ezil: {ezilDiff} ETH ({ezilDiff * ethPrice:0.00} USD)";
+                lblAverageHashrate.Text = $"Average Hash Rate = {averageHash / 1000000f:0.##} MH/s";
             }
             catch (Exception ex)
             {
@@ -259,6 +261,14 @@ namespace CryptoStats
                 }
                 throw new Exception($"Cannot retrieve cryptocurrency prices. Try again later.{Environment.NewLine}{ex.Message}");
             }
+        }
+
+        private EzilCurrentStats GetCurrentStats()
+        {
+            EzilCurrentStats ezilCurrentStats = null;
+            var ezilAPI = new EzilAPI(ezilWallet.Eth, ezilWallet.Zil);
+            ezilCurrentStats = JsonConvert.DeserializeObject<EzilCurrentStats>(ezilAPI.GetCurrentStats());
+            return ezilCurrentStats;
         }
 
         private static CoinListings GetCryptoPrices(string apiKey)
