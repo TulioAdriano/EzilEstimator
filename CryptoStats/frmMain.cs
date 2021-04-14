@@ -160,18 +160,19 @@ namespace CryptoStats
             return workersInfo;
         }
 
-        private void DisplayWorkerGraph(TRexSummary workerStat, long minHash, long maxHash, Pen pen = null, int zoom = 2, bool printTimeStamp = true)
+        private void DisplayWorkerGraph(TRexSummary workerStat, long minHash, long maxHash, Pen pen = null, bool printTimeStamp = true)
         {
-            DisplayWorkerGraph(workerStat.velocities.hashrate, minHash, maxHash, pen, zoom, printTimeStamp);
+            DisplayWorkerGraph(workerStat.velocities.hashrate, minHash, maxHash, pen, printTimeStamp);
         }
 
-        private void DisplayWorkerGraph(List<long[]> hashrate, long minHash, long maxHash, Pen pen = null, int zoom = 2, bool printTimeStamp = true)
+        private void DisplayWorkerGraph(List<long[]> hashrate, long minHash, long maxHash, Pen pen = null, bool printTimeStamp = true)
         {
             Pen graphPen = pen ?? Pens.Black;
             var font = new Font("Arial", 8);
+            double zoom = this.CreateGraphics().DpiX / 96d;
             if (pen == null)
             {
-                picWorkerGraph.Image = new Bitmap(800 * zoom, 200 * zoom);
+                picWorkerGraph.Image = new Bitmap((int)(800 * zoom), (int)(200 * zoom));
             }
             using (var gfx = Graphics.FromImage(picWorkerGraph.Image))
             {
@@ -184,12 +185,12 @@ namespace CryptoStats
                 int i = 0;
                 foreach (var hash in hashrate)
                 {
-                    int newY = (180 * zoom) - (int)(Math.Round(((double)(hash[1] - minHash) / (double)hashDiff) * (180 * zoom)));
+                    int newY = (int)(180 * zoom) - (int)(Math.Round(((double)(hash[1] - minHash) / (double)hashDiff) * (180 * zoom)));
                     gfx.DrawLine(graphPen, x, y, x + space, newY);
                     if (printTimeStamp && timeSteps.Contains(i++))
                     {
                         var timeStamp = DateTimeOffset.FromUnixTimeSeconds(hash[0]).DateTime.ToLocalTime();
-                        gfx.DrawString($"{timeStamp.ToShortDateString()} {timeStamp.ToShortTimeString()}", font, Brushes.Red, x, 180 * zoom);
+                        gfx.DrawString($"{timeStamp.ToShortDateString()} {timeStamp.ToShortTimeString()}", font, Brushes.Red, x, (int)(180 * zoom));
                     }
                     x += space;
                     y = newY;
@@ -197,11 +198,11 @@ namespace CryptoStats
                 if (printTimeStamp)
                 {
                     var lastTimeStamp = DateTimeOffset.FromUnixTimeSeconds(hashrate.Last()[0]).DateTime.ToLocalTime();
-                    gfx.DrawString($"{lastTimeStamp.ToShortDateString()} {lastTimeStamp.ToShortTimeString()}", font, Brushes.Red, x, (180 * zoom));
+                    gfx.DrawString($"{lastTimeStamp.ToShortDateString()} {lastTimeStamp.ToShortTimeString()}", font, Brushes.Red, x, (int)(180 * zoom));
                 }
 
-                gfx.DrawString($"{(maxHash / 1000000d):0.0}", font, Brushes.Black, 720 * zoom, 0);
-                gfx.DrawString($"{(minHash / 1000000d):0.0}", font, Brushes.Black, 720 * zoom, 165 * zoom);
+                gfx.DrawString($"{(maxHash / 1000000d):0.0}", font, Brushes.Black, (int)(720 * zoom), 0);
+                gfx.DrawString($"{(minHash / 1000000d):0.0}", font, Brushes.Black, (int)(720 * zoom), (int)(165 * zoom));
             }
             picWorkerGraph.Refresh();
         }
@@ -421,7 +422,7 @@ namespace CryptoStats
             bool printTimeStamp = true;
             foreach (var workerStat in workerStats)
             {
-                DisplayWorkerGraph(workerStat.Value, minHash, maxHash, pens[(i++ % 5)], 2, printTimeStamp);
+                DisplayWorkerGraph(workerStat.Value, minHash, maxHash, pens[(i++ % 5)], printTimeStamp);
                 printTimeStamp = false;
             }
             this.Cursor = Cursors.Default;
