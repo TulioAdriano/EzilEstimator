@@ -65,6 +65,15 @@ namespace CryptoStats
                 lblEthBalance.Text = $"Unpaid ETH: {balances.eth}";
                 lblZilBalance.Text = $"Unpaid ZIL: {balances.zil}";
 
+                DateTime cutoffTime = (DateTime.UtcNow >= DateTime.UtcNow.Date.AddHours(6) ?
+                                                               DateTime.UtcNow.Date.AddHours(6) :
+                                                               DateTime.UtcNow.Date.AddDays(-1).AddHours(6));
+
+                float ethToday = rewards24.Where(c => c.coin.Equals("eth") && c.created_at > cutoffTime).Sum(s => s.amount);
+                float zilToday = rewards24.Where(c => c.coin.Equals("zil") && c.created_at > cutoffTime).Sum(s => s.amount);
+                lblEthToday.Text = $"ETH earned today: {ethToday}";
+                lblZilToday.Text = $"ZIL earned today: {zilToday}";
+
                 int timeFrame = rdo24h.Checked ? 24 : 48;
                 var history = GetHistory(ezilWallet, timeFrame);
                 var acceptedShares = history.Sum(c => c.accepted_shares_count);
@@ -109,7 +118,7 @@ namespace CryptoStats
         {
             machines = JsonConvert.DeserializeObject<List<Machine>>(Properties.Settings.Default.Machines);
             apiKey = Properties.Settings.Default.CoinApiKey;
-            ezilWallet = JsonConvert.DeserializeObject<Wallet>(Properties.Settings.Default.EzilWallet);      
+            ezilWallet = JsonConvert.DeserializeObject<Wallet>(Properties.Settings.Default.EzilWallet);
         }
 
         private static EzilBalance GetBalances(Wallet ezilWallet)
@@ -146,7 +155,7 @@ namespace CryptoStats
                     HashPower = worker.Value.hashrate,
                     MaxHash = (worker.Value.velocities == null ? 0 : worker.Value.velocities.hashrate.Max(c => c[1])),
                     MinHash = (worker.Value.velocities == null ? 0 : worker.Value.velocities.hashrate.Min(c => c[1])),
-                    PowerUsage = (long)Math.Round( worker.Value.velocities.power.Average(c=>c[1]))
+                    PowerUsage = (long)Math.Round(worker.Value.velocities.power.Average(c => c[1]))
                 });
             }
 
@@ -154,7 +163,7 @@ namespace CryptoStats
             {
                 double hashPower = (workersInfo.Sum(c => c.HashPower) / 1000000d);
                 lblHashPower.Text = $"Total Hash Rate: {hashPower:0.00} MH/s";
-                lblPowerUsage.Text= $"Total Power Usage: {(workersInfo.Sum(c => c.PowerUsage) / 1000d):0.00} KW/h";
+                lblPowerUsage.Text = $"Total Power Usage: {(workersInfo.Sum(c => c.PowerUsage) / 1000d):0.00} KW/h";
             }
 
             return workersInfo;
@@ -237,21 +246,21 @@ namespace CryptoStats
 
                 float ethBalanceValue = balances.eth * ethPrice;
                 float zilBalanceValue = balances.zil * zilPrice;
-                lblEthValue.Text = $"({ethBalanceValue:0.00} USD)";
-                lblZilValue.Text = $"({zilBalanceValue:0.00} USD)";
-                lblTotalBalance.Text = $"= ({(ethBalanceValue + zilBalanceValue):0.00} USD)";
+                lblEthValue.Text = $"(${ethBalanceValue:0.00})";
+                lblZilValue.Text = $"(${zilBalanceValue:0.00})";
+                lblTotalBalance.Text = $"= (${(ethBalanceValue + zilBalanceValue):0.00})";
 
                 var coinInfoEth24 = minerstatsAPI.GetCoinHistory("ETH");
                 var currentStats = GetCurrentStats();
                 long averageHash = currentStats.average_hashrate;
-                lblNetHash.Text = $"Network Hashrate: {coinInfoCurrEth.network_hashrate/1000000000000} TH/s";
+                lblNetHash.Text = $"Network Hashrate: {coinInfoCurrEth.network_hashrate / 1000000000000} TH/s";
                 lblBlockReward.Text = $"Block Reward: {coinInfoCurrEth.reward_block} ETH";
                 float ethCur = ((coinInfoCurrEth.reward * 0.99f) * 24) * averageHash;
-                lblEthCurProfit.Text = $"Current Profitability: {ethCur} ETH ({ethCur * ethPrice:0.00} USD)";
+                lblEthCurProfit.Text = $"Current Profitability: {ethCur} ETH (${ethCur * ethPrice:0.00})";
                 float eth24h = ((coinInfoEth24.reward * 0.99f) * 24) * averageHash;
-                lblEthProfit.Text = $"24h Profitability: {eth24h} ETH ({eth24h * ethPrice:0.00} USD)";
+                lblEthProfit.Text = $"24h Profitability: {eth24h} ETH (${eth24h * ethPrice:0.00})";
                 float ezilDiff = eth - eth24h;
-                lblEzilDiff.Text = $"Difference to Ezil: {ezilDiff} ETH ({ezilDiff * ethPrice:0.00} USD)";
+                lblEzilDiff.Text = $"Difference to Ezil: {ezilDiff} ETH (${ezilDiff * ethPrice:0.00})";
                 lblAverageHashrate.Text = $"Average Hash Rate = {averageHash / 1000000f:0.##} MH/s";
             }
             catch (Exception ex)
@@ -456,7 +465,7 @@ namespace CryptoStats
             DateTime utcNow = DateTime.UtcNow;
             var trexData = GetWorkerStats(machines, false);
             int granularity = (int)txtGranularity.Value;
-            for (int seconds = 3600; seconds > 0; seconds-= granularity)
+            for (int seconds = 3600; seconds > 0; seconds -= granularity)
             {
                 var timeStart = utcNow.AddSeconds(-seconds);
                 var timeEnd = timeStart.AddSeconds(granularity);
@@ -471,11 +480,11 @@ namespace CryptoStats
                     }
                     var result = worker.velocities.hashrate.Where(c => c[0] >= timeStart.ToUnixTimeSeconds()
                                                                      && c[0] <= timeEnd.ToUnixTimeSeconds());
-                    if (result.Count().Equals(0)) 
-                    { 
-                        continue; 
+                    if (result.Count().Equals(0))
+                    {
+                        continue;
                     }
-                    
+
                     var avgRate = result.Average(c => c[1]);
                     hashRate += (long)Math.Round(avgRate);
                 }
