@@ -145,7 +145,7 @@ namespace CryptoStats
             var workersInfo = new List<WorkerInfo>();
             foreach (var worker in workerStats)
             {
-                if (worker.Key.ToLower().Contains("offline"))
+                if (worker.Value == null || worker.Key.ToLower().Contains("offline"))
                 {
                     continue;
                 }
@@ -335,9 +335,17 @@ namespace CryptoStats
             {
                 try
                 {
+                    TRexSummary workerInfo = null;
                     if (machine.Enabled)
                     {
-                        workerStats.Add(machine.ToString(), TRexAPI.GetFullSummary(machine.Host));
+                        workerInfo = TRexAPI.GetFullSummary(machine.Host);
+                    }
+
+                    workerStats.Add(machine.ToString(), workerInfo);
+
+                    if (workerInfo == null)
+                    {
+                        continue;
                     }
                 }
                 catch
@@ -352,6 +360,11 @@ namespace CryptoStats
                 workerTree.Nodes.Clear();
                 foreach (var workerStat in workerStats)
                 {
+                    if (workerStat.Value == null)
+                    {
+                        continue;
+                    }
+
                     var workerNode = workerTree.Nodes.Add(workerStat.Key);
                     if (workerTree.SelectedNode == null)
                     {
@@ -381,7 +394,10 @@ namespace CryptoStats
             var workersStats = GetWorkerStats(machines, false);
             var workerInfo = GetWorkersInfo(workersStats, false).Where(c => c.WorkerName.Equals(workerTree.SelectedNode.Text)).FirstOrDefault();
 
-            DisplayWorkerGraph(workersStats[workerTree.SelectedNode.Text], workerInfo.MinHash, workerInfo.MaxHash);
+            if (workerInfo != null)
+            {
+                DisplayWorkerGraph(workersStats[workerTree.SelectedNode.Text], workerInfo.MinHash, workerInfo.MaxHash);
+            }
         }
         private void cmdRefeshGraph_Click(object sender, EventArgs e)
         {
@@ -442,8 +458,10 @@ namespace CryptoStats
             frmConfiguration configForm = new frmConfiguration();
             if (configForm.ShowDialog().Equals(DialogResult.OK))
             {
+                this.Cursor = Cursors.WaitCursor;
                 LoadConfig();
                 RefreshTree();
+                this.Cursor = Cursors.Default;
             }
         }
 

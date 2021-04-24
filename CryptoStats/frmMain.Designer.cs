@@ -93,50 +93,46 @@
             this.dataGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
             this.dataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
-            this.dataGridView.Location = new System.Drawing.Point(1636, 392);
-            this.dataGridView.Margin = new System.Windows.Forms.Padding(6);
+            this.dataGridView.Location = new System.Drawing.Point(818, 196);
             this.dataGridView.Name = "dataGridView";
             this.dataGridView.RowHeadersVisible = false;
             this.dataGridView.RowHeadersWidth = 82;
-            this.dataGridView.Size = new System.Drawing.Size(1072, 772);
+            this.dataGridView.Size = new System.Drawing.Size(536, 386);
             this.dataGridView.TabIndex = 0;
             this.dataGridView.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.dataGridView_CellFormatting);
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(8, 32);
-            this.label1.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
+            this.label1.Location = new System.Drawing.Point(4, 16);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(201, 25);
+            this.label1.Size = new System.Drawing.Size(101, 13);
             this.label1.TabIndex = 1;
             this.label1.Text = "ETH in the last 24h:";
             // 
             // txtEth24h
             // 
-            this.txtEth24h.Location = new System.Drawing.Point(224, 26);
-            this.txtEth24h.Margin = new System.Windows.Forms.Padding(6);
+            this.txtEth24h.Location = new System.Drawing.Point(112, 13);
             this.txtEth24h.Name = "txtEth24h";
-            this.txtEth24h.Size = new System.Drawing.Size(330, 31);
+            this.txtEth24h.Size = new System.Drawing.Size(167, 20);
             this.txtEth24h.TabIndex = 2;
             // 
             // lblEthUsd
             // 
             this.lblEthUsd.AutoSize = true;
-            this.lblEthUsd.Location = new System.Drawing.Point(568, 32);
-            this.lblEthUsd.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
+            this.lblEthUsd.Location = new System.Drawing.Point(284, 16);
             this.lblEthUsd.Name = "lblEthUsd";
-            this.lblEthUsd.Size = new System.Drawing.Size(92, 25);
+            this.lblEthUsd.Size = new System.Drawing.Size(48, 13);
             this.lblEthUsd.TabIndex = 3;
             this.lblEthUsd.Text = "= 0 USD";
             // 
             // lblEntryCount
             // 
             this.lblEntryCount.AutoSize = true;
-            this.lblEntryCount.Location = new System.Drawing.Point(1632, 360);
-            this.lblEntryCount.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblEntryCount.Location = new System.Drawing.Point(816, 180);
+            this.lblEntryCount.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblEntryCount.Name = "lblEntryCount";
-            this.lblEntryCount.Size = new System.Drawing.Size(95, 25);
+            this.lblEntryCount.Size = new System.Drawing.Size(47, 13);
             this.lblEntryCount.TabIndex = 4;
             this.lblEntryCount.Text = "0 entries";
             // 
@@ -144,29 +140,26 @@
             // 
             this.picWorkerGraph.BackColor = System.Drawing.Color.White;
             this.picWorkerGraph.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.picWorkerGraph.Location = new System.Drawing.Point(16, 768);
-            this.picWorkerGraph.Margin = new System.Windows.Forms.Padding(6);
+            this.picWorkerGraph.Location = new System.Drawing.Point(8, 384);
             this.picWorkerGraph.Name = "picWorkerGraph";
-            this.picWorkerGraph.Size = new System.Drawing.Size(1598, 398);
+            this.picWorkerGraph.Size = new System.Drawing.Size(800, 200);
             this.picWorkerGraph.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.picWorkerGraph.TabIndex = 5;
             this.picWorkerGraph.TabStop = false;
             // 
             // workerTree
             // 
-            this.workerTree.Location = new System.Drawing.Point(16, 60);
-            this.workerTree.Margin = new System.Windows.Forms.Padding(6);
+            this.workerTree.Location = new System.Drawing.Point(8, 30);
             this.workerTree.Name = "workerTree";
-            this.workerTree.Size = new System.Drawing.Size(1048, 544);
+            this.workerTree.Size = new System.Drawing.Size(526, 274);
             this.workerTree.TabIndex = 6;
             this.workerTree.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.workerTree_AfterSelect);
             // 
             // cmdRefeshGraph
             // 
-            this.cmdRefeshGraph.Location = new System.Drawing.Point(912, 616);
-            this.cmdRefeshGraph.Margin = new System.Windows.Forms.Padding(6);
+            this.cmdRefeshGraph.Location = new System.Drawing.Point(456, 308);
             this.cmdRefeshGraph.Name = "cmdRefeshGraph";
-            this.cmdRefeshGraph.Size = new System.Drawing.Size(150, 46);
+            this.cmdRefeshGraph.Size = new System.Drawing.Size(75, 23);
             this.cmdRefeshGraph.TabIndex = 7;
             this.cmdRefeshGraph.Text = "Refresh";
             this.cmdRefeshGraph.UseVisualStyleBackColor = true;
@@ -174,10 +167,9 @@
             // 
             // cmdRefreshRewards
             // 
-            this.cmdRefreshRewards.Location = new System.Drawing.Point(2560, 334);
-            this.cmdRefreshRewards.Margin = new System.Windows.Forms.Padding(6);
+            this.cmdRefreshRewards.Location = new System.Drawing.Point(1280, 167);
             this.cmdRefreshRewards.Name = "cmdRefreshRewards";
-            this.cmdRefreshRewards.Size = new System.Drawing.Size(150, 46);
+            this.cmdRefreshRewards.Size = new System.Drawing.Size(75, 23);
             this.cmdRefreshRewards.TabIndex = 8;
             this.cmdRefreshRewards.Text = "Refresh";
             this.cmdRefreshRewards.UseVisualStyleBackColor = true;
@@ -185,10 +177,9 @@
             // 
             // cmdCombineGraphs
             // 
-            this.cmdCombineGraphs.Location = new System.Drawing.Point(1156, 708);
-            this.cmdCombineGraphs.Margin = new System.Windows.Forms.Padding(6);
+            this.cmdCombineGraphs.Location = new System.Drawing.Point(578, 354);
             this.cmdCombineGraphs.Name = "cmdCombineGraphs";
-            this.cmdCombineGraphs.Size = new System.Drawing.Size(222, 46);
+            this.cmdCombineGraphs.Size = new System.Drawing.Size(111, 23);
             this.cmdCombineGraphs.TabIndex = 7;
             this.cmdCombineGraphs.Text = "Overlay Graphs";
             this.cmdCombineGraphs.UseVisualStyleBackColor = true;
@@ -197,77 +188,69 @@
             // lblHashPower
             // 
             this.lblHashPower.AutoSize = true;
-            this.lblHashPower.Location = new System.Drawing.Point(16, 616);
-            this.lblHashPower.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
+            this.lblHashPower.Location = new System.Drawing.Point(8, 308);
             this.lblHashPower.Name = "lblHashPower";
-            this.lblHashPower.Size = new System.Drawing.Size(247, 25);
+            this.lblHashPower.Size = new System.Drawing.Size(127, 13);
             this.lblHashPower.TabIndex = 9;
             this.lblHashPower.Text = "Total Hash Rate: 0 MH/s";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(8, 76);
-            this.label2.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
+            this.label2.Location = new System.Drawing.Point(4, 38);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(189, 25);
+            this.label2.Size = new System.Drawing.Size(95, 13);
             this.label2.TabIndex = 1;
             this.label2.Text = "ZIL in the last 24h:";
             // 
             // txtZil24h
             // 
-            this.txtZil24h.Location = new System.Drawing.Point(224, 68);
-            this.txtZil24h.Margin = new System.Windows.Forms.Padding(6);
+            this.txtZil24h.Location = new System.Drawing.Point(112, 34);
             this.txtZil24h.Name = "txtZil24h";
-            this.txtZil24h.Size = new System.Drawing.Size(330, 31);
+            this.txtZil24h.Size = new System.Drawing.Size(167, 20);
             this.txtZil24h.TabIndex = 2;
             // 
             // lblZilUsd
             // 
             this.lblZilUsd.AutoSize = true;
-            this.lblZilUsd.Location = new System.Drawing.Point(568, 76);
-            this.lblZilUsd.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
+            this.lblZilUsd.Location = new System.Drawing.Point(284, 38);
             this.lblZilUsd.Name = "lblZilUsd";
-            this.lblZilUsd.Size = new System.Drawing.Size(92, 25);
+            this.lblZilUsd.Size = new System.Drawing.Size(48, 13);
             this.lblZilUsd.TabIndex = 3;
             this.lblZilUsd.Text = "= 0 USD";
             // 
             // lblTotal
             // 
             this.lblTotal.AutoSize = true;
-            this.lblTotal.Location = new System.Drawing.Point(568, 114);
-            this.lblTotal.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
+            this.lblTotal.Location = new System.Drawing.Point(284, 57);
             this.lblTotal.Name = "lblTotal";
-            this.lblTotal.Size = new System.Drawing.Size(92, 25);
+            this.lblTotal.Size = new System.Drawing.Size(48, 13);
             this.lblTotal.TabIndex = 3;
             this.lblTotal.Text = "= 0 USD";
             // 
             // lblEthBalance
             // 
             this.lblEthBalance.AutoSize = true;
-            this.lblEthBalance.Location = new System.Drawing.Point(8, 150);
-            this.lblEthBalance.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
+            this.lblEthBalance.Location = new System.Drawing.Point(4, 75);
             this.lblEthBalance.Name = "lblEthBalance";
-            this.lblEthBalance.Size = new System.Drawing.Size(152, 25);
+            this.lblEthBalance.Size = new System.Drawing.Size(78, 13);
             this.lblEthBalance.TabIndex = 10;
             this.lblEthBalance.Text = "Unpaid ETH: 0";
             // 
             // lblZilBalance
             // 
             this.lblZilBalance.AutoSize = true;
-            this.lblZilBalance.Location = new System.Drawing.Point(8, 190);
-            this.lblZilBalance.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
+            this.lblZilBalance.Location = new System.Drawing.Point(4, 95);
             this.lblZilBalance.Name = "lblZilBalance";
-            this.lblZilBalance.Size = new System.Drawing.Size(140, 25);
+            this.lblZilBalance.Size = new System.Drawing.Size(72, 13);
             this.lblZilBalance.TabIndex = 11;
             this.lblZilBalance.Text = "Unpaid ZIL: 0";
             // 
             // lblTotalBalance
             // 
-            this.lblTotalBalance.Location = new System.Drawing.Point(160, 228);
-            this.lblTotalBalance.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
+            this.lblTotalBalance.Location = new System.Drawing.Point(80, 114);
             this.lblTotalBalance.Name = "lblTotalBalance";
-            this.lblTotalBalance.Size = new System.Drawing.Size(248, 28);
+            this.lblTotalBalance.Size = new System.Drawing.Size(124, 14);
             this.lblTotalBalance.TabIndex = 12;
             this.lblTotalBalance.Text = "= (0.00 USD)";
             this.lblTotalBalance.TextAlign = System.Drawing.ContentAlignment.TopRight;
@@ -280,7 +263,8 @@
             this.helpToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(2726, 40);
+            this.menuStrip1.Padding = new System.Windows.Forms.Padding(3, 1, 0, 1);
+            this.menuStrip1.Size = new System.Drawing.Size(1364, 24);
             this.menuStrip1.TabIndex = 13;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -291,25 +275,25 @@
             this.toolStripMenuItem1,
             this.exitToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(72, 36);
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 22);
             this.fileToolStripMenuItem.Text = "&File";
             // 
             // settingsToolStripMenuItem
             // 
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(235, 44);
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
             this.settingsToolStripMenuItem.Text = "&Settings";
             this.settingsToolStripMenuItem.Click += new System.EventHandler(this.settingsToolStripMenuItem_Click);
             // 
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(232, 6);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(113, 6);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(235, 44);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
             this.exitToolStripMenuItem.Text = "E&xit";
             // 
             // helpToolStripMenuItem
@@ -317,42 +301,39 @@
             this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.aboutToolStripMenuItem});
             this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
-            this.helpToolStripMenuItem.Size = new System.Drawing.Size(85, 36);
+            this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 22);
             this.helpToolStripMenuItem.Text = "&Help";
             // 
             // aboutToolStripMenuItem
             // 
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(214, 44);
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
             this.aboutToolStripMenuItem.Text = "&About";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
             // lblZilValue
             // 
-            this.lblZilValue.Location = new System.Drawing.Point(264, 190);
-            this.lblZilValue.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
+            this.lblZilValue.Location = new System.Drawing.Point(132, 95);
             this.lblZilValue.Name = "lblZilValue";
-            this.lblZilValue.Size = new System.Drawing.Size(144, 38);
+            this.lblZilValue.Size = new System.Drawing.Size(72, 19);
             this.lblZilValue.TabIndex = 12;
             this.lblZilValue.Text = "(0.00 USD)";
             this.lblZilValue.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
             // lblEthValue
             // 
-            this.lblEthValue.Location = new System.Drawing.Point(264, 150);
-            this.lblEthValue.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
+            this.lblEthValue.Location = new System.Drawing.Point(132, 75);
             this.lblEthValue.Name = "lblEthValue";
-            this.lblEthValue.Size = new System.Drawing.Size(144, 40);
+            this.lblEthValue.Size = new System.Drawing.Size(72, 20);
             this.lblEthValue.TabIndex = 12;
             this.lblEthValue.Text = "(0.00 USD)";
             this.lblEthValue.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
             // cmdMergeGraphs
             // 
-            this.cmdMergeGraphs.Location = new System.Drawing.Point(1392, 708);
-            this.cmdMergeGraphs.Margin = new System.Windows.Forms.Padding(6);
+            this.cmdMergeGraphs.Location = new System.Drawing.Point(696, 354);
             this.cmdMergeGraphs.Name = "cmdMergeGraphs";
-            this.cmdMergeGraphs.Size = new System.Drawing.Size(222, 46);
+            this.cmdMergeGraphs.Size = new System.Drawing.Size(111, 23);
             this.cmdMergeGraphs.TabIndex = 7;
             this.cmdMergeGraphs.Text = "Merge Graphs";
             this.cmdMergeGraphs.UseVisualStyleBackColor = true;
@@ -360,8 +341,8 @@
             // 
             // txtGranularity
             // 
-            this.txtGranularity.Location = new System.Drawing.Point(1500, 668);
-            this.txtGranularity.Margin = new System.Windows.Forms.Padding(4);
+            this.txtGranularity.Location = new System.Drawing.Point(750, 334);
+            this.txtGranularity.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.txtGranularity.Maximum = new decimal(new int[] {
             60,
             0,
@@ -373,7 +354,7 @@
             0,
             0});
             this.txtGranularity.Name = "txtGranularity";
-            this.txtGranularity.Size = new System.Drawing.Size(114, 31);
+            this.txtGranularity.Size = new System.Drawing.Size(57, 20);
             this.txtGranularity.TabIndex = 14;
             this.txtGranularity.Value = new decimal(new int[] {
             10,
@@ -384,20 +365,19 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(1392, 674);
-            this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label3.Location = new System.Drawing.Point(696, 337);
+            this.label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(102, 25);
+            this.label3.Size = new System.Drawing.Size(52, 13);
             this.label3.TabIndex = 15;
             this.label3.Text = "Seconds:";
             // 
             // lblPowerUsage
             // 
             this.lblPowerUsage.AutoSize = true;
-            this.lblPowerUsage.Location = new System.Drawing.Point(384, 616);
-            this.lblPowerUsage.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
+            this.lblPowerUsage.Location = new System.Drawing.Point(192, 308);
             this.lblPowerUsage.Name = "lblPowerUsage";
-            this.lblPowerUsage.Size = new System.Drawing.Size(208, 25);
+            this.lblPowerUsage.Size = new System.Drawing.Size(108, 13);
             this.lblPowerUsage.TabIndex = 9;
             this.lblPowerUsage.Text = "Total Power: 0 KW/h";
             // 
@@ -417,11 +397,11 @@
             this.groupBox1.Controls.Add(this.lblZilBalance);
             this.groupBox1.Controls.Add(this.lblTotal);
             this.groupBox1.Controls.Add(this.lblEthBalance);
-            this.groupBox1.Location = new System.Drawing.Point(1636, 60);
-            this.groupBox1.Margin = new System.Windows.Forms.Padding(4);
+            this.groupBox1.Location = new System.Drawing.Point(818, 30);
+            this.groupBox1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Padding = new System.Windows.Forms.Padding(4);
-            this.groupBox1.Size = new System.Drawing.Size(1072, 264);
+            this.groupBox1.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupBox1.Size = new System.Drawing.Size(536, 132);
             this.groupBox1.TabIndex = 16;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Live Stats";
@@ -429,20 +409,18 @@
             // lblZilToday
             // 
             this.lblZilToday.AutoSize = true;
-            this.lblZilToday.Location = new System.Drawing.Point(487, 190);
-            this.lblZilToday.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
+            this.lblZilToday.Location = new System.Drawing.Point(244, 95);
             this.lblZilToday.Name = "lblZilToday";
-            this.lblZilToday.Size = new System.Drawing.Size(198, 25);
+            this.lblZilToday.Size = new System.Drawing.Size(100, 13);
             this.lblZilToday.TabIndex = 13;
             this.lblZilToday.Text = "ZIL earned today: 0";
             // 
             // lblEthToday
             // 
             this.lblEthToday.AutoSize = true;
-            this.lblEthToday.Location = new System.Drawing.Point(487, 150);
-            this.lblEthToday.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
+            this.lblEthToday.Location = new System.Drawing.Point(244, 75);
             this.lblEthToday.Name = "lblEthToday";
-            this.lblEthToday.Size = new System.Drawing.Size(210, 25);
+            this.lblEthToday.Size = new System.Drawing.Size(106, 13);
             this.lblEthToday.TabIndex = 13;
             this.lblEthToday.Text = "ETH earned today: 0";
             // 
@@ -453,11 +431,11 @@
             this.groupBox2.Controls.Add(this.lblBlockReward);
             this.groupBox2.Controls.Add(this.lblEthCurProfit);
             this.groupBox2.Controls.Add(this.lblEthProfit);
-            this.groupBox2.Location = new System.Drawing.Point(1072, 60);
-            this.groupBox2.Margin = new System.Windows.Forms.Padding(4);
+            this.groupBox2.Location = new System.Drawing.Point(536, 30);
+            this.groupBox2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Padding = new System.Windows.Forms.Padding(4);
-            this.groupBox2.Size = new System.Drawing.Size(542, 264);
+            this.groupBox2.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupBox2.Size = new System.Drawing.Size(271, 132);
             this.groupBox2.TabIndex = 17;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Minerstats Data (Ethereum)";
@@ -465,50 +443,50 @@
             // lblEzilDiff
             // 
             this.lblEzilDiff.AutoSize = true;
-            this.lblEzilDiff.Location = new System.Drawing.Point(6, 230);
-            this.lblEzilDiff.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblEzilDiff.Location = new System.Drawing.Point(3, 115);
+            this.lblEzilDiff.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblEzilDiff.Name = "lblEzilDiff";
-            this.lblEzilDiff.Size = new System.Drawing.Size(461, 25);
+            this.lblEzilDiff.Size = new System.Drawing.Size(231, 13);
             this.lblEzilDiff.TabIndex = 1;
             this.lblEzilDiff.Text = "Difference to Ezil: 0.0000000 ETH (00.00 USD)";
             // 
             // lblNetHash
             // 
             this.lblNetHash.AutoSize = true;
-            this.lblNetHash.Location = new System.Drawing.Point(6, 32);
-            this.lblNetHash.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblNetHash.Location = new System.Drawing.Point(3, 16);
+            this.lblNetHash.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblNetHash.Name = "lblNetHash";
-            this.lblNetHash.Size = new System.Drawing.Size(312, 25);
+            this.lblNetHash.Size = new System.Drawing.Size(160, 13);
             this.lblNetHash.TabIndex = 0;
             this.lblNetHash.Text = "Network Hashrate: 000.00 TH/s";
             // 
             // lblBlockReward
             // 
             this.lblBlockReward.AutoSize = true;
-            this.lblBlockReward.Location = new System.Drawing.Point(6, 76);
-            this.lblBlockReward.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblBlockReward.Location = new System.Drawing.Point(3, 38);
+            this.lblBlockReward.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblBlockReward.Name = "lblBlockReward";
-            this.lblBlockReward.Size = new System.Drawing.Size(306, 25);
+            this.lblBlockReward.Size = new System.Drawing.Size(156, 13);
             this.lblBlockReward.TabIndex = 0;
             this.lblBlockReward.Text = "Block Reward: 0.0000000 ETH";
             // 
             // lblEthCurProfit
             // 
             this.lblEthCurProfit.AutoSize = true;
-            this.lblEthCurProfit.Location = new System.Drawing.Point(6, 150);
-            this.lblEthCurProfit.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblEthCurProfit.Location = new System.Drawing.Point(3, 75);
+            this.lblEthCurProfit.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblEthCurProfit.Name = "lblEthCurProfit";
-            this.lblEthCurProfit.Size = new System.Drawing.Size(481, 25);
+            this.lblEthCurProfit.Size = new System.Drawing.Size(238, 13);
             this.lblEthCurProfit.TabIndex = 0;
             this.lblEthCurProfit.Text = "Current Profitability: 0.0000000 ETH (00.00 USD)";
             // 
             // lblEthProfit
             // 
             this.lblEthProfit.AutoSize = true;
-            this.lblEthProfit.Location = new System.Drawing.Point(6, 190);
-            this.lblEthProfit.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblEthProfit.Location = new System.Drawing.Point(3, 95);
+            this.lblEthProfit.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblEthProfit.Name = "lblEthProfit";
-            this.lblEthProfit.Size = new System.Drawing.Size(446, 25);
+            this.lblEthProfit.Size = new System.Drawing.Size(222, 13);
             this.lblEthProfit.TabIndex = 0;
             this.lblEthProfit.Text = "24h Profitability: 0.0000000 ETH (00.00 USD)";
             // 
@@ -521,11 +499,11 @@
             this.groupBox3.Controls.Add(this.lblAcceptedShares);
             this.groupBox3.Controls.Add(this.lblSharesRatio);
             this.groupBox3.Controls.Add(this.lblStaleShares);
-            this.groupBox3.Location = new System.Drawing.Point(1072, 332);
-            this.groupBox3.Margin = new System.Windows.Forms.Padding(4);
+            this.groupBox3.Location = new System.Drawing.Point(536, 166);
+            this.groupBox3.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Padding = new System.Windows.Forms.Padding(4);
-            this.groupBox3.Size = new System.Drawing.Size(542, 296);
+            this.groupBox3.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupBox3.Size = new System.Drawing.Size(271, 148);
             this.groupBox3.TabIndex = 18;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Ezil Historic Stats";
@@ -533,20 +511,20 @@
             // lblAverageHashrate
             // 
             this.lblAverageHashrate.AutoSize = true;
-            this.lblAverageHashrate.Location = new System.Drawing.Point(6, 256);
-            this.lblAverageHashrate.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblAverageHashrate.Location = new System.Drawing.Point(3, 128);
+            this.lblAverageHashrate.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblAverageHashrate.Name = "lblAverageHashrate";
-            this.lblAverageHashrate.Size = new System.Drawing.Size(321, 25);
+            this.lblAverageHashrate.Size = new System.Drawing.Size(164, 13);
             this.lblAverageHashrate.TabIndex = 2;
             this.lblAverageHashrate.Text = "Average Hash Rate = 0.00 MH/s";
             // 
             // rdo48h
             // 
             this.rdo48h.AutoSize = true;
-            this.rdo48h.Location = new System.Drawing.Point(120, 34);
-            this.rdo48h.Margin = new System.Windows.Forms.Padding(4);
+            this.rdo48h.Location = new System.Drawing.Point(60, 17);
+            this.rdo48h.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.rdo48h.Name = "rdo48h";
-            this.rdo48h.Size = new System.Drawing.Size(79, 29);
+            this.rdo48h.Size = new System.Drawing.Size(43, 17);
             this.rdo48h.TabIndex = 1;
             this.rdo48h.Text = "48h";
             this.rdo48h.UseVisualStyleBackColor = true;
@@ -555,10 +533,10 @@
             // 
             this.rdo24h.AutoSize = true;
             this.rdo24h.Checked = true;
-            this.rdo24h.Location = new System.Drawing.Point(12, 34);
-            this.rdo24h.Margin = new System.Windows.Forms.Padding(4);
+            this.rdo24h.Location = new System.Drawing.Point(6, 17);
+            this.rdo24h.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.rdo24h.Name = "rdo24h";
-            this.rdo24h.Size = new System.Drawing.Size(79, 29);
+            this.rdo24h.Size = new System.Drawing.Size(43, 17);
             this.rdo24h.TabIndex = 1;
             this.rdo24h.TabStop = true;
             this.rdo24h.Text = "24h";
@@ -568,48 +546,48 @@
             // lblInvalidShares
             // 
             this.lblInvalidShares.AutoSize = true;
-            this.lblInvalidShares.Location = new System.Drawing.Point(6, 170);
-            this.lblInvalidShares.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblInvalidShares.Location = new System.Drawing.Point(3, 85);
+            this.lblInvalidShares.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblInvalidShares.Name = "lblInvalidShares";
-            this.lblInvalidShares.Size = new System.Drawing.Size(226, 25);
+            this.lblInvalidShares.Size = new System.Drawing.Size(113, 13);
             this.lblInvalidShares.TabIndex = 0;
             this.lblInvalidShares.Text = "Total Invalid Shares: 0";
             // 
             // lblAcceptedShares
             // 
             this.lblAcceptedShares.AutoSize = true;
-            this.lblAcceptedShares.Location = new System.Drawing.Point(6, 84);
-            this.lblAcceptedShares.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblAcceptedShares.Location = new System.Drawing.Point(3, 42);
+            this.lblAcceptedShares.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblAcceptedShares.Name = "lblAcceptedShares";
-            this.lblAcceptedShares.Size = new System.Drawing.Size(254, 25);
+            this.lblAcceptedShares.Size = new System.Drawing.Size(128, 13);
             this.lblAcceptedShares.TabIndex = 0;
             this.lblAcceptedShares.Text = "Total Accepted Shares: 0";
             // 
             // lblSharesRatio
             // 
             this.lblSharesRatio.AutoSize = true;
-            this.lblSharesRatio.Location = new System.Drawing.Point(6, 212);
-            this.lblSharesRatio.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblSharesRatio.Location = new System.Drawing.Point(3, 106);
+            this.lblSharesRatio.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblSharesRatio.Name = "lblSharesRatio";
-            this.lblSharesRatio.Size = new System.Drawing.Size(234, 25);
+            this.lblSharesRatio.Size = new System.Drawing.Size(115, 13);
             this.lblSharesRatio.TabIndex = 0;
             this.lblSharesRatio.Text = "Stale Shares Ratio: 0%";
             // 
             // lblStaleShares
             // 
             this.lblStaleShares.AutoSize = true;
-            this.lblStaleShares.Location = new System.Drawing.Point(6, 128);
-            this.lblStaleShares.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblStaleShares.Location = new System.Drawing.Point(3, 64);
+            this.lblStaleShares.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblStaleShares.Name = "lblStaleShares";
-            this.lblStaleShares.Size = new System.Drawing.Size(213, 25);
+            this.lblStaleShares.Size = new System.Drawing.Size(106, 13);
             this.lblStaleShares.TabIndex = 0;
             this.lblStaleShares.Text = "Total Stale Shares: 0";
             // 
             // frmMain
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(192F, 192F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(2726, 1182);
+            this.ClientSize = new System.Drawing.Size(1364, 591);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
@@ -628,7 +606,7 @@
             this.Controls.Add(this.menuStrip1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MainMenuStrip = this.menuStrip1;
-            this.Margin = new System.Windows.Forms.Padding(4);
+            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.MaximizeBox = false;
             this.Name = "frmMain";
             this.Text = "Jamirocoin Ezil Estimator";
