@@ -77,6 +77,12 @@
             this.lblAcceptedShares = new System.Windows.Forms.Label();
             this.lblSharesRatio = new System.Windows.Forms.Label();
             this.lblStaleShares = new System.Windows.Forms.Label();
+            this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.txtCustomHash = new System.Windows.Forms.NumericUpDown();
+            this.rdoUseCustom = new System.Windows.Forms.RadioButton();
+            this.rdoUseReported = new System.Windows.Forms.RadioButton();
+            this.rdoUseAverage = new System.Windows.Forms.RadioButton();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picWorkerGraph)).BeginInit();
             this.menuStrip1.SuspendLayout();
@@ -84,6 +90,8 @@
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
+            this.groupBox4.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.txtCustomHash)).BeginInit();
             this.SuspendLayout();
             // 
             // dataGridView
@@ -98,7 +106,7 @@
             this.dataGridView.Name = "dataGridView";
             this.dataGridView.RowHeadersVisible = false;
             this.dataGridView.RowHeadersWidth = 82;
-            this.dataGridView.Size = new System.Drawing.Size(536, 386);
+            this.dataGridView.Size = new System.Drawing.Size(536, 471);
             this.dataGridView.TabIndex = 0;
             this.dataGridView.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.dataGridView_CellFormatting);
             // 
@@ -141,7 +149,7 @@
             // 
             this.picWorkerGraph.BackColor = System.Drawing.Color.White;
             this.picWorkerGraph.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.picWorkerGraph.Location = new System.Drawing.Point(8, 384);
+            this.picWorkerGraph.Location = new System.Drawing.Point(8, 467);
             this.picWorkerGraph.Name = "picWorkerGraph";
             this.picWorkerGraph.Size = new System.Drawing.Size(800, 200);
             this.picWorkerGraph.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -152,13 +160,13 @@
             // 
             this.workerTree.Location = new System.Drawing.Point(8, 30);
             this.workerTree.Name = "workerTree";
-            this.workerTree.Size = new System.Drawing.Size(526, 274);
+            this.workerTree.Size = new System.Drawing.Size(526, 382);
             this.workerTree.TabIndex = 6;
             this.workerTree.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.workerTree_AfterSelect);
             // 
             // cmdRefeshGraph
             // 
-            this.cmdRefeshGraph.Location = new System.Drawing.Point(456, 308);
+            this.cmdRefeshGraph.Location = new System.Drawing.Point(459, 415);
             this.cmdRefeshGraph.Name = "cmdRefeshGraph";
             this.cmdRefeshGraph.Size = new System.Drawing.Size(75, 23);
             this.cmdRefeshGraph.TabIndex = 7;
@@ -178,7 +186,7 @@
             // 
             // cmdCombineGraphs
             // 
-            this.cmdCombineGraphs.Location = new System.Drawing.Point(578, 354);
+            this.cmdCombineGraphs.Location = new System.Drawing.Point(578, 437);
             this.cmdCombineGraphs.Name = "cmdCombineGraphs";
             this.cmdCombineGraphs.Size = new System.Drawing.Size(111, 23);
             this.cmdCombineGraphs.TabIndex = 7;
@@ -189,7 +197,7 @@
             // lblHashPower
             // 
             this.lblHashPower.AutoSize = true;
-            this.lblHashPower.Location = new System.Drawing.Point(8, 308);
+            this.lblHashPower.Location = new System.Drawing.Point(11, 415);
             this.lblHashPower.Name = "lblHashPower";
             this.lblHashPower.Size = new System.Drawing.Size(127, 13);
             this.lblHashPower.TabIndex = 9;
@@ -282,19 +290,19 @@
             // settingsToolStripMenuItem
             // 
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
             this.settingsToolStripMenuItem.Text = "&Settings";
             this.settingsToolStripMenuItem.Click += new System.EventHandler(this.settingsToolStripMenuItem_Click);
             // 
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(177, 6);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(113, 6);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
             this.exitToolStripMenuItem.Text = "E&xit";
             // 
             // helpToolStripMenuItem
@@ -332,7 +340,7 @@
             // 
             // cmdMergeGraphs
             // 
-            this.cmdMergeGraphs.Location = new System.Drawing.Point(696, 354);
+            this.cmdMergeGraphs.Location = new System.Drawing.Point(696, 437);
             this.cmdMergeGraphs.Name = "cmdMergeGraphs";
             this.cmdMergeGraphs.Size = new System.Drawing.Size(111, 23);
             this.cmdMergeGraphs.TabIndex = 7;
@@ -342,8 +350,8 @@
             // 
             // txtGranularity
             // 
-            this.txtGranularity.Location = new System.Drawing.Point(750, 334);
-            this.txtGranularity.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.txtGranularity.Location = new System.Drawing.Point(750, 417);
+            this.txtGranularity.Margin = new System.Windows.Forms.Padding(2);
             this.txtGranularity.Maximum = new decimal(new int[] {
             60,
             0,
@@ -366,7 +374,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(696, 337);
+            this.label3.Location = new System.Drawing.Point(696, 420);
             this.label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(52, 13);
@@ -376,7 +384,7 @@
             // lblPowerUsage
             // 
             this.lblPowerUsage.AutoSize = true;
-            this.lblPowerUsage.Location = new System.Drawing.Point(192, 308);
+            this.lblPowerUsage.Location = new System.Drawing.Point(195, 415);
             this.lblPowerUsage.Name = "lblPowerUsage";
             this.lblPowerUsage.Size = new System.Drawing.Size(108, 13);
             this.lblPowerUsage.TabIndex = 9;
@@ -399,9 +407,9 @@
             this.groupBox1.Controls.Add(this.lblTotal);
             this.groupBox1.Controls.Add(this.lblEthBalance);
             this.groupBox1.Location = new System.Drawing.Point(818, 30);
-            this.groupBox1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupBox1.Margin = new System.Windows.Forms.Padding(2);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupBox1.Padding = new System.Windows.Forms.Padding(2);
             this.groupBox1.Size = new System.Drawing.Size(536, 132);
             this.groupBox1.TabIndex = 16;
             this.groupBox1.TabStop = false;
@@ -433,9 +441,9 @@
             this.groupBox2.Controls.Add(this.lblEthCurProfit);
             this.groupBox2.Controls.Add(this.lblEthProfit);
             this.groupBox2.Location = new System.Drawing.Point(536, 30);
-            this.groupBox2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupBox2.Margin = new System.Windows.Forms.Padding(2);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupBox2.Padding = new System.Windows.Forms.Padding(2);
             this.groupBox2.Size = new System.Drawing.Size(271, 132);
             this.groupBox2.TabIndex = 17;
             this.groupBox2.TabStop = false;
@@ -500,14 +508,14 @@
             this.groupBox3.Controls.Add(this.lblAcceptedShares);
             this.groupBox3.Controls.Add(this.lblSharesRatio);
             this.groupBox3.Controls.Add(this.lblStaleShares);
-            this.groupBox3.Location = new System.Drawing.Point(536, 166);
-            this.groupBox3.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupBox3.Location = new System.Drawing.Point(536, 265);
+            this.groupBox3.Margin = new System.Windows.Forms.Padding(2);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupBox3.Padding = new System.Windows.Forms.Padding(2);
             this.groupBox3.Size = new System.Drawing.Size(271, 148);
             this.groupBox3.TabIndex = 18;
             this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "Ezil Historic Stats";
+            this.groupBox3.Text = "Ezil Historical Stats";
             // 
             // lblAverageHashrate
             // 
@@ -523,7 +531,7 @@
             // 
             this.rdo48h.AutoSize = true;
             this.rdo48h.Location = new System.Drawing.Point(60, 17);
-            this.rdo48h.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.rdo48h.Margin = new System.Windows.Forms.Padding(2);
             this.rdo48h.Name = "rdo48h";
             this.rdo48h.Size = new System.Drawing.Size(43, 17);
             this.rdo48h.TabIndex = 1;
@@ -535,7 +543,7 @@
             this.rdo24h.AutoSize = true;
             this.rdo24h.Checked = true;
             this.rdo24h.Location = new System.Drawing.Point(6, 17);
-            this.rdo24h.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.rdo24h.Margin = new System.Windows.Forms.Padding(2);
             this.rdo24h.Name = "rdo24h";
             this.rdo24h.Size = new System.Drawing.Size(43, 17);
             this.rdo24h.TabIndex = 1;
@@ -584,11 +592,93 @@
             this.lblStaleShares.TabIndex = 0;
             this.lblStaleShares.Text = "Total Stale Shares: 0";
             // 
+            // groupBox4
+            // 
+            this.groupBox4.Controls.Add(this.label4);
+            this.groupBox4.Controls.Add(this.txtCustomHash);
+            this.groupBox4.Controls.Add(this.rdoUseCustom);
+            this.groupBox4.Controls.Add(this.rdoUseReported);
+            this.groupBox4.Controls.Add(this.rdoUseAverage);
+            this.groupBox4.Location = new System.Drawing.Point(536, 167);
+            this.groupBox4.Name = "groupBox4";
+            this.groupBox4.Size = new System.Drawing.Size(271, 93);
+            this.groupBox4.TabIndex = 19;
+            this.groupBox4.TabStop = false;
+            this.groupBox4.Text = "HashRate used for estimates";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(231, 67);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(34, 13);
+            this.label4.TabIndex = 16;
+            this.label4.Text = "MH/s";
+            // 
+            // txtCustomHash
+            // 
+            this.txtCustomHash.Location = new System.Drawing.Point(116, 65);
+            this.txtCustomHash.Margin = new System.Windows.Forms.Padding(2);
+            this.txtCustomHash.Maximum = new decimal(new int[] {
+            1000000000,
+            0,
+            0,
+            0});
+            this.txtCustomHash.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            393216});
+            this.txtCustomHash.Name = "txtCustomHash";
+            this.txtCustomHash.Size = new System.Drawing.Size(110, 20);
+            this.txtCustomHash.TabIndex = 15;
+            this.txtCustomHash.Value = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+            // 
+            // rdoUseCustom
+            // 
+            this.rdoUseCustom.AutoSize = true;
+            this.rdoUseCustom.Location = new System.Drawing.Point(6, 65);
+            this.rdoUseCustom.Name = "rdoUseCustom";
+            this.rdoUseCustom.Size = new System.Drawing.Size(105, 17);
+            this.rdoUseCustom.TabIndex = 2;
+            this.rdoUseCustom.Text = "Use custom rate:";
+            this.rdoUseCustom.UseVisualStyleBackColor = true;
+            this.rdoUseCustom.CheckedChanged += new System.EventHandler(this.rdoUseCustom_CheckedChanged);
+            // 
+            // rdoUseReported
+            // 
+            this.rdoUseReported.AutoSize = true;
+            this.rdoUseReported.Location = new System.Drawing.Point(6, 42);
+            this.rdoUseReported.Name = "rdoUseReported";
+            this.rdoUseReported.Size = new System.Drawing.Size(139, 17);
+            this.rdoUseReported.TabIndex = 1;
+            this.rdoUseReported.Text = "Use T-Rex reported rate";
+            this.rdoUseReported.UseVisualStyleBackColor = true;
+            this.rdoUseReported.CheckedChanged += new System.EventHandler(this.rdoUseReported_CheckedChanged);
+            // 
+            // rdoUseAverage
+            // 
+            this.rdoUseAverage.AutoSize = true;
+            this.rdoUseAverage.Checked = true;
+            this.rdoUseAverage.Location = new System.Drawing.Point(6, 19);
+            this.rdoUseAverage.Name = "rdoUseAverage";
+            this.rdoUseAverage.Size = new System.Drawing.Size(130, 17);
+            this.rdoUseAverage.TabIndex = 0;
+            this.rdoUseAverage.TabStop = true;
+            this.rdoUseAverage.Text = "Use historical average";
+            this.rdoUseAverage.UseVisualStyleBackColor = true;
+            this.rdoUseAverage.CheckedChanged += new System.EventHandler(this.rdoUseAverage_CheckedChanged);
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(1362, 590);
+            this.ClientSize = new System.Drawing.Size(1362, 675);
+            this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
@@ -608,7 +698,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.MaximizeBox = false;
             this.Name = "frmMain";
             this.Text = "Jamirocoin Ezil Estimator";
@@ -625,6 +715,9 @@
             this.groupBox2.PerformLayout();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
+            this.groupBox4.ResumeLayout(false);
+            this.groupBox4.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.txtCustomHash)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -680,6 +773,12 @@
         private System.Windows.Forms.Label lblAverageHashrate;
         private System.Windows.Forms.Label lblZilToday;
         private System.Windows.Forms.Label lblEthToday;
+        private System.Windows.Forms.GroupBox groupBox4;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.NumericUpDown txtCustomHash;
+        private System.Windows.Forms.RadioButton rdoUseCustom;
+        private System.Windows.Forms.RadioButton rdoUseReported;
+        private System.Windows.Forms.RadioButton rdoUseAverage;
     }
 }
 

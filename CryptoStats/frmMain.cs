@@ -16,6 +16,7 @@ namespace CryptoStats
         List<Machine> machines = new List<Machine>();
         string apiKey = string.Empty;
         Wallet ezilWallet = new Wallet();
+        double hashPower = 0;
 
         public frmMain()
         {
@@ -161,7 +162,7 @@ namespace CryptoStats
 
             if (updateTotalHash)
             {
-                double hashPower = (workersInfo.Sum(c => c.HashPower) / 1000000d);
+                hashPower = (workersInfo.Sum(c => c.HashPower) / 1000000d);
                 lblHashPower.Text = $"Total Hash Rate: {hashPower:0.00} MH/s";
                 lblPowerUsage.Text = $"Total Power Usage: {(workersInfo.Sum(c => c.PowerUsage) / 1000d):0.00} KW/h";
             }
@@ -251,13 +252,27 @@ namespace CryptoStats
                 lblTotalBalance.Text = $"= (${(ethBalanceValue + zilBalanceValue):0.00})";
 
                 var coinInfoEth24 = minerstatsAPI.GetCoinHistory("ETH");
+                float selectedHash = 0;
                 var currentStats = GetCurrentStats();
-                long averageHash = currentStats.average_hashrate;
+                float averageHash = currentStats.average_hashrate;
+                if (rdoUseAverage.Checked)
+                {
+                    selectedHash = averageHash;
+                }
+                else if (rdoUseReported.Checked)
+                {
+                    selectedHash = (float)hashPower * 1000000;
+                }
+                else
+                {
+                    selectedHash = (float)txtCustomHash.Value * 1000000;
+                }
+
                 lblNetHash.Text = $"Network Hashrate: {coinInfoCurrEth.network_hashrate / 1000000000000} TH/s";
                 lblBlockReward.Text = $"Block Reward: {coinInfoCurrEth.reward_block} ETH";
-                float ethCur = ((coinInfoCurrEth.reward * 0.99f) * 24) * averageHash;
+                float ethCur = ((coinInfoCurrEth.reward * 0.99f) * 24) * selectedHash;
                 lblEthCurProfit.Text = $"Current Profitability: {ethCur} ETH (${ethCur * ethPrice:0.00})";
-                float eth24h = ((coinInfoEth24.reward * 0.99f) * 24) * averageHash;
+                float eth24h = ((coinInfoEth24.reward * 0.99f) * 24) * selectedHash;
                 lblEthProfit.Text = $"24h Profitability: {eth24h} ETH (${eth24h * ethPrice:0.00})";
                 float ezilDiff = eth - eth24h;
                 lblEzilDiff.Text = $"Difference to Ezil: {ezilDiff} ETH (${ezilDiff * ethPrice:0.00})";
@@ -535,6 +550,36 @@ namespace CryptoStats
             this.Cursor = Cursors.WaitCursor;
             GetStatsAndBalance();
             this.Cursor = Cursors.Default;
+        }
+
+        private void rdoUseAverage_CheckedChanged(object sender, EventArgs e)
+        {
+            if ((sender as RadioButton).Checked)
+            {
+                this.Cursor = Cursors.WaitCursor;
+                GetStatsAndBalance();
+                this.Cursor = Cursors.Default;
+            }
+        }
+
+        private void rdoUseReported_CheckedChanged(object sender, EventArgs e)
+        {
+            if ((sender as RadioButton).Checked)
+            {
+                this.Cursor = Cursors.WaitCursor;
+                GetStatsAndBalance();
+                this.Cursor = Cursors.Default;
+            }
+        }
+
+        private void rdoUseCustom_CheckedChanged(object sender, EventArgs e)
+        {
+            if ((sender as RadioButton).Checked)
+            {
+                this.Cursor = Cursors.WaitCursor;
+                GetStatsAndBalance();
+                this.Cursor = Cursors.Default;
+            }
         }
     }
 
