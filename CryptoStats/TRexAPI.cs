@@ -339,5 +339,4 @@ namespace CryptoStats
             get; set;
         }
     }
-
 }

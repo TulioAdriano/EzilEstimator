@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
@@ -9,72 +10,75 @@ namespace CryptoStats
 {
     public class EzilAPI
     {
-        public string ethAddress
-        {
-            get;
-        }
-        public string zilAddress
-        {
-            get;
-        }
 
-        public EzilAPI(string ethAddress, string zilAddress)
+        public static List<EzilReward> GetRewards(Wallet wallet, int page = 1, int entries = 10, string coin = "eth")
         {
-            this.ethAddress = ethAddress;
-            this.zilAddress = zilAddress;
-        }
-
-        public string GetRewards(int page = 1, int entries = 10, string coin = "eth")
-        {
-            string response = string.Empty;
+            List<EzilReward> rewards = new List<EzilReward>();
 
             using (HttpClient httpClient = new HttpClient())
             {
-                string request = $"https://billing.ezil.me/rewards/{ethAddress}.{zilAddress}?page={page}&per_page={entries}&coin={coin}";
-                response = httpClient.GetStringAsync(new Uri(request)).Result;
+                string request = $"https://billing.ezil.me/rewards/{wallet.Eth}.{wallet.Zil}?page={page}&per_page={entries}&coin={coin}";
+                string response = httpClient.GetStringAsync(new Uri(request)).Result;
+                rewards = JsonConvert.DeserializeObject<List<EzilReward>>(response);
             }
 
-            return response;
+            return rewards;
         }
-        public string GetBalances()
+        public static EzilBalance GetBalances(Wallet wallet)
         {
-            string response = string.Empty;
+            EzilBalance balances = null;
 
             using (HttpClient httpClient = new HttpClient())
             {
-                string request = $"https://billing.ezil.me/balances/{ethAddress}.{zilAddress}";
-                response = httpClient.GetStringAsync(new Uri(request)).Result;
+                string request = $"https://billing.ezil.me/balances/{wallet.Eth}.{wallet.Zil}";
+                string response = httpClient.GetStringAsync(new Uri(request)).Result;
+                balances = JsonConvert.DeserializeObject<EzilBalance>(response);
             }
 
-            return response;
+            return balances;
         }
 
-        public string GetHistoricalStats(int timeFrame)
+        public static List<EzilStats> GetHistoricalStats(Wallet wallet, int timeFrame)
         {
-            string response = string.Empty;
+            List<EzilStats> stats = new List<EzilStats>();
             string timeFrom = DateTime.UtcNow.AddHours(-timeFrame).ToString("yyyy-MM-ddTHH-mm-ss.fffZ");
             string timeTo = DateTime.UtcNow.ToString("yyyy-MM-ddTHH-mm-ss.fffZ");
 
             using (HttpClient httpClient = new HttpClient())
             {
-                string request = $"https://stats.ezil.me/historical_stats/{ethAddress}.{zilAddress}?time_from={timeFrom}&time_to={timeTo}";
-                response = httpClient.GetStringAsync(new Uri(request)).Result;
+                string request = $"https://stats.ezil.me/historical_stats/{wallet.Eth}.{wallet.Zil}?time_from={timeFrom}&time_to={timeTo}";
+                string response = httpClient.GetStringAsync(new Uri(request)).Result;
+                stats = JsonConvert.DeserializeObject<List<EzilStats>>(response);
             }
 
-            return response;
+            return stats;
         }
 
-        public string GetCurrentStats(bool includeReported = true)
+        public static EzilCurrentStats GetCurrentStats(Wallet wallet, bool includeReported = true)
         {
-            string response = string.Empty;
+            EzilCurrentStats currentStats = null;
 
             using (HttpClient httpClient = new HttpClient())
             {
-                string request = $"https://stats.ezil.me/current_stats/{ethAddress}.{zilAddress}{(includeReported ? "/reported" : string.Empty)}";
-                response = httpClient.GetStringAsync(new Uri(request)).Result;
+                string request = $"https://stats.ezil.me/current_stats/{wallet.Eth}.{wallet.Zil}{(includeReported ? "/reported" : string.Empty)}";
+                string response = httpClient.GetStringAsync(new Uri(request)).Result;
+                currentStats = JsonConvert.DeserializeObject<EzilCurrentStats>(response);
             }
 
-            return response;
+            return currentStats;
+        }
+
+        public static ZilInfo GetZilInfo()
+        {
+            ZilInfo zilinfo = null;
+            using (HttpClient httpClient = new HttpClient())
+            {
+                var request = $"https://xxx.ezil.me/blockchain_stats";
+                var response = httpClient.GetStringAsync(new Uri(request)).Result;
+                zilinfo = JsonConvert.DeserializeObject<ZilInfo>(response);
+            }
+
+            return zilinfo;
         }
     }
 
@@ -255,6 +259,33 @@ namespace CryptoStats
         }
     }
 
+    public class ZilInfo
+    {
+        public long block_num
+        {
+            get; set;
+        }
+        public long tx_block_num
+        {
+            get; set;
+        }
+        public long[] difficulty
+        {
+            get; set;
+        }
+        public DateTime utc_time
+        {
+            get; set;
+        }
+        public DateTime? start_time
+        {
+            get; set;
+        }
+        public DateTime next_pow_time
+        {
+            get; set;
+        }
+    }
 }
 
 

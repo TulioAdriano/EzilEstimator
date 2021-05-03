@@ -17,6 +17,7 @@ namespace CryptoStats
         string apiKey = string.Empty;
         Wallet ezilWallet = new Wallet();
         double hashPower = 0;
+        ZilInfo zilInfo = null;
 
         public frmMain()
         {
@@ -43,12 +44,15 @@ namespace CryptoStats
 
             var workerStats = GetWorkerStats(machines);
             var workersInfo = GetWorkersInfo(workerStats, true);
+            zilInfo = EzilAPI.GetZilInfo();
+
             if (workersInfo != null && workersInfo.Count > 0)
             {
                 DisplayWorkerGraph(workerStats[workerTree.SelectedNode.Text], workersInfo[0].MinHash, workersInfo[0].MaxHash);
             }
 
             GetStatsAndBalance();
+            zilTimer.Start();
             this.Cursor = Cursors.Default;
         }
 
@@ -56,13 +60,13 @@ namespace CryptoStats
         {
             try
             {
-                var rewards24 = GetEzilStats(ezilWallet);
+                var rewards24 = GetEzilStats();
                 float eth = rewards24.Where(c => c.coin.Equals("eth")).Sum(s => s.amount);
                 float zil = rewards24.Where(c => c.coin.Equals("zil")).Sum(s => s.amount);
                 txtEth24h.Text = eth.ToString();
                 txtZil24h.Text = zil.ToString();
 
-                var balances = GetBalances(ezilWallet);
+                var balances = GetBalances();
                 lblEthBalance.Text = $"Unpaid ETH: {balances.eth}";
                 lblZilBalance.Text = $"Unpaid ZIL: {balances.zil}";
 
@@ -100,9 +104,7 @@ namespace CryptoStats
         {
             try
             {
-                EzilAPI ezilAPI = new EzilAPI(ezilWallet.Eth, ezilWallet.Zil);
-                string response = ezilAPI.GetHistoricalStats(timeFrame);
-                var ezilStats = JsonConvert.DeserializeObject<List<EzilStats>>(response);
+                var ezilStats = EzilAPI.GetHistoricalStats(ezilWallet, timeFrame);
                 return ezilStats;
             }
             catch (Exception ex)
@@ -122,13 +124,11 @@ namespace CryptoStats
             ezilWallet = JsonConvert.DeserializeObject<Wallet>(Properties.Settings.Default.EzilWallet);
         }
 
-        private static EzilBalance GetBalances(Wallet ezilWallet)
+        private EzilBalance GetBalances()
         {
             try
             {
-                EzilAPI ezilAPI = new EzilAPI(ezilWallet.Eth, ezilWallet.Zil);
-                string response = ezilAPI.GetBalances();
-                var balances = JsonConvert.DeserializeObject<EzilBalance>(response);
+                var balances = EzilAPI.GetBalances(ezilWallet);
                 return balances;
             }
             catch (Exception ex)
@@ -290,9 +290,7 @@ namespace CryptoStats
 
         private EzilCurrentStats GetCurrentStats()
         {
-            EzilCurrentStats ezilCurrentStats = null;
-            var ezilAPI = new EzilAPI(ezilWallet.Eth, ezilWallet.Zil);
-            ezilCurrentStats = JsonConvert.DeserializeObject<EzilCurrentStats>(ezilAPI.GetCurrentStats());
+            var ezilCurrentStats = EzilAPI.GetCurrentStats(ezilWallet);
             return ezilCurrentStats;
         }
 
@@ -304,17 +302,15 @@ namespace CryptoStats
             return coinListings;
         }
 
-        private static List<EzilReward> GetEzilStats(Wallet ezilWallet)
+        private List<EzilReward> GetEzilStats()
         {
             try
             {
-                EzilAPI ezilAPI = new EzilAPI(ezilWallet.Eth, ezilWallet.Zil);
                 List<EzilReward> ezilRewards = new List<EzilReward>();
                 int page = 1;
                 do
                 {
-                    string response = ezilAPI.GetRewards(page++, 999, "eth");
-                    var rewards = JsonConvert.DeserializeObject<List<EzilReward>>(response);
+                    var rewards = EzilAPI.GetRewards(ezilWallet, page++, 999, "eth");
                     ezilRewards.AddRange(rewards/*.Where(r => r.coin.Equals("eth"))*/);
                 } while (ezilRewards.Min(c => c.created_at) >= DateTime.UtcNow.AddDays(-1));
 
@@ -324,8 +320,7 @@ namespace CryptoStats
                 ezilRewards.Clear();
                 do
                 {
-                    string response = ezilAPI.GetRewards(page++, 999, "zil");
-                    var rewards = JsonConvert.DeserializeObject<List<EzilReward>>(response);
+                    var rewards = EzilAPI.GetRewards(ezilWallet, page++, 999, "zil");
                     ezilRewards.AddRange(rewards/*.Where(r => r.coin.Equals("eth"))*/);
                 } while (ezilRewards.Min(c => c.created_at) >= DateTime.UtcNow.AddDays(-1));
                 rewards24.AddRange(ezilRewards.Where(r => r.created_at >= DateTime.UtcNow.AddDays(-1)).ToList());
@@ -494,6 +489,7 @@ namespace CryptoStats
 
         private void cmdMergeGraphs_Click(object sender, EventArgs e)
         {
+            this.Cursor = Cursors.WaitCursor;
             List<long[]> hashRates = new List<long[]>();
             DateTime utcNow = DateTime.UtcNow;
             var trexData = GetWorkerStats(machines, false);
@@ -526,6 +522,7 @@ namespace CryptoStats
             }
 
             DisplayWorkerGraph(hashRates, hashRates.Min(c => c[1]), hashRates.Max(c => c[1]));
+            this.Cursor = Cursors.Default;
         }
 
         private void dataGridView_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
@@ -580,6 +577,20 @@ namespace CryptoStats
                 GetStatsAndBalance();
                 this.Cursor = Cursors.Default;
             }
+        }
+
+        private void zilTimer_Tick(object sender, EventArgs e)
+        {
+            if (zilInfo.next_pow_time <= DateTime.UtcNow)
+            {
+                zilInfo = EzilAPI.GetZilInfo();
+            }
+
+            var zilPowTime = (zilInfo.next_pow_time - DateTime.UtcNow);
+            lblNextZil.Invoke(new MethodInvoker(() =>
+            {
+                lblNextZil.Text = $"Next ZIL round in: {zilPowTime.Hours}:{zilPowTime.Minutes:00}:{zilPowTime.Seconds:00} ";
+            }));
         }
     }
 

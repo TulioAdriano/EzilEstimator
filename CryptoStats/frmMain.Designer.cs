@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
             this.dataGridView = new System.Windows.Forms.DataGridView();
             this.label1 = new System.Windows.Forms.Label();
@@ -83,6 +84,8 @@
             this.rdoUseCustom = new System.Windows.Forms.RadioButton();
             this.rdoUseReported = new System.Windows.Forms.RadioButton();
             this.rdoUseAverage = new System.Windows.Forms.RadioButton();
+            this.lblNextZil = new System.Windows.Forms.Label();
+            this.zilTimer = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picWorkerGraph)).BeginInit();
             this.menuStrip1.SuspendLayout();
@@ -392,6 +395,7 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.lblNextZil);
             this.groupBox1.Controls.Add(this.lblZilToday);
             this.groupBox1.Controls.Add(this.lblEthToday);
             this.groupBox1.Controls.Add(this.label1);
@@ -673,6 +677,20 @@
             this.rdoUseAverage.UseVisualStyleBackColor = true;
             this.rdoUseAverage.CheckedChanged += new System.EventHandler(this.rdoUseAverage_CheckedChanged);
             // 
+            // lblNextZil
+            // 
+            this.lblNextZil.AutoSize = true;
+            this.lblNextZil.Location = new System.Drawing.Point(244, 114);
+            this.lblNextZil.Name = "lblNextZil";
+            this.lblNextZil.Size = new System.Drawing.Size(131, 13);
+            this.lblNextZil.TabIndex = 14;
+            this.lblNextZil.Text = "Next ZIL round in: 0:00:00";
+            // 
+            // zilTimer
+            // 
+            this.zilTimer.Interval = 1000;
+            this.zilTimer.Tick += new System.EventHandler(this.zilTimer_Tick);
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -779,6 +797,8 @@
         private System.Windows.Forms.RadioButton rdoUseCustom;
         private System.Windows.Forms.RadioButton rdoUseReported;
         private System.Windows.Forms.RadioButton rdoUseAverage;
+        private System.Windows.Forms.Label lblNextZil;
+        private System.Windows.Forms.Timer zilTimer;
     }
 }
 
