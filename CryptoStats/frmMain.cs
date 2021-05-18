@@ -223,7 +223,7 @@ namespace CryptoStats
             dataGridView.Columns[0].DefaultCellStyle.Format =
             dataGridView.Columns[3].DefaultCellStyle.Format = "0.#################################";
 
-            lblEntryCount.Text = $"{rewards24.Count} entries";
+            lblEntryCount.Text = $"{rewards24.Count} entries ({rewards24.Count(c=>c.coin.Equals("eth"))} ETH, {rewards24.Count(c => c.coin.Equals("zil"))} ZIL)";
         }
 
         private void Display24hEarnings(float eth, float zil, EzilBalance balances)
@@ -397,6 +397,7 @@ namespace CryptoStats
 
         private void workerTree_AfterSelect(object sender, TreeViewEventArgs e)
         {
+            this.Cursor = Cursors.WaitCursor;
             if (e.Node.Parent != null)
             {
                 workerTree.SelectedNode = e.Node.Parent;
@@ -408,6 +409,7 @@ namespace CryptoStats
             {
                 DisplayWorkerGraph(workersStats[workerTree.SelectedNode.Text], workerInfo.MinHash, workerInfo.MaxHash);
             }
+            this.Cursor = Cursors.Default;
         }
         private void cmdRefeshGraph_Click(object sender, EventArgs e)
         {
@@ -436,7 +438,7 @@ namespace CryptoStats
         private void cmdRefreshRewards_Click(object sender, EventArgs e)
         {
             this.Cursor = Cursors.WaitCursor;
-
+            zilInfo = EzilAPI.GetZilInfo();
             GetStatsAndBalance();
             this.Cursor = Cursors.Default;
         }
@@ -453,10 +455,16 @@ namespace CryptoStats
             long maxHash = workersInfo.Max(c => c.MaxHash);
             int i = 0;
 
-            picWorkerGraph.Image = new Bitmap(800 * 2, 200 * 2);
+            double zoom = this.CreateGraphics().DpiX / 96d;
+
+            picWorkerGraph.Image = new Bitmap((int)(800 * zoom), (int)(200 * zoom));
             bool printTimeStamp = true;
             foreach (var workerStat in workerStats)
             {
+                if (workerStat.Value == null)
+                {
+                    continue;
+                }
                 DisplayWorkerGraph(workerStat.Value, minHash, maxHash, pens[(i++ % 5)], printTimeStamp);
                 printTimeStamp = false;
             }
@@ -502,6 +510,10 @@ namespace CryptoStats
                 long hashRate = 0;
                 foreach (var item in trexData)
                 {
+                    if (item.Value == null)
+                    {
+                        continue;
+                    }
                     var worker = item.Value;
                     if (item.Value.velocities == null)
                     {
@@ -581,7 +593,7 @@ namespace CryptoStats
 
         private void zilTimer_Tick(object sender, EventArgs e)
         {
-            if (zilInfo.next_pow_time <= DateTime.UtcNow)
+            if (zilInfo.next_pow_time <= DateTime.UtcNow || ((int)(zilInfo.next_pow_time - DateTime.UtcNow).TotalMinutes % 15) == 0)
             {
                 zilInfo = EzilAPI.GetZilInfo();
             }
