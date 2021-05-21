@@ -9,7 +9,7 @@ Configuration screen will require entering an ETH and ZIL wallet to be able to r
 Obsolete for now. It's no longer required to retrieve price of the cryptocurrencies. Currently using Minerstat API which doesn't require an API key.
 
 ### Machines
-Enter a hostname to retrieve T-Rex statistics. If running on the same machine you can use localhost or 127.0.0.1. If running remote, make sure to add the `--api-bind-http` parameter to enable remote access. See <https://github.com/trexminer/T-Rex> for details on how this parameter works.
+Enter a hostname to retrieve T-Rex statistics. If running on the same machine you can use localhost or 127.0.0.1. If running remote, make sure to add the `--api-bind-http` parameter to enable remote access. See the [T-Rex readme.md file](https://github.com/TulioAdriano/EzilEstimator/blob/master/T-Rex.md) for details on how this parameter works.
 
 # Usage
 Once machines and wallet information are configured, the application will fetch all data on startup. The hashrate graph will plot for the first machine in the list. 
