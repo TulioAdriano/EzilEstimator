@@ -17,10 +17,9 @@ Once machines and wallet information are configured, the application will fetch 
 Use the buttons near the graph to combine all of them into a total hash power graph or overlay all workers. The up/down number above the merge graph buttons can be used to change the granularity of the data aggregation in case there are gaps between different workers. T-Rex samples every 10 seconds by default, so the application starts up with that value. Changing it to less than T-Rex's sampling interval will result in an inaccurate graph.
 
 # TODO
-* Add status bar to show progress while calling APIs
 * Add ZIL network stats (May not be possible)
 * Allow enabling/disabling worker stats from the tree view
-* Move all API calls to run on tasks 
+* Attempt to fix something causing stale stats cutting off at midnight rather than 24h/48h before.
 * Add release notes
 
 # License
