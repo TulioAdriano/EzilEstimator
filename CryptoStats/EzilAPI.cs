@@ -73,9 +73,13 @@ namespace CryptoStats
             ZilInfo zilinfo = null;
             using (HttpClient httpClient = new HttpClient())
             {
-                var request = $"https://xxx.ezil.me/blockchain_stats";
-                var response = httpClient.GetStringAsync(new Uri(request)).Result;
-                zilinfo = JsonConvert.DeserializeObject<ZilInfo>(response);
+                try
+                {
+                    var request = $"https://xxx.ezil.me/blockchain_stats";
+                    var response = httpClient.GetStringAsync(new Uri(request)).Result;
+                    zilinfo = JsonConvert.DeserializeObject<ZilInfo>(response);
+                }
+                catch { }
             }
 
             return zilinfo;

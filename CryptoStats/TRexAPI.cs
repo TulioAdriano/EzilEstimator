@@ -278,6 +278,10 @@ namespace CryptoStats
         {
             get; set;
         }
+        public int memory_temperature
+        {
+            get; set;
+        }
         public int mtweak
         {
             get; set;

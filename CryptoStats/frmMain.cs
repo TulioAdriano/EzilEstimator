@@ -39,64 +39,141 @@ namespace CryptoStats
 
         private void frmMain_Shown(object sender, EventArgs e)
         {
-            this.Cursor = Cursors.WaitCursor;
             LoadConfig();
 
-            var workerStats = GetWorkerStats(machines);
-            var workersInfo = GetWorkersInfo(workerStats, true);
-            zilInfo = EzilAPI.GetZilInfo();
-
-            if (workersInfo != null && workersInfo.Count > 0)
+            Task.Run(() =>
             {
-                DisplayWorkerGraph(workerStats[workerTree.SelectedNode.Text], workersInfo[0].MinHash, workersInfo[0].MaxHash);
-            }
+                SetupProgressBar(2);
+                txtStatus.Text = "Getting workers information";
+                var workerStats = GetWorkerStats(machines);
+                var workersInfo = GetWorkersInfo(workerStats, true);
+                UpdateProgressBarValue(1);
 
-            GetStatsAndBalance();
+                txtStatus.Text = "Plotting graph";
+                if (workersInfo != null && workersInfo.Count > 0)
+                {
+                    if (workerTree.InvokeRequired)
+                    {
+                        workerTree.Invoke(new MethodInvoker(() =>
+                        {
+                            DisplayWorkerGraph(workerStats[workerTree.SelectedNode.Text], workersInfo[0].MinHash, workersInfo[0].MaxHash);
+                        }));
+                    }
+                    else
+                    {
+                        DisplayWorkerGraph(workerStats[workerTree.SelectedNode.Text], workersInfo[0].MinHash, workersInfo[0].MaxHash);
+                    }
+                }
+                UpdateProgressBarValue(2);
+
+                GetStatsAndBalance();
+            });
+
             zilTimer.Start();
-            this.Cursor = Cursors.Default;
         }
 
         private void GetStatsAndBalance()
         {
             try
             {
+                SetupProgressBar(5);
+                txtStatus.Text = "Getting statistics from Ezil.me";
                 var rewards24 = GetEzilStats();
                 float eth = rewards24.Where(c => c.coin.Equals("eth")).Sum(s => s.amount);
                 float zil = rewards24.Where(c => c.coin.Equals("zil")).Sum(s => s.amount);
-                txtEth24h.Text = eth.ToString();
-                txtZil24h.Text = zil.ToString();
+                UpdateText(txtEth24h, eth.ToString());
+                UpdateText(txtZil24h, zil.ToString());
+                UpdateProgressBarValue(1);
 
+                txtStatus.Text = "Getting balances from Ezil.me";
                 var balances = GetBalances();
-                lblEthBalance.Text = $"Unpaid ETH: {balances.eth}";
-                lblZilBalance.Text = $"Unpaid ZIL: {balances.zil}";
+                UpdateText(lblEthBalance, $"Unpaid ETH: {balances.eth}");
+                UpdateText(lblZilBalance, $"Unpaid ZIL: {balances.zil}");
 
                 DateTime cutoffTime = (DateTime.UtcNow >= DateTime.UtcNow.Date.AddHours(6) ?
-                                                               DateTime.UtcNow.Date.AddHours(6) :
-                                                               DateTime.UtcNow.Date.AddDays(-1).AddHours(6));
+                                                          DateTime.UtcNow.Date.AddHours(6) :
+                                                          DateTime.UtcNow.Date.AddDays(-1).AddHours(6));
 
-                float ethToday = rewards24.Where(c => c.coin.Equals("eth") && c.created_at > cutoffTime).Sum(s => s.amount);
-                float zilToday = rewards24.Where(c => c.coin.Equals("zil") && c.created_at > cutoffTime).Sum(s => s.amount);
-                lblEthToday.Text = $"ETH earned today: {ethToday}";
-                lblZilToday.Text = $"ZIL earned today: {zilToday}";
+                var ethRewardsToday = rewards24.Where(c => c.coin.Equals("eth") && c.created_at > cutoffTime);
+                var zilRewardsToday = rewards24.Where(c => c.coin.Equals("zil") && c.created_at > cutoffTime);
 
+                var timespanEth = ethRewardsToday.Max(c => c.created_at) - cutoffTime;
+                var timespanZil = zilRewardsToday.Max(c => c.created_at) - cutoffTime;
+
+                float ethValToday = ethRewardsToday.Sum(s => s.amount);
+                float zilValToday = zilRewardsToday.Sum(s => s.amount);
+                UpdateText(lblEthToday, $"ETH earned today: {ethValToday}; Trending to: {((ethValToday / timespanEth.TotalHours) * 24):0.#######}");
+                UpdateText(lblZilToday, $"ZIL earned today: {zilValToday}; Trending to: {((zilValToday / timespanZil.TotalHours) * 24):0.##}");
+                UpdateProgressBarValue(2);
+
+                txtStatus.Text = "Getting rewards history from Ezil.me";
                 int timeFrame = rdo24h.Checked ? 24 : 48;
                 var history = GetHistory(ezilWallet, timeFrame);
                 var acceptedShares = history.Sum(c => c.accepted_shares_count);
                 var staleShares = history.Sum(c => c.stale_shares_count);
                 var invalidShares = history.Sum(c => c.invalid_shares_count);
                 var staleRatio = (staleShares / ((double)(acceptedShares + staleShares + invalidShares)));
-                lblAcceptedShares.Text = $"Total Accepted Shares: {acceptedShares}";
-                lblStaleShares.Text = $"Total Stale Shares: {staleShares}";
-                lblInvalidShares.Text = $"Total Invalid Shares: {invalidShares}";
-                lblSharesRatio.Text = $"Stale Shares Ratio: {staleRatio:P2}";
+                UpdateText(lblAcceptedShares, $"Total Accepted Shares: {acceptedShares}");
+                UpdateText(lblStaleShares, $"Total Stale Shares: {staleShares}");
+                UpdateText(lblInvalidShares, $"Total Invalid Shares: {invalidShares}");
+                UpdateText(lblSharesRatio, $"Stale Shares Ratio: {staleRatio:P2}");
+                UpdateProgressBarValue(3);
 
+                txtStatus.Text = "Updating rewards list";
                 DisplayRewardGridInfo(rewards24);
+                UpdateProgressBarValue(4);
 
+                txtStatus.Text = "Updating earnings statistics";
                 Display24hEarnings(eth, zil, balances);
+                UpdateProgressBarValue(5);
+                txtStatus.Text = "Ready";
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void SetupProgressBar(int maxVal)
+        {
+            if (this.InvokeRequired)
+            {
+                this.Invoke(new MethodInvoker(() =>
+                {
+                    pbStatus.Maximum = maxVal;
+                    pbStatus.Value = 0;
+                }));
+            }
+            else
+            {
+                pbStatus.Maximum = maxVal;
+                pbStatus.Value = 0;
+            }
+        }
+
+        private void UpdateText(Control control, string text)
+        {
+            if (control.InvokeRequired)
+            {
+                control.Invoke(new MethodInvoker(() => control.Text = text));
+            }
+            else
+            {
+                control.Text = text;
+            }
+        }
+
+        private void UpdateProgressBarValue(int value)
+        {
+            if (this.InvokeRequired)
+            {
+                this.Invoke(new MethodInvoker(() => {
+                    pbStatus.Value = value;
+                }));
+            }
+            else
+            {
+                pbStatus.Value = value;
             }
         }
 
@@ -163,8 +240,8 @@ namespace CryptoStats
             if (updateTotalHash)
             {
                 hashPower = (workersInfo.Sum(c => c.HashPower) / 1000000d);
-                lblHashPower.Text = $"Total Hash Rate: {hashPower:0.00} MH/s";
-                lblPowerUsage.Text = $"Total Power Usage: {(workersInfo.Sum(c => c.PowerUsage) / 1000d):0.00} KW/h";
+                UpdateText(lblHashPower, $"Total Hash Rate: {hashPower:0.00} MH/s");
+                UpdateText(lblPowerUsage, $"Total Power Usage: {(workersInfo.Sum(c => c.PowerUsage) / 1000d):0.00} KW/h");
             }
 
             return workersInfo;
@@ -214,16 +291,37 @@ namespace CryptoStats
                 gfx.DrawString($"{(maxHash / 1000000d):0.0}", font, Brushes.Black, (int)(720 * zoom), 0);
                 gfx.DrawString($"{(minHash / 1000000d):0.0}", font, Brushes.Black, (int)(720 * zoom), (int)(165 * zoom));
             }
-            picWorkerGraph.Refresh();
+            if (picWorkerGraph.InvokeRequired)
+            {
+                picWorkerGraph.Invoke(new MethodInvoker(() => picWorkerGraph.Refresh()));
+            }
+            else
+            {
+                picWorkerGraph.Refresh();
+            }
         }
 
         private void DisplayRewardGridInfo(List<EzilReward> rewards24)
         {
-            dataGridView.DataSource = rewards24;
-            dataGridView.Columns[0].DefaultCellStyle.Format =
-            dataGridView.Columns[3].DefaultCellStyle.Format = "0.#################################";
+            if (dataGridView.InvokeRequired)
+            {
+                dataGridView.Invoke(new MethodInvoker(() =>
+                {
+                    dataGridView.DataSource = rewards24;
+                    dataGridView.Columns[0].DefaultCellStyle.Format =
+                    dataGridView.Columns[3].DefaultCellStyle.Format = "0.#################################";
 
-            lblEntryCount.Text = $"{rewards24.Count} entries ({rewards24.Count(c=>c.coin.Equals("eth"))} ETH, {rewards24.Count(c => c.coin.Equals("zil"))} ZIL)";
+                    lblEntryCount.Text = $"{rewards24.Count} entries ({rewards24.Count(c => c.coin.Equals("eth"))} ETH, {rewards24.Count(c => c.coin.Equals("zil"))} ZIL)";
+                }));
+            }
+            else
+            {
+                dataGridView.DataSource = rewards24;
+                dataGridView.Columns[0].DefaultCellStyle.Format =
+                dataGridView.Columns[3].DefaultCellStyle.Format = "0.#################################";
+
+                lblEntryCount.Text = $"{rewards24.Count} entries ({rewards24.Count(c=>c.coin.Equals("eth"))} ETH, {rewards24.Count(c => c.coin.Equals("zil"))} ZIL)";
+            }
         }
 
         private void Display24hEarnings(float eth, float zil, EzilBalance balances)
@@ -235,48 +333,16 @@ namespace CryptoStats
                 //float zilPrice = coinListings.data.Where(d => d.symbol.Equals("ZIL")).FirstOrDefault().quote.USD.price;
                 MinerstatsAPI minerstatsAPI = new MinerstatsAPI();
                 var coinInfoList = minerstatsAPI.GetCoinInfo(new string[] { "ETH", "ZIL" });
-                var coinInfoCurrEth = coinInfoList.Where(d => d.coin.Equals("ETH")).FirstOrDefault();
-
-                float ethPrice = coinInfoList.Where(d => d.coin.Equals("ETH")).FirstOrDefault().price;
-                float zilPrice = coinInfoList.Where(d => d.coin.Equals("ZIL")).FirstOrDefault().price;
-                float ethValue = ethPrice * eth;
-                float zilValue = zilPrice * zil;
-                lblEthUsd.Text = $"= ${ethValue:0.00} @ ${ethPrice:0.00}";
-                lblZilUsd.Text = $"= ${zilValue:0.00} @ ${zilPrice:0.00}";
-                lblTotal.Text = $"= ${(ethValue + zilValue):0.00}/d, {((ethValue + zilValue) * 7):0.00}/w, {((ethValue + zilValue) * 30):0.00}/m, {((ethValue + zilValue) * 365):0.00}/y";
-
-                float ethBalanceValue = balances.eth * ethPrice;
-                float zilBalanceValue = balances.zil * zilPrice;
-                lblEthValue.Text = $"(${ethBalanceValue:0.00})";
-                lblZilValue.Text = $"(${zilBalanceValue:0.00})";
-                lblTotalBalance.Text = $"= (${(ethBalanceValue + zilBalanceValue):0.00})";
-
                 var coinInfoEth24 = minerstatsAPI.GetCoinHistory("ETH");
-                float selectedHash = 0;
-                var currentStats = GetCurrentStats();
-                float averageHash = currentStats.average_hashrate;
-                if (rdoUseAverage.Checked)
+
+                if (this.InvokeRequired)
                 {
-                    selectedHash = averageHash;
-                }
-                else if (rdoUseReported.Checked)
-                {
-                    selectedHash = (float)hashPower * 1000000;
+                    this.Invoke(new MethodInvoker(() => UpdateUiLabels(eth, zil, balances, coinInfoList, coinInfoEth24)));
                 }
                 else
                 {
-                    selectedHash = (float)txtCustomHash.Value * 1000000;
+                    UpdateUiLabels(eth, zil, balances, coinInfoList, coinInfoEth24);
                 }
-
-                lblNetHash.Text = $"Network Hashrate: {coinInfoCurrEth.network_hashrate / 1000000000000} TH/s";
-                lblBlockReward.Text = $"Block Reward: {coinInfoCurrEth.reward_block} ETH";
-                float ethCur = ((coinInfoCurrEth.reward * 0.99f) * 24) * selectedHash;
-                lblEthCurProfit.Text = $"Current Profitability: {ethCur} ETH (${ethCur * ethPrice:0.00})";
-                float eth24h = ((coinInfoEth24.reward * 0.99f) * 24) * selectedHash;
-                lblEthProfit.Text = $"24h Profitability: {eth24h} ETH (${eth24h * ethPrice:0.00})";
-                float ezilDiff = eth - eth24h;
-                lblEzilDiff.Text = $"Difference to Ezil: {ezilDiff} ETH (${ezilDiff * ethPrice:0.00})";
-                lblAverageHashrate.Text = $"Average Hash Rate = {averageHash / 1000000f:0.##} MH/s";
             }
             catch (Exception ex)
             {
@@ -286,6 +352,50 @@ namespace CryptoStats
                 }
                 throw new Exception($"Cannot retrieve cryptocurrency prices. Try again later.{Environment.NewLine}{ex.Message}");
             }
+        }
+
+        private void UpdateUiLabels(float eth, float zil, EzilBalance balances, List<CoinInfo> coinInfoList, CoinInfo coinInfoEth24)
+        {
+            var coinInfoCurrEth = coinInfoList.Where(d => d.coin.Equals("ETH")).FirstOrDefault();
+            float ethPrice = coinInfoList.Where(d => d.coin.Equals("ETH")).FirstOrDefault().price;
+            float zilPrice = coinInfoList.Where(d => d.coin.Equals("ZIL")).FirstOrDefault().price;
+            float ethValue = ethPrice * eth;
+            float zilValue = zilPrice * zil;
+            lblEthUsd.Text = $"= ${ethValue:0.00} @ ${ethPrice:0.00}";
+            lblZilUsd.Text = $"= ${zilValue:0.00} @ ${zilPrice:0.00}";
+            lblTotal.Text = $"= ${(ethValue + zilValue):0.00}/d, {((ethValue + zilValue) * 7):0.00}/w, {((ethValue + zilValue) * 30):0.00}/m, {((ethValue + zilValue) * 365):0.00}/y";
+
+            float ethBalanceValue = balances.eth * ethPrice;
+            float zilBalanceValue = balances.zil * zilPrice;
+            lblEthValue.Text = $"(${ethBalanceValue:0.00})";
+            lblZilValue.Text = $"(${zilBalanceValue:0.00})";
+            lblTotalBalance.Text = $"= (${(ethBalanceValue + zilBalanceValue):0.00})";
+
+            float selectedHash = 0;
+            var currentStats = GetCurrentStats();
+            float averageHash = currentStats.average_hashrate;
+            if (rdoUseAverage.Checked)
+            {
+                selectedHash = averageHash;
+            }
+            else if (rdoUseReported.Checked)
+            {
+                selectedHash = (float)hashPower * 1000000;
+            }
+            else
+            {
+                selectedHash = (float)txtCustomHash.Value * 1000000;
+            }
+
+            lblNetHash.Text = $"Network Hashrate: {coinInfoCurrEth.network_hashrate / 1000000000000} TH/s";
+            lblBlockReward.Text = $"Block Reward: {coinInfoCurrEth.reward_block} ETH";
+            float ethCur = ((coinInfoCurrEth.reward * 0.99f) * 24) * selectedHash;
+            lblEthCurProfit.Text = $"Current Profitability: {ethCur} ETH (${ethCur * ethPrice:0.00})";
+            float eth24h = ((coinInfoEth24.reward * 0.99f) * 24) * selectedHash;
+            lblEthProfit.Text = $"24h Profitability: {eth24h} ETH (${eth24h * ethPrice:0.00})";
+            float ezilDiff = eth - eth24h;
+            lblEzilDiff.Text = $"Difference to Ezil: {ezilDiff} ETH (${ezilDiff * ethPrice:0.00})";
+            lblAverageHashrate.Text = $"Average Hash Rate = {averageHash / 1000000f:0.##} MH/s";
         }
 
         private EzilCurrentStats GetCurrentStats()
@@ -341,6 +451,24 @@ namespace CryptoStats
         {
             Dictionary<string, TRexSummary> workerStats = new Dictionary<string, TRexSummary>();
 
+            int currentPbValue = 0;
+            int currentPbMax = 0;
+            if (this.InvokeRequired)
+            {
+                this.Invoke(new MethodInvoker(() =>
+                {
+                    currentPbMax = pbStatus.Maximum;
+                    currentPbValue = pbStatus.Value;
+                }));
+            }
+            else
+            {
+                currentPbMax = pbStatus.Maximum;
+                currentPbValue = pbStatus.Value;
+            }
+
+            SetupProgressBar(machines.Count);
+            int i = 0;
             foreach (var machine in machines)
             {
                 try
@@ -348,9 +476,9 @@ namespace CryptoStats
                     TRexSummary workerInfo = null;
                     if (machine.Enabled)
                     {
+                        txtStatus.Text = $"Getting stats for {machine.Nickname}";
                         workerInfo = TRexAPI.GetFullSummary(machine.Host);
                     }
-
                     workerStats.Add(machine.ToString(), workerInfo);
 
                     if (workerInfo == null)
@@ -363,36 +491,68 @@ namespace CryptoStats
                     workerStats.Add($"{machine} - OFFLINE", new TRexSummary());
                     machine.Enabled = false;
                 }
+                finally
+                {
+                    UpdateProgressBarValue(++i);
+                }
             }
+            txtStatus.Text = "Ready";
 
             if (reloadTree)
             {
-                workerTree.Nodes.Clear();
-                foreach (var workerStat in workerStats)
+                if (this.InvokeRequired)
                 {
-                    if (workerStat.Value == null)
-                    {
-                        continue;
-                    }
-
-                    var workerNode = workerTree.Nodes.Add(workerStat.Key);
-                    if (workerTree.SelectedNode == null)
-                    {
-                        workerTree.SelectedNode = workerNode;
-                    }
-
-                    if (workerStat.Value.gpus != null)
-                    {
-                        foreach (var gpu in workerStat.Value.gpus)
-                        {
-                            workerNode.Nodes.Add($"{gpu.vendor} {gpu.name}: Hash={(gpu.hashrate / 1000000d):0.00}MH/s Temp={gpu.temperature}°C Power={gpu.power}W Efficiency={gpu.efficiency}");
-                        }
-                    }
-                    workerNode.Expand();
+                    this.Invoke(new MethodInvoker(() => ReloadTree(workerStats)));
+                }
+                else
+                {
+                    ReloadTree(workerStats);
                 }
             }
 
+            if (this.InvokeRequired)
+            {
+                this.Invoke(new MethodInvoker(() =>
+                {
+                    pbStatus.Maximum = currentPbMax;
+                    pbStatus.Value = currentPbValue;
+                }));
+            }
+            else
+            {
+                pbStatus.Maximum = currentPbMax;
+                pbStatus.Value = currentPbValue;
+            }
+
             return workerStats;
+        }
+
+        private void ReloadTree(Dictionary<string, TRexSummary> workerStats)
+        {
+            workerTree.Nodes.Clear();
+            foreach (var workerStat in workerStats)
+            {
+                if (workerStat.Value == null)
+                {
+                    continue;
+                }
+
+                var workerNode = workerTree.Nodes.Add(workerStat.Key);
+                if (workerTree.SelectedNode == null)
+                {
+                    workerTree.SelectedNode = workerNode;
+                }
+
+                if (workerStat.Value.gpus != null)
+                {
+                    foreach (var gpu in workerStat.Value.gpus)
+                    {
+                        var gpuName = (gpu.name.StartsWith(gpu.vendor) ? gpu.name : $"{gpu.vendor} {gpu.name}");
+                        workerNode.Nodes.Add($"{gpuName}: Hash={(gpu.hashrate / 1000000d):0.00}MH/s GPU={gpu.temperature}°C Mem={gpu.memory_temperature}°C Power={gpu.power}W Efficiency={gpu.efficiency}");
+                    }
+                }
+                workerNode.Expand();
+            }
         }
 
         private void workerTree_AfterSelect(object sender, TreeViewEventArgs e)
@@ -413,18 +573,27 @@ namespace CryptoStats
         }
         private void cmdRefeshGraph_Click(object sender, EventArgs e)
         {
-            this.Cursor = Cursors.WaitCursor;
-
-            RefreshTree();
-            this.Cursor = Cursors.Default;
+            Task.Run(() => RefreshTree());
         }
 
         private void RefreshTree()
         {
             string selectedNodeKey = string.Empty;
-            if (workerTree.SelectedNode != null)
+            if (workerTree.InvokeRequired)
             {
-                selectedNodeKey = workerTree.SelectedNode.Text;
+                workerTree.Invoke(new MethodInvoker(() => {
+                    if (workerTree.SelectedNode != null)
+                    {
+                        selectedNodeKey = workerTree.SelectedNode.Text;
+                    }
+                }));
+            }
+            else
+            {
+                if (workerTree.SelectedNode != null)
+                {
+                    selectedNodeKey = workerTree.SelectedNode.Text;
+                }
             }
 
             var workersStats = GetWorkerStats(machines, true);
@@ -437,38 +606,36 @@ namespace CryptoStats
 
         private void cmdRefreshRewards_Click(object sender, EventArgs e)
         {
-            this.Cursor = Cursors.WaitCursor;
-            zilInfo = EzilAPI.GetZilInfo();
-            GetStatsAndBalance();
-            this.Cursor = Cursors.Default;
+            //zilInfo = EzilAPI.GetZilInfo();
+            Task.Run(() => GetStatsAndBalance());
         }
 
         private void cmdCombineGraphs_Click(object sender, EventArgs e)
         {
-            this.Cursor = Cursors.WaitCursor;
-
-            var pens = new List<Pen>() { Pens.Blue, Pens.Red, Pens.DarkGreen, Pens.Orange, Pens.Violet };
-            var workerStats = GetWorkerStats(machines, true);
-            var workersInfo = GetWorkersInfo(workerStats);
-
-            long minHash = workersInfo.Min(c => c.MinHash);
-            long maxHash = workersInfo.Max(c => c.MaxHash);
-            int i = 0;
-
-            double zoom = this.CreateGraphics().DpiX / 96d;
-
-            picWorkerGraph.Image = new Bitmap((int)(800 * zoom), (int)(200 * zoom));
-            bool printTimeStamp = true;
-            foreach (var workerStat in workerStats)
+            Task.Run(() =>
             {
-                if (workerStat.Value == null)
+                var pens = new List<Pen>() { Pens.Blue, Pens.Red, Pens.DarkGreen, Pens.Orange, Pens.Violet };
+                var workerStats = GetWorkerStats(machines, true);
+                var workersInfo = GetWorkersInfo(workerStats);
+
+                long minHash = workersInfo.Min(c => c.MinHash);
+                long maxHash = workersInfo.Max(c => c.MaxHash);
+                int i = 0;
+
+                double zoom = this.CreateGraphics().DpiX / 96d;
+
+                picWorkerGraph.Image = new Bitmap((int)(800 * zoom), (int)(200 * zoom));
+                bool printTimeStamp = true;
+                foreach (var workerStat in workerStats)
                 {
-                    continue;
+                    if (workerStat.Value == null)
+                    {
+                        continue;
+                    }
+                    DisplayWorkerGraph(workerStat.Value, minHash, maxHash, pens[(i++ % 5)], printTimeStamp);
+                    printTimeStamp = false;
                 }
-                DisplayWorkerGraph(workerStat.Value, minHash, maxHash, pens[(i++ % 5)], printTimeStamp);
-                printTimeStamp = false;
-            }
-            this.Cursor = Cursors.Default;
+            });
         }
 
         private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
@@ -497,44 +664,45 @@ namespace CryptoStats
 
         private void cmdMergeGraphs_Click(object sender, EventArgs e)
         {
-            this.Cursor = Cursors.WaitCursor;
-            List<long[]> hashRates = new List<long[]>();
-            DateTime utcNow = DateTime.UtcNow;
-            var trexData = GetWorkerStats(machines, false);
-            int granularity = (int)txtGranularity.Value;
-            for (int seconds = 3600; seconds > 0; seconds -= granularity)
+            Task.Run(() =>
             {
-                var timeStart = utcNow.AddSeconds(-seconds);
-                var timeEnd = timeStart.AddSeconds(granularity);
-
-                long hashRate = 0;
-                foreach (var item in trexData)
+                List<long[]> hashRates = new List<long[]>();
+                DateTime utcNow = DateTime.UtcNow;
+                var trexData = GetWorkerStats(machines, false);
+                int granularity = (int)txtGranularity.Value;
+                for (int seconds = 3600; seconds > 0; seconds -= granularity)
                 {
-                    if (item.Value == null)
+                    var timeStart = utcNow.AddSeconds(-seconds);
+                    var timeEnd = timeStart.AddSeconds(granularity);
+
+                    long hashRate = 0;
+                    foreach (var item in trexData)
                     {
-                        continue;
-                    }
-                    var worker = item.Value;
-                    if (item.Value.velocities == null)
-                    {
-                        continue;
-                    }
-                    var result = worker.velocities.hashrate.Where(c => c[0] >= timeStart.ToUnixTimeSeconds()
-                                                                     && c[0] <= timeEnd.ToUnixTimeSeconds());
-                    if (result.Count().Equals(0))
-                    {
-                        continue;
+                        if (item.Value == null)
+                        {
+                            continue;
+                        }
+                        var worker = item.Value;
+                        if (item.Value.velocities == null)
+                        {
+                            continue;
+                        }
+                        var result = worker.velocities.hashrate.Where(c => c[0] >= timeStart.ToUnixTimeSeconds()
+                                                                         && c[0] <= timeEnd.ToUnixTimeSeconds());
+                        if (result.Count().Equals(0))
+                        {
+                            continue;
+                        }
+
+                        var avgRate = result.Average(c => c[1]);
+                        hashRate += (long)Math.Round(avgRate);
                     }
 
-                    var avgRate = result.Average(c => c[1]);
-                    hashRate += (long)Math.Round(avgRate);
+                    hashRates.Add(new long[2] { timeStart.ToUnixTimeSeconds(), hashRate });
                 }
 
-                hashRates.Add(new long[2] { timeStart.ToUnixTimeSeconds(), hashRate });
-            }
-
-            DisplayWorkerGraph(hashRates, hashRates.Min(c => c[1]), hashRates.Max(c => c[1]));
-            this.Cursor = Cursors.Default;
+                DisplayWorkerGraph(hashRates, hashRates.Min(c => c[1]), hashRates.Max(c => c[1]));
+            });
         }
 
         private void dataGridView_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
@@ -593,7 +761,7 @@ namespace CryptoStats
 
         private void zilTimer_Tick(object sender, EventArgs e)
         {
-            if (zilInfo.next_pow_time <= DateTime.UtcNow || ((int)(zilInfo.next_pow_time - DateTime.UtcNow).TotalMinutes % 15) == 0)
+            if (zilInfo == null || zilInfo.next_pow_time <= DateTime.UtcNow || ((int)(zilInfo.next_pow_time - DateTime.UtcNow).TotalMinutes % 5) == 0)
             {
                 zilInfo = EzilAPI.GetZilInfo();
             }

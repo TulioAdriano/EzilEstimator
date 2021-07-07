@@ -62,6 +62,7 @@
             this.label3 = new System.Windows.Forms.Label();
             this.lblPowerUsage = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.lblNextZil = new System.Windows.Forms.Label();
             this.lblZilToday = new System.Windows.Forms.Label();
             this.lblEthToday = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
@@ -84,8 +85,10 @@
             this.rdoUseCustom = new System.Windows.Forms.RadioButton();
             this.rdoUseReported = new System.Windows.Forms.RadioButton();
             this.rdoUseAverage = new System.Windows.Forms.RadioButton();
-            this.lblNextZil = new System.Windows.Forms.Label();
             this.zilTimer = new System.Windows.Forms.Timer(this.components);
+            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.txtStatus = new System.Windows.Forms.ToolStripStatusLabel();
+            this.pbStatus = new System.Windows.Forms.ToolStripProgressBar();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picWorkerGraph)).BeginInit();
             this.menuStrip1.SuspendLayout();
@@ -95,6 +98,7 @@
             this.groupBox3.SuspendLayout();
             this.groupBox4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txtCustomHash)).BeginInit();
+            this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // dataGridView
@@ -419,6 +423,15 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Live Stats";
             // 
+            // lblNextZil
+            // 
+            this.lblNextZil.AutoSize = true;
+            this.lblNextZil.Location = new System.Drawing.Point(244, 114);
+            this.lblNextZil.Name = "lblNextZil";
+            this.lblNextZil.Size = new System.Drawing.Size(131, 13);
+            this.lblNextZil.TabIndex = 14;
+            this.lblNextZil.Text = "Next ZIL round in: 0:00:00";
+            // 
             // lblZilToday
             // 
             this.lblZilToday.AutoSize = true;
@@ -677,25 +690,42 @@
             this.rdoUseAverage.UseVisualStyleBackColor = true;
             this.rdoUseAverage.CheckedChanged += new System.EventHandler(this.rdoUseAverage_CheckedChanged);
             // 
-            // lblNextZil
-            // 
-            this.lblNextZil.AutoSize = true;
-            this.lblNextZil.Location = new System.Drawing.Point(244, 114);
-            this.lblNextZil.Name = "lblNextZil";
-            this.lblNextZil.Size = new System.Drawing.Size(131, 13);
-            this.lblNextZil.TabIndex = 14;
-            this.lblNextZil.Text = "Next ZIL round in: 0:00:00";
-            // 
             // zilTimer
             // 
             this.zilTimer.Interval = 1000;
             this.zilTimer.Tick += new System.EventHandler(this.zilTimer_Tick);
             // 
+            // statusStrip1
+            // 
+            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.txtStatus,
+            this.pbStatus});
+            this.statusStrip1.Location = new System.Drawing.Point(0, 673);
+            this.statusStrip1.Name = "statusStrip1";
+            this.statusStrip1.Size = new System.Drawing.Size(1362, 22);
+            this.statusStrip1.TabIndex = 20;
+            this.statusStrip1.Text = "statusStrip1";
+            // 
+            // txtStatus
+            // 
+            this.txtStatus.AutoSize = false;
+            this.txtStatus.Name = "txtStatus";
+            this.txtStatus.Size = new System.Drawing.Size(1245, 17);
+            this.txtStatus.Spring = true;
+            this.txtStatus.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // pbStatus
+            // 
+            this.pbStatus.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.pbStatus.Name = "pbStatus";
+            this.pbStatus.Size = new System.Drawing.Size(100, 16);
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(1362, 675);
+            this.ClientSize = new System.Drawing.Size(1362, 695);
+            this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
@@ -736,6 +766,8 @@
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txtCustomHash)).EndInit();
+            this.statusStrip1.ResumeLayout(false);
+            this.statusStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -799,6 +831,9 @@
         private System.Windows.Forms.RadioButton rdoUseAverage;
         private System.Windows.Forms.Label lblNextZil;
         private System.Windows.Forms.Timer zilTimer;
+        private System.Windows.Forms.StatusStrip statusStrip1;
+        private System.Windows.Forms.ToolStripStatusLabel txtStatus;
+        private System.Windows.Forms.ToolStripProgressBar pbStatus;
     }
 }
 
