@@ -19,7 +19,6 @@ Use the buttons near the graph to combine all of them into a total hash power gr
 # TODO
 * Add ZIL network stats (May not be possible)
 * Allow enabling/disabling worker stats from the tree view
-* Attempt to fix something causing stale stats cutting off at midnight rather than 24h/48h before.
 * Add release notes
 
 # License
