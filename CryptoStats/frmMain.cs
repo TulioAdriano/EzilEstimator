@@ -74,6 +74,8 @@ namespace CryptoStats
 
         private void GetStatsAndBalance()
         {
+            SetCursor(Cursors.AppStarting);
+
             try
             {
                 SetupProgressBar(5);
@@ -131,6 +133,20 @@ namespace CryptoStats
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+            SetCursor(Cursors.Default);
+        }
+
+        private void SetCursor(Cursor cursor)
+        {
+            if (this.InvokeRequired)
+            {
+                this.Invoke(new MethodInvoker(() => this.Cursor = cursor));
+            }
+            else
+            {
+                this.Cursor = cursor;
             }
         }
 
@@ -548,7 +564,12 @@ namespace CryptoStats
                     foreach (var gpu in workerStat.Value.gpus)
                     {
                         var gpuName = (gpu.name.StartsWith(gpu.vendor) ? gpu.name : $"{gpu.vendor} {gpu.name}");
-                        workerNode.Nodes.Add($"{gpuName}: Hash={(gpu.hashrate / 1000000d):0.00}MH/s GPU={gpu.temperature}°C Mem={gpu.memory_temperature}°C Power={gpu.power}W Efficiency={gpu.efficiency}");
+                        var gpuMemTemp = (gpu.memory_temperature > 0 ? $"{gpu.memory_temperature}°C" : "NA");
+                        workerNode.Nodes.Add($"{gpuName}: Hash={(gpu.hashrate / 1000000d):0.00}MH/s " +
+                                                        $"GPU={gpu.temperature}°C " +
+                                                        $"Mem={gpuMemTemp} " +
+                                                        $"Power={gpu.power}W " +
+                                                        $"Efficiency={gpu.efficiency}");
                     }
                 }
                 workerNode.Expand();
@@ -578,6 +599,7 @@ namespace CryptoStats
 
         private void RefreshTree()
         {
+            SetCursor(Cursors.AppStarting);
             string selectedNodeKey = string.Empty;
             if (workerTree.InvokeRequired)
             {
@@ -602,6 +624,8 @@ namespace CryptoStats
             {
                 DisplayWorkerGraph(workersStats[selectedNodeKey], workerInfo.MinHash, workerInfo.MaxHash);
             }
+
+            SetCursor(Cursors.Default);
         }
 
         private void cmdRefreshRewards_Click(object sender, EventArgs e)
@@ -614,6 +638,8 @@ namespace CryptoStats
         {
             Task.Run(() =>
             {
+                SetCursor(Cursors.AppStarting);
+
                 var pens = new List<Pen>() { Pens.Blue, Pens.Red, Pens.DarkGreen, Pens.Orange, Pens.Violet };
                 var workerStats = GetWorkerStats(machines, true);
                 var workersInfo = GetWorkersInfo(workerStats);
@@ -635,6 +661,8 @@ namespace CryptoStats
                     DisplayWorkerGraph(workerStat.Value, minHash, maxHash, pens[(i++ % 5)], printTimeStamp);
                     printTimeStamp = false;
                 }
+
+                SetCursor(Cursors.Default);
             });
         }
 
@@ -643,10 +671,8 @@ namespace CryptoStats
             frmConfiguration configForm = new frmConfiguration();
             if (configForm.ShowDialog().Equals(DialogResult.OK))
             {
-                this.Cursor = Cursors.WaitCursor;
                 LoadConfig();
-                RefreshTree();
-                this.Cursor = Cursors.Default;
+                Task.Run(() => RefreshTree());
             }
         }
 
@@ -666,6 +692,8 @@ namespace CryptoStats
         {
             Task.Run(() =>
             {
+                SetCursor(Cursors.AppStarting);
+
                 List<long[]> hashRates = new List<long[]>();
                 DateTime utcNow = DateTime.UtcNow;
                 var trexData = GetWorkerStats(machines, false);
@@ -702,6 +730,8 @@ namespace CryptoStats
                 }
 
                 DisplayWorkerGraph(hashRates, hashRates.Min(c => c[1]), hashRates.Max(c => c[1]));
+
+                SetCursor(Cursors.Default);
             });
         }
 
@@ -724,18 +754,14 @@ namespace CryptoStats
 
         private void rdo24h_CheckedChanged(object sender, EventArgs e)
         {
-            this.Cursor = Cursors.WaitCursor;
-            GetStatsAndBalance();
-            this.Cursor = Cursors.Default;
+            Task.Run(() => GetStatsAndBalance());
         }
 
         private void rdoUseAverage_CheckedChanged(object sender, EventArgs e)
         {
             if ((sender as RadioButton).Checked)
             {
-                this.Cursor = Cursors.WaitCursor;
-                GetStatsAndBalance();
-                this.Cursor = Cursors.Default;
+                Task.Run(() => GetStatsAndBalance());
             }
         }
 
@@ -743,9 +769,7 @@ namespace CryptoStats
         {
             if ((sender as RadioButton).Checked)
             {
-                this.Cursor = Cursors.WaitCursor;
-                GetStatsAndBalance();
-                this.Cursor = Cursors.Default;
+                Task.Run(() => GetStatsAndBalance());
             }
         }
 
@@ -753,9 +777,7 @@ namespace CryptoStats
         {
             if ((sender as RadioButton).Checked)
             {
-                this.Cursor = Cursors.WaitCursor;
-                GetStatsAndBalance();
-                this.Cursor = Cursors.Default;
+                Task.Run(() => GetStatsAndBalance());
             }
         }
 

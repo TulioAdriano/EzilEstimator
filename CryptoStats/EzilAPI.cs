@@ -41,8 +41,8 @@ namespace CryptoStats
         public static List<EzilStats> GetHistoricalStats(Wallet wallet, int timeFrame)
         {
             List<EzilStats> stats = new List<EzilStats>();
-            string timeFrom = DateTime.UtcNow.AddHours(-timeFrame).ToString("yyyy-MM-ddTHH-mm-ss.fffZ");
-            string timeTo = DateTime.UtcNow.ToString("yyyy-MM-ddTHH-mm-ss.fffZ");
+            string timeFrom = DateTime.UtcNow.AddHours(-timeFrame).ToString("yyyy-MM-ddTHH:mm:ss.fffZ");
+            string timeTo = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss.fffZ");
 
             using (HttpClient httpClient = new HttpClient())
             {
