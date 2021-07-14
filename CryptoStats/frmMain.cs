@@ -97,15 +97,21 @@ namespace CryptoStats
                                                           DateTime.UtcNow.Date.AddDays(-1).AddHours(6));
 
                 var ethRewardsToday = rewards24.Where(c => c.coin.Equals("eth") && c.created_at > cutoffTime);
+                if (ethRewardsToday.Count() > 0)
+                {
+                    var timespanEth = ethRewardsToday.Max(c => c.created_at) - cutoffTime;
+                    float ethValToday = ethRewardsToday.Sum(s => s.amount);
+                    UpdateText(lblEthToday, $"ETH earned today: {ethValToday}; Trending to: {((ethValToday / timespanEth.TotalHours) * 24):0.#######}");
+                }
+
                 var zilRewardsToday = rewards24.Where(c => c.coin.Equals("zil") && c.created_at > cutoffTime);
+                if (zilRewardsToday.Count() > 0)
+                {
+                    var timespanZil = zilRewardsToday.Max(c => c.created_at) - cutoffTime;
+                    float zilValToday = zilRewardsToday.Sum(s => s.amount);
+                    UpdateText(lblZilToday, $"ZIL earned today: {zilValToday}; Trending to: {((zilValToday / timespanZil.TotalHours) * 24):0.##}");
+                }
 
-                var timespanEth = ethRewardsToday.Max(c => c.created_at) - cutoffTime;
-                var timespanZil = zilRewardsToday.Max(c => c.created_at) - cutoffTime;
-
-                float ethValToday = ethRewardsToday.Sum(s => s.amount);
-                float zilValToday = zilRewardsToday.Sum(s => s.amount);
-                UpdateText(lblEthToday, $"ETH earned today: {ethValToday}; Trending to: {((ethValToday / timespanEth.TotalHours) * 24):0.#######}");
-                UpdateText(lblZilToday, $"ZIL earned today: {zilValToday}; Trending to: {((zilValToday / timespanZil.TotalHours) * 24):0.##}");
                 UpdateProgressBarValue(2);
 
                 txtStatus.Text = "Getting rewards history from Ezil.me";
