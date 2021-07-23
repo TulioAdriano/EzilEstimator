@@ -18,6 +18,7 @@ namespace CryptoStats
         Wallet ezilWallet = new Wallet();
         double hashPower = 0;
         ZilInfo zilInfo = null;
+        private List<EzilReward> rewards24;
 
         public frmMain()
         {
@@ -80,7 +81,7 @@ namespace CryptoStats
             {
                 SetupProgressBar(5);
                 txtStatus.Text = "Getting statistics from Ezil.me";
-                var rewards24 = GetEzilStats();
+                rewards24 = GetEzilStats();
                 float eth = rewards24.Where(c => c.coin.Equals("eth")).Sum(s => s.amount);
                 float zil = rewards24.Where(c => c.coin.Equals("zil")).Sum(s => s.amount);
                 UpdateText(txtEth24h, eth.ToString());
@@ -329,21 +330,53 @@ namespace CryptoStats
             {
                 dataGridView.Invoke(new MethodInvoker(() =>
                 {
-                    dataGridView.DataSource = rewards24;
-                    dataGridView.Columns[0].DefaultCellStyle.Format =
-                    dataGridView.Columns[3].DefaultCellStyle.Format = "0.#################################";
-
-                    lblEntryCount.Text = $"{rewards24.Count} entries ({rewards24.Count(c => c.coin.Equals("eth"))} ETH, {rewards24.Count(c => c.coin.Equals("zil"))} ZIL)";
+                    LoadGrid(rewards24);
                 }));
             }
             else
             {
-                dataGridView.DataSource = rewards24;
-                dataGridView.Columns[0].DefaultCellStyle.Format =
-                dataGridView.Columns[3].DefaultCellStyle.Format = "0.#################################";
-
-                lblEntryCount.Text = $"{rewards24.Count} entries ({rewards24.Count(c=>c.coin.Equals("eth"))} ETH, {rewards24.Count(c => c.coin.Equals("zil"))} ZIL)";
+                LoadGrid(rewards24);
             }
+        }
+
+        private void LoadGrid(List<EzilReward> rewards24)
+        {
+            List<EzilReward> dataSource = new List<EzilReward>();
+            if (chkConsolidateMEV.Checked)
+            {
+                dataSource.AddRange(rewards24.Where(c=> c.coin.Equals("eth")
+                                                     && c.block_number != null)
+                                             .GroupBy(b => b.block_number).Select(c => new EzilReward
+                {
+                    block_number = c.First().block_number,
+                    amount = c.Sum(s => s.amount),
+                    coin = c.First().coin,
+                    created_at = c.First().created_at,
+                    cashback_amount = (c.Count() > 1 ? c.Last().amount : 0),
+                    id = c.First().id
+                }).ToList());
+                dataSource.AddRange(rewards24.Where(c => c.coin.Equals("eth") && c.block_number == null));
+                dataSource.AddRange(rewards24.Where(c => c.coin.Equals("zil")));
+                dataSource = dataSource.OrderBy(c => c.coin).ThenByDescending(c => c.created_at).ToList();
+            }
+            else
+            {
+                dataSource = rewards24;
+            }
+
+            dataGridView.DataSource = dataSource;
+            dataGridView.Columns[0].DefaultCellStyle.Format =
+            dataGridView.Columns[3].DefaultCellStyle.Format = "0.#################################";
+            if (chkConsolidateMEV.Checked)
+            {
+                dataGridView.Columns[3].HeaderText = "MEV_ammount";
+            }
+            else
+            {
+                dataGridView.Columns[3].HeaderText = "cashback_amount";
+            }
+
+            lblEntryCount.Text = $"{rewards24.Count} entries ({rewards24.Count(c => c.coin.Equals("eth"))} ETH, {rewards24.Count(c => c.coin.Equals("zil"))} ZIL)";
         }
 
         private void Display24hEarnings(float eth, float zil, EzilBalance balances)
@@ -799,6 +832,11 @@ namespace CryptoStats
             {
                 lblNextZil.Text = $"Next ZIL round in: {zilPowTime.Hours}:{zilPowTime.Minutes:00}:{zilPowTime.Seconds:00} ";
             }));
+        }
+
+        private void chkConsolidateMEV_CheckedChanged(object sender, EventArgs e)
+        {
+            LoadGrid(rewards24);
         }
     }
 

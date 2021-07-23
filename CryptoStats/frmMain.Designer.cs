@@ -89,6 +89,7 @@
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.txtStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.pbStatus = new System.Windows.Forms.ToolStripProgressBar();
+            this.chkConsolidateMEV = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picWorkerGraph)).BeginInit();
             this.menuStrip1.SuspendLayout();
@@ -720,11 +721,25 @@
             this.pbStatus.Name = "pbStatus";
             this.pbStatus.Size = new System.Drawing.Size(100, 16);
             // 
+            // chkConsolidateMEV
+            // 
+            this.chkConsolidateMEV.AutoSize = true;
+            this.chkConsolidateMEV.Checked = true;
+            this.chkConsolidateMEV.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkConsolidateMEV.Location = new System.Drawing.Point(1105, 179);
+            this.chkConsolidateMEV.Name = "chkConsolidateMEV";
+            this.chkConsolidateMEV.Size = new System.Drawing.Size(147, 17);
+            this.chkConsolidateMEV.TabIndex = 21;
+            this.chkConsolidateMEV.Text = "Consolidate MEV rewards";
+            this.chkConsolidateMEV.UseVisualStyleBackColor = true;
+            this.chkConsolidateMEV.CheckedChanged += new System.EventHandler(this.chkConsolidateMEV_CheckedChanged);
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(1362, 695);
+            this.Controls.Add(this.chkConsolidateMEV);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox3);
@@ -834,6 +849,7 @@
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel txtStatus;
         private System.Windows.Forms.ToolStripProgressBar pbStatus;
+        private System.Windows.Forms.CheckBox chkConsolidateMEV;
     }
 }
 
