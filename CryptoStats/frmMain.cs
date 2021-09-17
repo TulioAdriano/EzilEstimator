@@ -532,7 +532,18 @@ namespace CryptoStats
                     if (machine.Enabled)
                     {
                         txtStatus.Text = $"Getting stats for {machine.Nickname}";
-                        workerInfo = TRexAPI.GetFullSummary(machine.Host);
+                        switch (machine.Miner_Type)
+                        {
+                            case MinerType.TRex:
+                                workerInfo = TRexAPI.GetFullSummary(machine.Host);
+                                break;
+                            case MinerType.NBMiner:
+                                workerInfo = NbminerAPI.GetTrexSummary(machine.Host);
+                                break;
+                            case MinerType.GMiner:
+                                workerInfo = GMinerAPI.GetTrexSummary(machine.Host);
+                                break;
+                        }
                     }
                     workerStats.Add(machine.ToString(), workerInfo);
 
@@ -876,6 +887,12 @@ namespace CryptoStats
         }
     }
 
+    public enum MinerType
+    {
+        TRex,
+        NBMiner,
+        GMiner
+    }
 
     public class Machine
     {
@@ -893,7 +910,11 @@ namespace CryptoStats
         }
         public override string ToString()
         {
-            return $"{Host} ({Nickname})";
+            return $"{Host} ({Nickname}) - {Miner_Type}";
+        }
+        public MinerType Miner_Type
+        {
+            get; set;
         }
     }
 

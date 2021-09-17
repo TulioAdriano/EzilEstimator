@@ -35,6 +35,8 @@ namespace CryptoStats
             this.cmdOk = new System.Windows.Forms.Button();
             this.cmdCancel = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.rdoNbiner = new System.Windows.Forms.RadioButton();
+            this.rdoTrex = new System.Windows.Forms.RadioButton();
             this.txtNickname = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -46,6 +48,7 @@ namespace CryptoStats
             this.txtEth = new System.Windows.Forms.TextBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.txtApiKey = new System.Windows.Forms.TextBox();
+            this.rdoGminer = new System.Windows.Forms.RadioButton();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -54,18 +57,18 @@ namespace CryptoStats
             // lstMachines
             // 
             this.lstMachines.FormattingEnabled = true;
-            this.lstMachines.Location = new System.Drawing.Point(140, 16);
-            this.lstMachines.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.lstMachines.Location = new System.Drawing.Point(144, 16);
+            this.lstMachines.Margin = new System.Windows.Forms.Padding(2);
             this.lstMachines.Name = "lstMachines";
-            this.lstMachines.Size = new System.Drawing.Size(196, 139);
+            this.lstMachines.Size = new System.Drawing.Size(187, 169);
             this.lstMachines.TabIndex = 6;
             this.lstMachines.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.lstMachines_ItemCheck);
             this.lstMachines.KeyDown += new System.Windows.Forms.KeyEventHandler(this.lstMachines_KeyDown);
             // 
             // cmdAddMachine
             // 
-            this.cmdAddMachine.Location = new System.Drawing.Point(42, 113);
-            this.cmdAddMachine.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.cmdAddMachine.Location = new System.Drawing.Point(36, 150);
+            this.cmdAddMachine.Margin = new System.Windows.Forms.Padding(2);
             this.cmdAddMachine.Name = "cmdAddMachine";
             this.cmdAddMachine.Size = new System.Drawing.Size(60, 25);
             this.cmdAddMachine.TabIndex = 5;
@@ -75,8 +78,8 @@ namespace CryptoStats
             // 
             // cmdOk
             // 
-            this.cmdOk.Location = new System.Drawing.Point(104, 296);
-            this.cmdOk.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.cmdOk.Location = new System.Drawing.Point(103, 321);
+            this.cmdOk.Margin = new System.Windows.Forms.Padding(2);
             this.cmdOk.Name = "cmdOk";
             this.cmdOk.Size = new System.Drawing.Size(60, 25);
             this.cmdOk.TabIndex = 7;
@@ -87,16 +90,20 @@ namespace CryptoStats
             // cmdCancel
             // 
             this.cmdCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cmdCancel.Location = new System.Drawing.Point(183, 296);
-            this.cmdCancel.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.cmdCancel.Location = new System.Drawing.Point(182, 321);
+            this.cmdCancel.Margin = new System.Windows.Forms.Padding(2);
             this.cmdCancel.Name = "cmdCancel";
             this.cmdCancel.Size = new System.Drawing.Size(60, 25);
             this.cmdCancel.TabIndex = 8;
             this.cmdCancel.Text = "Cancel";
             this.cmdCancel.UseVisualStyleBackColor = true;
+            this.cmdCancel.Click += new System.EventHandler(this.cmdCancel_Click);
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.rdoGminer);
+            this.groupBox1.Controls.Add(this.rdoNbiner);
+            this.groupBox1.Controls.Add(this.rdoTrex);
             this.groupBox1.Controls.Add(this.txtNickname);
             this.groupBox1.Controls.Add(this.label4);
             this.groupBox1.Controls.Add(this.label3);
@@ -104,18 +111,40 @@ namespace CryptoStats
             this.groupBox1.Controls.Add(this.lstMachines);
             this.groupBox1.Controls.Add(this.cmdAddMachine);
             this.groupBox1.Location = new System.Drawing.Point(6, 120);
-            this.groupBox1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupBox1.Margin = new System.Windows.Forms.Padding(2);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.groupBox1.Size = new System.Drawing.Size(337, 167);
+            this.groupBox1.Padding = new System.Windows.Forms.Padding(2);
+            this.groupBox1.Size = new System.Drawing.Size(337, 194);
             this.groupBox1.TabIndex = 3;
             this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Machines (T-Rex)";
+            this.groupBox1.Text = "Machines";
+            // 
+            // rdoNbiner
+            // 
+            this.rdoNbiner.AutoSize = true;
+            this.rdoNbiner.Location = new System.Drawing.Point(67, 95);
+            this.rdoNbiner.Name = "rdoNbiner";
+            this.rdoNbiner.Size = new System.Drawing.Size(66, 17);
+            this.rdoNbiner.TabIndex = 8;
+            this.rdoNbiner.Text = "NBMiner";
+            this.rdoNbiner.UseVisualStyleBackColor = true;
+            // 
+            // rdoTrex
+            // 
+            this.rdoTrex.AutoSize = true;
+            this.rdoTrex.Checked = true;
+            this.rdoTrex.Location = new System.Drawing.Point(6, 95);
+            this.rdoTrex.Name = "rdoTrex";
+            this.rdoTrex.Size = new System.Drawing.Size(54, 17);
+            this.rdoTrex.TabIndex = 7;
+            this.rdoTrex.TabStop = true;
+            this.rdoTrex.Text = "T-Rex";
+            this.rdoTrex.UseVisualStyleBackColor = true;
             // 
             // txtNickname
             // 
             this.txtNickname.Location = new System.Drawing.Point(6, 69);
-            this.txtNickname.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.txtNickname.Margin = new System.Windows.Forms.Padding(2);
             this.txtNickname.Name = "txtNickname";
             this.txtNickname.Size = new System.Drawing.Size(134, 20);
             this.txtNickname.TabIndex = 4;
@@ -143,7 +172,7 @@ namespace CryptoStats
             // txtHost
             // 
             this.txtHost.Location = new System.Drawing.Point(6, 30);
-            this.txtHost.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.txtHost.Margin = new System.Windows.Forms.Padding(2);
             this.txtHost.Name = "txtHost";
             this.txtHost.Size = new System.Drawing.Size(134, 20);
             this.txtHost.TabIndex = 3;
@@ -155,9 +184,9 @@ namespace CryptoStats
             this.groupBox2.Controls.Add(this.txtZil);
             this.groupBox2.Controls.Add(this.txtEth);
             this.groupBox2.Location = new System.Drawing.Point(6, 6);
-            this.groupBox2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupBox2.Margin = new System.Windows.Forms.Padding(2);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupBox2.Padding = new System.Windows.Forms.Padding(2);
             this.groupBox2.Size = new System.Drawing.Size(337, 64);
             this.groupBox2.TabIndex = 4;
             this.groupBox2.TabStop = false;
@@ -186,18 +215,18 @@ namespace CryptoStats
             // txtZil
             // 
             this.txtZil.Location = new System.Drawing.Point(36, 37);
-            this.txtZil.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.txtZil.Margin = new System.Windows.Forms.Padding(2);
             this.txtZil.Name = "txtZil";
-            this.txtZil.Size = new System.Drawing.Size(300, 20);
+            this.txtZil.Size = new System.Drawing.Size(295, 20);
             this.txtZil.TabIndex = 1;
             this.txtZil.TextChanged += new System.EventHandler(this.txtZil_TextChanged);
             // 
             // txtEth
             // 
             this.txtEth.Location = new System.Drawing.Point(36, 16);
-            this.txtEth.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.txtEth.Margin = new System.Windows.Forms.Padding(2);
             this.txtEth.Name = "txtEth";
-            this.txtEth.Size = new System.Drawing.Size(300, 20);
+            this.txtEth.Size = new System.Drawing.Size(295, 20);
             this.txtEth.TabIndex = 0;
             this.txtEth.TextChanged += new System.EventHandler(this.txtEth_TextChanged);
             // 
@@ -205,9 +234,9 @@ namespace CryptoStats
             // 
             this.groupBox3.Controls.Add(this.txtApiKey);
             this.groupBox3.Location = new System.Drawing.Point(6, 74);
-            this.groupBox3.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupBox3.Margin = new System.Windows.Forms.Padding(2);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupBox3.Padding = new System.Windows.Forms.Padding(2);
             this.groupBox3.Size = new System.Drawing.Size(337, 43);
             this.groupBox3.TabIndex = 4;
             this.groupBox3.TabStop = false;
@@ -216,11 +245,21 @@ namespace CryptoStats
             // txtApiKey
             // 
             this.txtApiKey.Location = new System.Drawing.Point(6, 17);
-            this.txtApiKey.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.txtApiKey.Margin = new System.Windows.Forms.Padding(2);
             this.txtApiKey.Name = "txtApiKey";
-            this.txtApiKey.Size = new System.Drawing.Size(330, 20);
+            this.txtApiKey.Size = new System.Drawing.Size(325, 20);
             this.txtApiKey.TabIndex = 2;
             this.txtApiKey.TextChanged += new System.EventHandler(this.txtApiKey_TextChanged);
+            // 
+            // rdoGminer
+            // 
+            this.rdoGminer.AutoSize = true;
+            this.rdoGminer.Location = new System.Drawing.Point(67, 118);
+            this.rdoGminer.Name = "rdoGminer";
+            this.rdoGminer.Size = new System.Drawing.Size(59, 17);
+            this.rdoGminer.TabIndex = 9;
+            this.rdoGminer.Text = "GMiner";
+            this.rdoGminer.UseVisualStyleBackColor = true;
             // 
             // frmConfiguration
             // 
@@ -228,7 +267,7 @@ namespace CryptoStats
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.cmdCancel;
-            this.ClientSize = new System.Drawing.Size(348, 331);
+            this.ClientSize = new System.Drawing.Size(348, 357);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
@@ -236,7 +275,7 @@ namespace CryptoStats
             this.Controls.Add(this.cmdOk);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "frmConfiguration";
@@ -271,5 +310,8 @@ namespace CryptoStats
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox txtHost;
+        private System.Windows.Forms.RadioButton rdoNbiner;
+        private System.Windows.Forms.RadioButton rdoTrex;
+        private System.Windows.Forms.RadioButton rdoGminer;
     }
 }

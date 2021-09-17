@@ -190,7 +190,7 @@ namespace CryptoStats
         {
             get; set;
         }
-        public long[][] power
+        public List<long[]> power
         {
             get; set;
         }

@@ -73,8 +73,8 @@ namespace CryptoStats
                 MessageBox.Show("Invalid host name. Please type the computer name or IP Address only.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-
-            machines.Add(new Machine { Host = txtHost.Text, Nickname = txtNickname.Text, Enabled = true });
+            var minerType = (rdoTrex.Checked ? MinerType.TRex : (rdoNbiner.Checked ? MinerType.NBMiner : MinerType.GMiner));
+            machines.Add(new Machine { Host = txtHost.Text, Nickname = txtNickname.Text, Enabled = true, Miner_Type = minerType });
             lstMachines.Items.Add(machines.Last(), true);
             txtHost.Text = string.Empty;
             txtNickname.Text = string.Empty;
@@ -124,6 +124,11 @@ namespace CryptoStats
                 machines.RemoveAt(lstMachines.SelectedIndex);
                 lstMachines.Items.Remove(lstMachines.SelectedItem);
             }
+        }
+
+        private void cmdCancel_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
