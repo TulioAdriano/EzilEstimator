@@ -78,6 +78,9 @@ namespace CryptoStats
             lstMachines.Items.Add(machines.Last(), true);
             txtHost.Text = string.Empty;
             txtNickname.Text = string.Empty;
+
+            lstMachines.SelectedIndex = -1;
+            cmdUpdate.Enabled = false;
         }
 
         private void lstMachines_ItemCheck(object sender, ItemCheckEventArgs e)
@@ -123,12 +126,51 @@ namespace CryptoStats
             {
                 machines.RemoveAt(lstMachines.SelectedIndex);
                 lstMachines.Items.Remove(lstMachines.SelectedItem);
+                cmdUpdate.Enabled = false;
             }
         }
 
         private void cmdCancel_Click(object sender, EventArgs e)
         {
+            this.DialogResult = DialogResult.Cancel;
+        }
 
+        private void lstMachines_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (lstMachines.SelectedIndex < 0)
+            {
+                return;
+            }
+
+            var machine = (Machine)lstMachines.SelectedItem;
+
+            txtHost.Text = machine.Host;
+            txtNickname.Text = machine.Nickname;
+            switch (machine.Miner_Type)
+            {
+                case MinerType.TRex:
+                    rdoTrex.Checked = true;
+                    break;
+                case MinerType.NBMiner:
+                    rdoNbiner.Checked = true;
+                    break;
+                case MinerType.GMiner:
+                    rdoGminer.Checked = true;
+                    break;
+            }
+
+            cmdUpdate.Enabled = true; 
+        }
+
+        private void cmdUpdate_Click(object sender, EventArgs e)
+        {
+            ((Machine)lstMachines.SelectedItem).Host = txtHost.Text;
+            ((Machine)lstMachines.SelectedItem).Nickname = txtNickname.Text;
+            var minerType = (rdoTrex.Checked ? MinerType.TRex : (rdoNbiner.Checked ? MinerType.NBMiner : MinerType.GMiner));
+            ((Machine)lstMachines.SelectedItem).Miner_Type = minerType;
+
+            machines[lstMachines.SelectedIndex] = lstMachines.SelectedItem as Machine;
+            lstMachines.Refresh();
         }
     }
 }

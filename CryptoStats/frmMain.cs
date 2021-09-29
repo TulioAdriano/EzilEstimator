@@ -535,13 +535,34 @@ namespace CryptoStats
                         switch (machine.Miner_Type)
                         {
                             case MinerType.TRex:
-                                workerInfo = TRexAPI.GetFullSummary(machine.Host);
+                                if (machine.Host.Contains(":"))
+                                {
+                                    workerInfo = TRexAPI.GetFullSummary(machine.Host.Split(':')[0], Convert.ToInt32(machine.Host.Split(':')[1]));
+                                }
+                                else
+                                {
+                                    workerInfo = TRexAPI.GetFullSummary(machine.Host);
+                                } 
                                 break;
                             case MinerType.NBMiner:
-                                workerInfo = NbminerAPI.GetTrexSummary(machine.Host);
+                                if (machine.Host.Contains(":"))
+                                {
+                                    workerInfo = NbminerAPI.GetTrexSummary(machine.Host.Split(':')[0], Convert.ToInt32(machine.Host.Split(':')[1]));
+                                }
+                                else
+                                {
+                                    workerInfo = NbminerAPI.GetTrexSummary(machine.Host);
+                                }
                                 break;
                             case MinerType.GMiner:
-                                workerInfo = GMinerAPI.GetTrexSummary(machine.Host);
+                                if (machine.Host.Contains(":"))
+                                {
+                                    workerInfo = GMinerAPI.GetTrexSummary(machine.Host.Split(':')[0], Convert.ToInt32(machine.Host.Split(':')[1]));
+                                }
+                                else
+                                {
+                                    workerInfo = GMinerAPI.GetTrexSummary(machine.Host);
+                                }
                                 break;
                         }
                     }
