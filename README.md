@@ -17,6 +17,9 @@ Support to NBMiner and GMiner has been added, but the hash rate graph won't work
 * See [GMiner readme.md file](https://github.com/develsoftware/GMinerRelease/blob/master/README.md) for more details on the API parameter.
 * See [NBMiner readme.md file](https://github.com/NebuTech/NBMiner/blob/master/readme.md) for more details on its parameters.
 
+### API Password
+This parameter only applies to T-Rex version 0.23 or above. If you set an API password, T-Rex will deny any API requests that don't carry the authorization token. Use the same password used to login the web-ui.
+
 # Usage
 Once machines and wallet information are configured, the application will fetch all data on startup. The hashrate graph will plot for the first machine in the list. 
 

@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -537,12 +538,22 @@ namespace CryptoStats
                             case MinerType.TRex:
                                 if (machine.Host.Contains(":"))
                                 {
-                                    workerInfo = TRexAPI.GetFullSummary(machine.Host.Split(':')[0], Convert.ToInt32(machine.Host.Split(':')[1]));
+                                    string host = machine.Host.Split(':')[0];
+                                    int port = Convert.ToInt32(machine.Host.Split(':')[1]);
+                                    if (!string.IsNullOrEmpty(machine.ApiPassword))
+                                    {
+                                        TRexAPI.Authorize(machine.ApiPassword, host, port);
+                                    }
+                                    workerInfo = TRexAPI.GetFullSummary(host, port);
                                 }
                                 else
                                 {
+                                    if (!string.IsNullOrEmpty(machine.ApiPassword))
+                                    {
+                                        TRexAPI.Authorize(machine.ApiPassword, machine.Host);
+                                    }
                                     workerInfo = TRexAPI.GetFullSummary(machine.Host);
-                                } 
+                                }
                                 break;
                             case MinerType.NBMiner:
                                 if (machine.Host.Contains(":"))
@@ -572,6 +583,25 @@ namespace CryptoStats
                     {
                         continue;
                     }
+                }
+                catch (AggregateException aex)
+                {
+                    var errorMessage = string.Empty;
+                    aex.Handle(ex =>
+                    {
+                        if (ex is HttpRequestException)
+                        {
+                            errorMessage = "(403: Forbidden) - Check API password";
+                        }
+                        return ex is HttpRequestException;
+                    });
+                    workerStats.Add($"{machine} - OFFLINE {errorMessage}", new TRexSummary());
+                    machine.Enabled = false;
+                }
+                catch (UnauthorizedAccessException ex) 
+                {
+                    workerStats.Add($"{machine} - OFFLINE {ex.Message}", new TRexSummary());
+                    machine.Enabled = false;
                 }
                 catch
                 {
@@ -934,6 +964,11 @@ namespace CryptoStats
             return $"{Host} ({Nickname}) - {Miner_Type}";
         }
         public MinerType Miner_Type
+        {
+            get; set;
+        }
+
+        public string ApiPassword
         {
             get; set;
         }

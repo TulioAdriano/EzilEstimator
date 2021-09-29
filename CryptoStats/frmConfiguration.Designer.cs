@@ -42,6 +42,7 @@ namespace CryptoStats
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.txtHost = new System.Windows.Forms.TextBox();
+            this.cmdUpdate = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
@@ -49,7 +50,8 @@ namespace CryptoStats
             this.txtEth = new System.Windows.Forms.TextBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.txtApiKey = new System.Windows.Forms.TextBox();
-            this.cmdUpdate = new System.Windows.Forms.Button();
+            this.txtApiPwd = new System.Windows.Forms.TextBox();
+            this.lblApiPwd = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -61,7 +63,7 @@ namespace CryptoStats
             this.lstMachines.Location = new System.Drawing.Point(144, 16);
             this.lstMachines.Margin = new System.Windows.Forms.Padding(2);
             this.lstMachines.Name = "lstMachines";
-            this.lstMachines.Size = new System.Drawing.Size(239, 169);
+            this.lstMachines.Size = new System.Drawing.Size(239, 199);
             this.lstMachines.TabIndex = 6;
             this.lstMachines.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.lstMachines_ItemCheck);
             this.lstMachines.SelectedIndexChanged += new System.EventHandler(this.lstMachines_SelectedIndexChanged);
@@ -69,7 +71,7 @@ namespace CryptoStats
             // 
             // cmdAddMachine
             // 
-            this.cmdAddMachine.Location = new System.Drawing.Point(80, 160);
+            this.cmdAddMachine.Location = new System.Drawing.Point(80, 191);
             this.cmdAddMachine.Margin = new System.Windows.Forms.Padding(2);
             this.cmdAddMachine.Name = "cmdAddMachine";
             this.cmdAddMachine.Size = new System.Drawing.Size(60, 25);
@@ -80,7 +82,7 @@ namespace CryptoStats
             // 
             // cmdOk
             // 
-            this.cmdOk.Location = new System.Drawing.Point(129, 321);
+            this.cmdOk.Location = new System.Drawing.Point(129, 356);
             this.cmdOk.Margin = new System.Windows.Forms.Padding(2);
             this.cmdOk.Name = "cmdOk";
             this.cmdOk.Size = new System.Drawing.Size(60, 25);
@@ -92,7 +94,7 @@ namespace CryptoStats
             // cmdCancel
             // 
             this.cmdCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cmdCancel.Location = new System.Drawing.Point(208, 321);
+            this.cmdCancel.Location = new System.Drawing.Point(208, 356);
             this.cmdCancel.Margin = new System.Windows.Forms.Padding(2);
             this.cmdCancel.Name = "cmdCancel";
             this.cmdCancel.Size = new System.Drawing.Size(60, 25);
@@ -103,6 +105,8 @@ namespace CryptoStats
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.txtApiPwd);
+            this.groupBox1.Controls.Add(this.lblApiPwd);
             this.groupBox1.Controls.Add(this.rdoGminer);
             this.groupBox1.Controls.Add(this.rdoNbiner);
             this.groupBox1.Controls.Add(this.rdoTrex);
@@ -117,7 +121,7 @@ namespace CryptoStats
             this.groupBox1.Margin = new System.Windows.Forms.Padding(2);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Padding = new System.Windows.Forms.Padding(2);
-            this.groupBox1.Size = new System.Drawing.Size(387, 194);
+            this.groupBox1.Size = new System.Drawing.Size(387, 232);
             this.groupBox1.TabIndex = 3;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Machines";
@@ -153,6 +157,7 @@ namespace CryptoStats
             this.rdoTrex.TabStop = true;
             this.rdoTrex.Text = "T-Rex";
             this.rdoTrex.UseVisualStyleBackColor = true;
+            this.rdoTrex.CheckedChanged += new System.EventHandler(this.rdoTrex_CheckedChanged);
             // 
             // txtNickname
             // 
@@ -189,6 +194,18 @@ namespace CryptoStats
             this.txtHost.Name = "txtHost";
             this.txtHost.Size = new System.Drawing.Size(134, 20);
             this.txtHost.TabIndex = 3;
+            // 
+            // cmdUpdate
+            // 
+            this.cmdUpdate.Enabled = false;
+            this.cmdUpdate.Location = new System.Drawing.Point(6, 191);
+            this.cmdUpdate.Margin = new System.Windows.Forms.Padding(2);
+            this.cmdUpdate.Name = "cmdUpdate";
+            this.cmdUpdate.Size = new System.Drawing.Size(60, 25);
+            this.cmdUpdate.TabIndex = 5;
+            this.cmdUpdate.Text = "Update";
+            this.cmdUpdate.UseVisualStyleBackColor = true;
+            this.cmdUpdate.Click += new System.EventHandler(this.cmdUpdate_Click);
             // 
             // groupBox2
             // 
@@ -264,16 +281,23 @@ namespace CryptoStats
             this.txtApiKey.TabIndex = 2;
             this.txtApiKey.TextChanged += new System.EventHandler(this.txtApiKey_TextChanged);
             // 
-            // cmdUpdate
+            // txtApiPwd
             // 
-            this.cmdUpdate.Location = new System.Drawing.Point(6, 160);
-            this.cmdUpdate.Margin = new System.Windows.Forms.Padding(2);
-            this.cmdUpdate.Name = "cmdUpdate";
-            this.cmdUpdate.Size = new System.Drawing.Size(60, 25);
-            this.cmdUpdate.TabIndex = 5;
-            this.cmdUpdate.Text = "Update";
-            this.cmdUpdate.UseVisualStyleBackColor = true;
-            this.cmdUpdate.Click += new System.EventHandler(this.cmdUpdate_Click);
+            this.txtApiPwd.Location = new System.Drawing.Point(6, 160);
+            this.txtApiPwd.Margin = new System.Windows.Forms.Padding(2);
+            this.txtApiPwd.Name = "txtApiPwd";
+            this.txtApiPwd.Size = new System.Drawing.Size(134, 20);
+            this.txtApiPwd.TabIndex = 11;
+            // 
+            // lblApiPwd
+            // 
+            this.lblApiPwd.AutoSize = true;
+            this.lblApiPwd.Location = new System.Drawing.Point(3, 145);
+            this.lblApiPwd.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblApiPwd.Name = "lblApiPwd";
+            this.lblApiPwd.Size = new System.Drawing.Size(111, 13);
+            this.lblApiPwd.TabIndex = 10;
+            this.lblApiPwd.Text = "API Password (T-Rex)";
             // 
             // frmConfiguration
             // 
@@ -281,7 +305,7 @@ namespace CryptoStats
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.cmdCancel;
-            this.ClientSize = new System.Drawing.Size(404, 357);
+            this.ClientSize = new System.Drawing.Size(404, 391);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
@@ -328,5 +352,7 @@ namespace CryptoStats
         private System.Windows.Forms.RadioButton rdoTrex;
         private System.Windows.Forms.RadioButton rdoGminer;
         private System.Windows.Forms.Button cmdUpdate;
+        private System.Windows.Forms.TextBox txtApiPwd;
+        private System.Windows.Forms.Label lblApiPwd;
     }
 }

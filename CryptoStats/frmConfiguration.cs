@@ -74,10 +74,11 @@ namespace CryptoStats
                 return;
             }
             var minerType = (rdoTrex.Checked ? MinerType.TRex : (rdoNbiner.Checked ? MinerType.NBMiner : MinerType.GMiner));
-            machines.Add(new Machine { Host = txtHost.Text, Nickname = txtNickname.Text, Enabled = true, Miner_Type = minerType });
+            machines.Add(new Machine { Host = txtHost.Text, Nickname = txtNickname.Text, Enabled = true, Miner_Type = minerType, ApiPassword = txtApiPwd.Text });
             lstMachines.Items.Add(machines.Last(), true);
             txtHost.Text = string.Empty;
             txtNickname.Text = string.Empty;
+            txtApiPwd.Text = string.Empty;
 
             lstMachines.SelectedIndex = -1;
             cmdUpdate.Enabled = false;
@@ -146,6 +147,7 @@ namespace CryptoStats
 
             txtHost.Text = machine.Host;
             txtNickname.Text = machine.Nickname;
+            txtApiPwd.Text = machine.ApiPassword;
             switch (machine.Miner_Type)
             {
                 case MinerType.TRex:
@@ -168,9 +170,19 @@ namespace CryptoStats
             ((Machine)lstMachines.SelectedItem).Nickname = txtNickname.Text;
             var minerType = (rdoTrex.Checked ? MinerType.TRex : (rdoNbiner.Checked ? MinerType.NBMiner : MinerType.GMiner));
             ((Machine)lstMachines.SelectedItem).Miner_Type = minerType;
+            ((Machine)lstMachines.SelectedItem).ApiPassword = txtApiPwd.Text;
 
             machines[lstMachines.SelectedIndex] = lstMachines.SelectedItem as Machine;
             lstMachines.Refresh();
+        }
+
+        private void rdoTrex_CheckedChanged(object sender, EventArgs e)
+        {
+            txtApiPwd.Enabled = lblApiPwd.Enabled = rdoTrex.Checked;
+            if (!rdoTrex.Checked)
+            {
+                txtApiPwd.Text = string.Empty;
+            }
         }
     }
 }

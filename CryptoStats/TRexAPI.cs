@@ -10,6 +10,8 @@ namespace CryptoStats
 {
     public class TRexAPI
     {
+        private static string sid;
+
         public static TRexSummary GetSummary(string endPointIP, int endPointPort = 4067)
         {
             TRexSummary trexSummary = null;
@@ -27,14 +29,53 @@ namespace CryptoStats
             TRexSummary trexSummary = null;
             using (HttpClient httpClient = new HttpClient())
             {
-                var request = $"http://{endPointIP}:{endPointPort}/summary?last-stat-ts=0";
+                var request = $"http://{endPointIP}:{endPointPort}/summary?last-stat-ts=0{(sid != string.Empty ? "&sid=" + sid : string.Empty)}";
                 var response = httpClient.GetStringAsync(new Uri(request)).Result;
                 trexSummary = JsonConvert.DeserializeObject<TRexSummary>(response);
             }
 
             return trexSummary;
         }
+
+        public static void Authorize(string password, string endPointIP, int endPointPort = 4067)
+        {
+            if (!string.IsNullOrEmpty(sid))
+            {
+                return;
+            }
+
+            AuthorizationResult authorizationResult = null;
+            using (HttpClient httpClient = new HttpClient())
+            {
+                var request = $"http://{endPointIP}:{endPointPort}/login?password={password}";
+                var response = httpClient.GetStringAsync(new Uri(request)).Result;
+                authorizationResult = JsonConvert.DeserializeObject<AuthorizationResult>(response);
+            }
+
+            if (authorizationResult.success)
+            {
+                sid = authorizationResult.sid;
+            }
+            else
+            {
+                throw new UnauthorizedAccessException("API password failed");
+            }
+        }
     }
+
+
+    public class AuthorizationResult
+    {
+        public string sid
+        {
+            get; set;
+        }
+        public bool success
+        {
+            get; set;
+        }
+    }
+
 
     public class TRexSummary
     {
