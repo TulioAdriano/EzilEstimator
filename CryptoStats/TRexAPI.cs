@@ -39,11 +39,6 @@ namespace CryptoStats
 
         public static void Authorize(string password, string endPointIP, int endPointPort = 4067)
         {
-            if (!string.IsNullOrEmpty(sid))
-            {
-                return;
-            }
-
             AuthorizationResult authorizationResult = null;
             using (HttpClient httpClient = new HttpClient())
             {

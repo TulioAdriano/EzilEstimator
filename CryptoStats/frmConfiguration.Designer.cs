@@ -35,6 +35,8 @@ namespace CryptoStats
             this.cmdOk = new System.Windows.Forms.Button();
             this.cmdCancel = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.txtApiPwd = new System.Windows.Forms.TextBox();
+            this.lblApiPwd = new System.Windows.Forms.Label();
             this.rdoGminer = new System.Windows.Forms.RadioButton();
             this.rdoNbiner = new System.Windows.Forms.RadioButton();
             this.rdoTrex = new System.Windows.Forms.RadioButton();
@@ -50,8 +52,6 @@ namespace CryptoStats
             this.txtEth = new System.Windows.Forms.TextBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.txtApiKey = new System.Windows.Forms.TextBox();
-            this.txtApiPwd = new System.Windows.Forms.TextBox();
-            this.lblApiPwd = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -125,6 +125,26 @@ namespace CryptoStats
             this.groupBox1.TabIndex = 3;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Machines";
+            // 
+            // txtApiPwd
+            // 
+            this.txtApiPwd.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtApiPwd.Location = new System.Drawing.Point(6, 160);
+            this.txtApiPwd.Margin = new System.Windows.Forms.Padding(2);
+            this.txtApiPwd.Name = "txtApiPwd";
+            this.txtApiPwd.PasswordChar = '●';
+            this.txtApiPwd.Size = new System.Drawing.Size(134, 20);
+            this.txtApiPwd.TabIndex = 11;
+            // 
+            // lblApiPwd
+            // 
+            this.lblApiPwd.AutoSize = true;
+            this.lblApiPwd.Location = new System.Drawing.Point(3, 145);
+            this.lblApiPwd.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblApiPwd.Name = "lblApiPwd";
+            this.lblApiPwd.Size = new System.Drawing.Size(111, 13);
+            this.lblApiPwd.TabIndex = 10;
+            this.lblApiPwd.Text = "API Password (T-Rex)";
             // 
             // rdoGminer
             // 
@@ -280,24 +300,6 @@ namespace CryptoStats
             this.txtApiKey.Size = new System.Drawing.Size(377, 20);
             this.txtApiKey.TabIndex = 2;
             this.txtApiKey.TextChanged += new System.EventHandler(this.txtApiKey_TextChanged);
-            // 
-            // txtApiPwd
-            // 
-            this.txtApiPwd.Location = new System.Drawing.Point(6, 160);
-            this.txtApiPwd.Margin = new System.Windows.Forms.Padding(2);
-            this.txtApiPwd.Name = "txtApiPwd";
-            this.txtApiPwd.Size = new System.Drawing.Size(134, 20);
-            this.txtApiPwd.TabIndex = 11;
-            // 
-            // lblApiPwd
-            // 
-            this.lblApiPwd.AutoSize = true;
-            this.lblApiPwd.Location = new System.Drawing.Point(3, 145);
-            this.lblApiPwd.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.lblApiPwd.Name = "lblApiPwd";
-            this.lblApiPwd.Size = new System.Drawing.Size(111, 13);
-            this.lblApiPwd.TabIndex = 10;
-            this.lblApiPwd.Text = "API Password (T-Rex)";
             // 
             // frmConfiguration
             // 
