@@ -80,6 +80,7 @@
             this.lblSharesRatio = new System.Windows.Forms.Label();
             this.lblStaleShares = new System.Windows.Forms.Label();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.rdo24hHistory = new System.Windows.Forms.RadioButton();
             this.label4 = new System.Windows.Forms.Label();
             this.txtCustomHash = new System.Windows.Forms.NumericUpDown();
             this.rdoUseCustom = new System.Windows.Forms.RadioButton();
@@ -90,6 +91,7 @@
             this.txtStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.pbStatus = new System.Windows.Forms.ToolStripProgressBar();
             this.chkConsolidateMEV = new System.Windows.Forms.CheckBox();
+            this.lblRealHash = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picWorkerGraph)).BeginInit();
             this.menuStrip1.SuspendLayout();
@@ -612,6 +614,8 @@
             // 
             // groupBox4
             // 
+            this.groupBox4.Controls.Add(this.lblRealHash);
+            this.groupBox4.Controls.Add(this.rdo24hHistory);
             this.groupBox4.Controls.Add(this.label4);
             this.groupBox4.Controls.Add(this.txtCustomHash);
             this.groupBox4.Controls.Add(this.rdoUseCustom);
@@ -623,6 +627,18 @@
             this.groupBox4.TabIndex = 19;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "HashRate used for estimates";
+            // 
+            // rdo24hHistory
+            // 
+            this.rdo24hHistory.AutoSize = true;
+            this.rdo24hHistory.Location = new System.Drawing.Point(141, 19);
+            this.rdo24hHistory.Name = "rdo24hHistory";
+            this.rdo24hHistory.Size = new System.Drawing.Size(128, 17);
+            this.rdo24hHistory.TabIndex = 17;
+            this.rdo24hHistory.TabStop = true;
+            this.rdo24hHistory.Text = "Use 24h Hash History";
+            this.rdo24hHistory.UseVisualStyleBackColor = true;
+            this.rdo24hHistory.CheckedChanged += new System.EventHandler(this.rdo24hHistory_CheckedChanged);
             // 
             // label4
             // 
@@ -684,10 +700,10 @@
             this.rdoUseAverage.Checked = true;
             this.rdoUseAverage.Location = new System.Drawing.Point(6, 19);
             this.rdoUseAverage.Name = "rdoUseAverage";
-            this.rdoUseAverage.Size = new System.Drawing.Size(130, 17);
+            this.rdoUseAverage.Size = new System.Drawing.Size(105, 17);
             this.rdoUseAverage.TabIndex = 0;
             this.rdoUseAverage.TabStop = true;
-            this.rdoUseAverage.Text = "Use historical average";
+            this.rdoUseAverage.Text = "Use Ezil average";
             this.rdoUseAverage.UseVisualStyleBackColor = true;
             this.rdoUseAverage.CheckedChanged += new System.EventHandler(this.rdoUseAverage_CheckedChanged);
             // 
@@ -733,6 +749,15 @@
             this.chkConsolidateMEV.Text = "Consolidate MEV rewards";
             this.chkConsolidateMEV.UseVisualStyleBackColor = true;
             this.chkConsolidateMEV.CheckedChanged += new System.EventHandler(this.chkConsolidateMEV_CheckedChanged);
+            // 
+            // lblRealHash
+            // 
+            this.lblRealHash.AutoSize = true;
+            this.lblRealHash.Location = new System.Drawing.Point(159, 35);
+            this.lblRealHash.Name = "lblRealHash";
+            this.lblRealHash.Size = new System.Drawing.Size(49, 13);
+            this.lblRealHash.TabIndex = 18;
+            this.lblRealHash.Text = "(0 MH/s)";
             // 
             // frmMain
             // 
@@ -850,6 +875,8 @@
         private System.Windows.Forms.ToolStripStatusLabel txtStatus;
         private System.Windows.Forms.ToolStripProgressBar pbStatus;
         private System.Windows.Forms.CheckBox chkConsolidateMEV;
+        private System.Windows.Forms.RadioButton rdo24hHistory;
+        private System.Windows.Forms.Label lblRealHash;
     }
 }
 

@@ -20,6 +20,7 @@ namespace CryptoStats
         double hashPower = 0;
         ZilInfo zilInfo = null;
         private List<EzilReward> rewards24;
+        private float hist24Hash;
 
         public frmMain()
         {
@@ -94,9 +95,7 @@ namespace CryptoStats
                 UpdateText(lblEthBalance, $"Unpaid ETH: {balances.eth}");
                 UpdateText(lblZilBalance, $"Unpaid ZIL: {balances.zil}");
 
-                DateTime cutoffTime = (DateTime.UtcNow >= DateTime.UtcNow.Date.AddHours(6) ?
-                                                          DateTime.UtcNow.Date.AddHours(6) :
-                                                          DateTime.UtcNow.Date.AddDays(-1).AddHours(6));
+                DateTime cutoffTime = DateTime.Now.Date.ToUniversalTime();
 
                 var ethRewardsToday = rewards24.Where(c => c.coin.Equals("eth") && c.created_at > cutoffTime);
                 if (ethRewardsToday.Count() > 0)
@@ -123,6 +122,8 @@ namespace CryptoStats
                 var staleShares = history.Sum(c => c.stale_shares_count);
                 var invalidShares = history.Sum(c => c.invalid_shares_count);
                 var staleRatio = (staleShares / ((double)(acceptedShares + staleShares + invalidShares)));
+                hist24Hash = (float)history.Average(c => c.short_average_hashrate);
+                UpdateText(lblRealHash, $"({hist24Hash/1000000:0.##}) MH/s");
                 UpdateText(lblAcceptedShares, $"Total Accepted Shares: {acceptedShares}");
                 UpdateText(lblStaleShares, $"Total Stale Shares: {staleShares}");
                 UpdateText(lblInvalidShares, $"Total Invalid Shares: {invalidShares}");
@@ -433,6 +434,10 @@ namespace CryptoStats
             if (rdoUseAverage.Checked)
             {
                 selectedHash = averageHash;
+            }
+            else if (rdo24h.Checked)
+            {
+                selectedHash = hist24Hash; 
             }
             else if (rdoUseReported.Checked)
             {
@@ -899,6 +904,14 @@ namespace CryptoStats
         private void chkConsolidateMEV_CheckedChanged(object sender, EventArgs e)
         {
             LoadGrid(rewards24);
+        }
+
+        private void rdo24hHistory_CheckedChanged(object sender, EventArgs e)
+        {
+            if ((sender as RadioButton).Checked)
+            {
+                Task.Run(() => GetStatsAndBalance());
+            }
         }
     }
 
