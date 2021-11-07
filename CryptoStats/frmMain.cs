@@ -477,7 +477,15 @@ namespace CryptoStats
             float eth24h = ((coinInfoEth24.reward * 0.99f) * 24) * selectedHash;
             lblEthProfit.Text = $"24h Profitability: {eth24h} ETH (${eth24h * ethPrice:0.00})";
             float ezilDiff = eth - eth24h;
-            lblEzilDiff.Text = $"Difference to Ezil: {ezilDiff} ETH (${ezilDiff * ethPrice:0.00})";
+            lblEzilDiff.Text = $"Difference to pool: {ezilDiff} ETH (${ezilDiff * ethPrice:0.00}, {(ezilDiff/eth24h):P1})";
+            if (ezilDiff < 0)
+            {
+                lblEzilDiff.ForeColor = Color.Red;
+            }
+            else
+            {
+                lblEzilDiff.ForeColor = Color.DarkGreen;
+            }
             lblAverageHashrate.Text = $"Average Hash Rate = {averageHash / 1000000f:0.##} MH/s";
         }
 
@@ -533,7 +541,9 @@ namespace CryptoStats
                     miningRewards = JsonConvert.DeserializeObject<List<MiningReward>>(File.ReadAllText(jsonPath));
                     miningRewards.AddRange(rewards);
 
-                    rewards24.AddRange(miningRewards.Where(r => r.created_at >= DateTime.UtcNow.AddDays(-1)).ToList().Distinct());
+                    rewards24.AddRange(miningRewards.Distinct()
+                                                    .Where(r => r.created_at >= DateTime.UtcNow.AddDays(-1))
+                                                    .OrderByDescending(c => c.created_at).ToList());
                     File.WriteAllText(jsonPath, JsonConvert.SerializeObject(rewards24));
                 }
 
@@ -945,7 +955,8 @@ namespace CryptoStats
             }
             else
             {
-                GetEzilStats();
+                var rewards24 = GetEzilStats();
+                DisplayRewardGridInfo(rewards24);
             }
         }
 
