@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
@@ -19,7 +20,7 @@ namespace CryptoStats
         Wallet ezilWallet = new Wallet();
         double hashPower = 0;
         ZilInfo zilInfo = null;
-        private List<EzilReward> rewards24;
+        private List<MiningReward> rewards24;
         private float hist24Hash;
 
         public frmMain()
@@ -72,6 +73,7 @@ namespace CryptoStats
                 GetStatsAndBalance();
             });
 
+            zilTimer.Interval = rdoEzil.Checked ? 1000 : 60000;
             zilTimer.Start();
         }
 
@@ -122,7 +124,10 @@ namespace CryptoStats
                 var staleShares = history.Sum(c => c.stale_shares_count);
                 var invalidShares = history.Sum(c => c.invalid_shares_count);
                 var staleRatio = (staleShares / ((double)(acceptedShares + staleShares + invalidShares)));
-                hist24Hash = (float)history.Average(c => c.short_average_hashrate);
+                if (history.Count > 0)
+                {
+                    hist24Hash = (float)history.Average(c => c.short_average_hashrate);
+                }
                 UpdateText(lblRealHash, $"({hist24Hash/1000000:0.##}) MH/s");
                 UpdateText(lblAcceptedShares, $"Total Accepted Shares: {acceptedShares}");
                 UpdateText(lblStaleShares, $"Total Stale Shares: {staleShares}");
@@ -202,11 +207,12 @@ namespace CryptoStats
             }
         }
 
-        private List<EzilStats> GetHistory(Wallet ezilWallet, int timeFrame)
+        private List<MiningStats> GetHistory(Wallet ezilWallet, int timeFrame)
         {
             try
             {
-                var ezilStats = EzilAPI.GetHistoricalStats(ezilWallet, timeFrame);
+                IMiningPool miningPool = GetMiningPoolAPI();
+                var ezilStats = miningPool.GetHistoricalStats(ezilWallet, timeFrame);
                 return ezilStats;
             }
             catch (Exception ex)
@@ -219,6 +225,21 @@ namespace CryptoStats
             }
         }
 
+        private IMiningPool GetMiningPoolAPI()
+        {
+            IMiningPool miningPool;
+            if (rdoEzil.Checked)
+            {
+                miningPool = new EzilAPI();
+            }
+            else
+            {
+                miningPool = new FlexPoolAPI();
+            }
+
+            return miningPool;
+        }
+
         private void LoadConfig()
         {
             machines = JsonConvert.DeserializeObject<List<Machine>>(Properties.Settings.Default.Machines);
@@ -226,11 +247,12 @@ namespace CryptoStats
             ezilWallet = JsonConvert.DeserializeObject<Wallet>(Properties.Settings.Default.EzilWallet);
         }
 
-        private EzilBalance GetBalances()
+        private MiningBalance GetBalances()
         {
             try
             {
-                var balances = EzilAPI.GetBalances(ezilWallet);
+                IMiningPool miningPool = GetMiningPoolAPI();
+                var balances = miningPool.GetBalances(ezilWallet);
                 return balances;
             }
             catch (Exception ex)
@@ -326,7 +348,7 @@ namespace CryptoStats
             }
         }
 
-        private void DisplayRewardGridInfo(List<EzilReward> rewards24)
+        private void DisplayRewardGridInfo(List<MiningReward> rewards24)
         {
             if (dataGridView.InvokeRequired)
             {
@@ -341,14 +363,14 @@ namespace CryptoStats
             }
         }
 
-        private void LoadGrid(List<EzilReward> rewards24)
+        private void LoadGrid(List<MiningReward> rewards24)
         {
-            List<EzilReward> dataSource = new List<EzilReward>();
+            List<MiningReward> dataSource = new List<MiningReward>();
             if (chkConsolidateMEV.Checked)
             {
                 dataSource.AddRange(rewards24.Where(c=> c.coin.Equals("eth")
                                                      && c.block_number != null)
-                                             .GroupBy(b => b.block_number).Select(c => new EzilReward
+                                             .GroupBy(b => b.block_number).Select(c => new MiningReward
                 {
                     block_number = c.First().block_number,
                     amount = c.Sum(s => s.amount),
@@ -381,7 +403,7 @@ namespace CryptoStats
             lblEntryCount.Text = $"{rewards24.Count} entries ({rewards24.Count(c => c.coin.Equals("eth"))} ETH, {rewards24.Count(c => c.coin.Equals("zil"))} ZIL)";
         }
 
-        private void Display24hEarnings(float eth, float zil, EzilBalance balances)
+        private void Display24hEarnings(float eth, float zil, MiningBalance balances)
         {
             try
             {
@@ -411,7 +433,7 @@ namespace CryptoStats
             }
         }
 
-        private void UpdateUiLabels(float eth, float zil, EzilBalance balances, List<CoinInfo> coinInfoList, CoinInfo coinInfoEth24)
+        private void UpdateUiLabels(float eth, float zil, MiningBalance balances, List<CoinInfo> coinInfoList, CoinInfo coinInfoEth24)
         {
             var coinInfoCurrEth = coinInfoList.Where(d => d.coin.Equals("ETH")).FirstOrDefault();
             float ethPrice = coinInfoList.Where(d => d.coin.Equals("ETH")).FirstOrDefault().price;
@@ -459,9 +481,10 @@ namespace CryptoStats
             lblAverageHashrate.Text = $"Average Hash Rate = {averageHash / 1000000f:0.##} MH/s";
         }
 
-        private EzilCurrentStats GetCurrentStats()
+        private MiningCurrentStats GetCurrentStats()
         {
-            var ezilCurrentStats = EzilAPI.GetCurrentStats(ezilWallet);
+            IMiningPool miningPool = GetMiningPoolAPI();
+            var ezilCurrentStats = miningPool.GetCurrentStats(ezilWallet);
             return ezilCurrentStats;
         }
 
@@ -473,28 +496,46 @@ namespace CryptoStats
             return coinListings;
         }
 
-        private List<EzilReward> GetEzilStats()
+        private List<MiningReward> GetEzilStats()
         {
             try
             {
-                List<EzilReward> ezilRewards = new List<EzilReward>();
-                int page = 1;
-                do
+                IMiningPool miningPool = GetMiningPoolAPI();
+                List<MiningReward> rewards24 = new List<MiningReward>();
+                List<MiningReward> miningRewards = new List<MiningReward>();
+                if (miningPool.CanPageRewards)
                 {
-                    var rewards = EzilAPI.GetRewards(ezilWallet, page++, 999, "eth");
-                    ezilRewards.AddRange(rewards/*.Where(r => r.coin.Equals("eth"))*/);
-                } while (ezilRewards.Min(c => c.created_at) >= DateTime.UtcNow.AddDays(-1));
+                    int page = 1;
+                    do
+                    {
+                        var rewards = miningPool.GetRewards(ezilWallet, page++, 999, "eth");
+                        miningRewards.AddRange(rewards/*.Where(r => r.coin.Equals("eth"))*/);
+                    } while (miningRewards.Min(c => c.created_at) >= DateTime.UtcNow.AddDays(-1));
+                    rewards24 = miningRewards.Where(r => r.created_at >= DateTime.UtcNow.AddDays(-1)).ToList();
 
-                var rewards24 = ezilRewards.Where(r => r.created_at >= DateTime.UtcNow.AddDays(-1)).ToList();
-
-                page = 1;
-                ezilRewards.Clear();
-                do
+                    page = 1;
+                    miningRewards.Clear();
+                    do
+                    {
+                        var rewards = miningPool.GetRewards(ezilWallet, page++, 999, "zil");
+                        miningRewards.AddRange(rewards/*.Where(r => r.coin.Equals("eth"))*/);
+                    } while (miningRewards.Min(c => c.created_at) >= DateTime.UtcNow.AddDays(-1));
+                    rewards24.AddRange(miningRewards.Where(r => r.created_at >= DateTime.UtcNow.AddDays(-1)).ToList());
+                }
+                else
                 {
-                    var rewards = EzilAPI.GetRewards(ezilWallet, page++, 999, "zil");
-                    ezilRewards.AddRange(rewards/*.Where(r => r.coin.Equals("eth"))*/);
-                } while (ezilRewards.Min(c => c.created_at) >= DateTime.UtcNow.AddDays(-1));
-                rewards24.AddRange(ezilRewards.Where(r => r.created_at >= DateTime.UtcNow.AddDays(-1)).ToList());
+                    var rewards = miningPool.GetRewards(ezilWallet, 0, 999, "eth");
+                    var jsonPath = Path.Combine(Application.StartupPath, "rewards.db");
+                    if (!File.Exists(jsonPath))
+                    {
+                        File.WriteAllText(jsonPath, JsonConvert.SerializeObject(rewards));
+                    }
+                    miningRewards = JsonConvert.DeserializeObject<List<MiningReward>>(File.ReadAllText(jsonPath));
+                    miningRewards.AddRange(rewards);
+
+                    rewards24.AddRange(miningRewards.Where(r => r.created_at >= DateTime.UtcNow.AddDays(-1)).ToList().Distinct());
+                    File.WriteAllText(jsonPath, JsonConvert.SerializeObject(rewards24));
+                }
 
                 return rewards24;
             }
@@ -889,16 +930,23 @@ namespace CryptoStats
 
         private void zilTimer_Tick(object sender, EventArgs e)
         {
-            if (zilInfo == null || zilInfo.next_pow_time <= DateTime.UtcNow || ((int)(zilInfo.next_pow_time - DateTime.UtcNow).TotalMinutes % 5) == 0)
+            if (rdoEzil.Checked)
             {
-                zilInfo = EzilAPI.GetZilInfo();
-            }
+                if (zilInfo == null || zilInfo.next_pow_time <= DateTime.UtcNow || ((int)(zilInfo.next_pow_time - DateTime.UtcNow).TotalMinutes % 5) == 0)
+                {
+                    zilInfo = EzilAPI.GetZilInfo();
+                }
 
-            var zilPowTime = (zilInfo.next_pow_time - DateTime.UtcNow);
-            lblNextZil.Invoke(new MethodInvoker(() =>
+                var zilPowTime = (zilInfo.next_pow_time - DateTime.UtcNow);
+                lblNextZil.Invoke(new MethodInvoker(() =>
+                {
+                    lblNextZil.Text = $"Next ZIL round in: {zilPowTime.Hours}:{zilPowTime.Minutes:00}:{zilPowTime.Seconds:00} ";
+                }));
+            }
+            else
             {
-                lblNextZil.Text = $"Next ZIL round in: {zilPowTime.Hours}:{zilPowTime.Minutes:00}:{zilPowTime.Seconds:00} ";
-            }));
+                GetEzilStats();
+            }
         }
 
         private void chkConsolidateMEV_CheckedChanged(object sender, EventArgs e)
@@ -912,6 +960,24 @@ namespace CryptoStats
             {
                 Task.Run(() => GetStatsAndBalance());
             }
+        }
+
+        private void rdoEzil_CheckedChanged(object sender, EventArgs e)
+        {
+            if (rdoEzil.Checked)
+            {
+                zilTimer.Stop();
+                zilTimer.Interval = 1000;
+                zilTimer.Start();
+            }
+            else
+            {
+                zilTimer.Stop();
+                zilTimer.Interval = 60000;
+                zilTimer.Start();
+            }
+
+            Task.Run(() => GetStatsAndBalance());
         }
     }
 

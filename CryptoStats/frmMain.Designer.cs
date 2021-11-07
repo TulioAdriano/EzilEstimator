@@ -80,6 +80,7 @@
             this.lblSharesRatio = new System.Windows.Forms.Label();
             this.lblStaleShares = new System.Windows.Forms.Label();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.lblRealHash = new System.Windows.Forms.Label();
             this.rdo24hHistory = new System.Windows.Forms.RadioButton();
             this.label4 = new System.Windows.Forms.Label();
             this.txtCustomHash = new System.Windows.Forms.NumericUpDown();
@@ -91,7 +92,8 @@
             this.txtStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.pbStatus = new System.Windows.Forms.ToolStripProgressBar();
             this.chkConsolidateMEV = new System.Windows.Forms.CheckBox();
-            this.lblRealHash = new System.Windows.Forms.Label();
+            this.rdoEzil = new System.Windows.Forms.RadioButton();
+            this.rdoFlexPool = new System.Windows.Forms.RadioButton();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picWorkerGraph)).BeginInit();
             this.menuStrip1.SuspendLayout();
@@ -628,6 +630,15 @@
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "HashRate used for estimates";
             // 
+            // lblRealHash
+            // 
+            this.lblRealHash.AutoSize = true;
+            this.lblRealHash.Location = new System.Drawing.Point(159, 35);
+            this.lblRealHash.Name = "lblRealHash";
+            this.lblRealHash.Size = new System.Drawing.Size(49, 13);
+            this.lblRealHash.TabIndex = 18;
+            this.lblRealHash.Text = "(0 MH/s)";
+            // 
             // rdo24hHistory
             // 
             this.rdo24hHistory.AutoSize = true;
@@ -750,20 +761,36 @@
             this.chkConsolidateMEV.UseVisualStyleBackColor = true;
             this.chkConsolidateMEV.CheckedChanged += new System.EventHandler(this.chkConsolidateMEV_CheckedChanged);
             // 
-            // lblRealHash
+            // rdoEzil
             // 
-            this.lblRealHash.AutoSize = true;
-            this.lblRealHash.Location = new System.Drawing.Point(159, 35);
-            this.lblRealHash.Name = "lblRealHash";
-            this.lblRealHash.Size = new System.Drawing.Size(49, 13);
-            this.lblRealHash.TabIndex = 18;
-            this.lblRealHash.Text = "(0 MH/s)";
+            this.rdoEzil.AutoSize = true;
+            this.rdoEzil.Location = new System.Drawing.Point(818, 161);
+            this.rdoEzil.Name = "rdoEzil";
+            this.rdoEzil.Size = new System.Drawing.Size(58, 17);
+            this.rdoEzil.TabIndex = 22;
+            this.rdoEzil.Text = "Ezil.me";
+            this.rdoEzil.UseVisualStyleBackColor = true;
+            this.rdoEzil.CheckedChanged += new System.EventHandler(this.rdoEzil_CheckedChanged);
+            // 
+            // rdoFlexPool
+            // 
+            this.rdoFlexPool.AutoSize = true;
+            this.rdoFlexPool.Checked = true;
+            this.rdoFlexPool.Location = new System.Drawing.Point(909, 161);
+            this.rdoFlexPool.Name = "rdoFlexPool";
+            this.rdoFlexPool.Size = new System.Drawing.Size(76, 17);
+            this.rdoFlexPool.TabIndex = 22;
+            this.rdoFlexPool.TabStop = true;
+            this.rdoFlexPool.Text = "FlexPool.io";
+            this.rdoFlexPool.UseVisualStyleBackColor = true;
             // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(1362, 695);
+            this.Controls.Add(this.rdoFlexPool);
+            this.Controls.Add(this.rdoEzil);
             this.Controls.Add(this.chkConsolidateMEV);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.groupBox4);
@@ -877,6 +904,8 @@
         private System.Windows.Forms.CheckBox chkConsolidateMEV;
         private System.Windows.Forms.RadioButton rdo24hHistory;
         private System.Windows.Forms.Label lblRealHash;
+        private System.Windows.Forms.RadioButton rdoEzil;
+        private System.Windows.Forms.RadioButton rdoFlexPool;
     }
 }
 

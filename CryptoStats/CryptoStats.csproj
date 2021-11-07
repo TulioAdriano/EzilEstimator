@@ -55,8 +55,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CoinMarketCapAPI.cs" />
-    <Compile Include="EzilAPI.cs" />
+    <Compile Include="Classes\CoinMarketCapAPI.cs" />
+    <Compile Include="Classes\EzilAPI.cs" />
+    <Compile Include="Classes\FlexPoolAPI.cs" />
     <Compile Include="frmConfiguration.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -69,17 +70,19 @@
     <Compile Include="frmMain.Designer.cs">
       <DependentUpon>frmMain.cs</DependentUpon>
     </Compile>
-    <Compile Include="MinerstatsAPI.cs" />
-    <Compile Include="GMinerAPI.cs" />
-    <Compile Include="NbminerAPI.cs" />
+    <Compile Include="Classes\MinerstatsAPI.cs" />
+    <Compile Include="Classes\GMinerAPI.cs" />
+    <Compile Include="Interfaces\IMiningPool.cs" />
+    <Compile Include="Classes\NbminerAPI.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TRexAPI.cs" />
+    <Compile Include="Classes\TRexAPI.cs" />
     <EmbeddedResource Include="frmConfiguration.resx">
       <DependentUpon>frmConfiguration.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmMain.resx">
       <DependentUpon>frmMain.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

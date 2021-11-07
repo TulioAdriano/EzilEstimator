@@ -8,39 +8,40 @@ using System.Threading.Tasks;
 
 namespace CryptoStats
 {
-    public class EzilAPI
+    public class EzilAPI : IMiningPool
     {
+        public bool CanPageRewards => true;
 
-        public static List<EzilReward> GetRewards(Wallet wallet, int page = 1, int entries = 10, string coin = "eth")
+        public List<MiningReward> GetRewards(Wallet wallet, int page = 1, int entries = 10, string coin = "eth")
         {
-            List<EzilReward> rewards = new List<EzilReward>();
+            List<MiningReward> rewards = new List<MiningReward>();
 
             using (HttpClient httpClient = new HttpClient())
             {
                 string request = $"https://billing.ezil.me/rewards/{wallet.Eth}.{wallet.Zil}?page={page}&per_page={entries}&coin={coin}";
                 string response = httpClient.GetStringAsync(new Uri(request)).Result;
-                rewards = JsonConvert.DeserializeObject<List<EzilReward>>(response);
+                rewards = JsonConvert.DeserializeObject<List<MiningReward>>(response);
             }
 
             return rewards;
         }
-        public static EzilBalance GetBalances(Wallet wallet)
+        public MiningBalance GetBalances(Wallet wallet)
         {
-            EzilBalance balances = null;
+            MiningBalance balances = null;
 
             using (HttpClient httpClient = new HttpClient())
             {
                 string request = $"https://billing.ezil.me/balances/{wallet.Eth}.{wallet.Zil}";
                 string response = httpClient.GetStringAsync(new Uri(request)).Result;
-                balances = JsonConvert.DeserializeObject<EzilBalance>(response);
+                balances = JsonConvert.DeserializeObject<MiningBalance>(response);
             }
 
             return balances;
         }
 
-        public static List<EzilStats> GetHistoricalStats(Wallet wallet, int timeFrame)
+        public List<MiningStats> GetHistoricalStats(Wallet wallet, int timeFrame)
         {
-            List<EzilStats> stats = new List<EzilStats>();
+            List<MiningStats> stats = new List<MiningStats>();
             string timeFrom = DateTime.UtcNow.AddHours(-timeFrame).ToString("yyyy-MM-ddTHH:mm:ss.fffZ");
             string timeTo = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss.fffZ");
 
@@ -48,21 +49,21 @@ namespace CryptoStats
             {
                 string request = $"https://stats.ezil.me/historical_stats/{wallet.Eth}.{wallet.Zil}?time_from={timeFrom}&time_to={timeTo}";
                 string response = httpClient.GetStringAsync(new Uri(request)).Result;
-                stats = JsonConvert.DeserializeObject<List<EzilStats>>(response);
+                stats = JsonConvert.DeserializeObject<List<MiningStats>>(response);
             }
 
             return stats;
         }
 
-        public static EzilCurrentStats GetCurrentStats(Wallet wallet, bool includeReported = true)
+        public MiningCurrentStats GetCurrentStats(Wallet wallet, bool includeReported = true)
         {
-            EzilCurrentStats currentStats = null;
+            MiningCurrentStats currentStats = null;
 
             using (HttpClient httpClient = new HttpClient())
             {
                 string request = $"https://stats.ezil.me/current_stats/{wallet.Eth}.{wallet.Zil}{(includeReported ? "/reported" : string.Empty)}";
                 string response = httpClient.GetStringAsync(new Uri(request)).Result;
-                currentStats = JsonConvert.DeserializeObject<EzilCurrentStats>(response);
+                currentStats = JsonConvert.DeserializeObject<MiningCurrentStats>(response);
             }
 
             return currentStats;
@@ -86,7 +87,7 @@ namespace CryptoStats
         }
     }
 
-    public class EzilReward
+    public class MiningReward : IEquatable<MiningReward>
     {
         public float amount
         {
@@ -112,9 +113,41 @@ namespace CryptoStats
         {
             get; set;
         }
+
+        public bool Equals(MiningReward other)
+        {
+            //Check whether the compared object is null.
+            if (Object.ReferenceEquals(other, null))
+                return false;
+
+            //Check whether the compared object references the same data.
+            if (Object.ReferenceEquals(this, other))
+                return true;
+
+            //Check whether the products' properties are equal.
+            return created_at.Equals(other.created_at) 
+                && block_number.Equals(other.block_number)
+                && amount.Equals(other.amount)
+                && cashback_amount.Equals(other.cashback_amount)
+                && coin.Equals(other.coin)
+                && id.Equals(other.id);
+        }
+        public override int GetHashCode()
+        {
+            int hashCreated_at = created_at == null ? 0 : created_at.GetHashCode();
+            int hashBlock_number = block_number == null ? 0 : block_number.GetHashCode();
+            int hashAmount = amount.GetHashCode();
+            int hashCashback_amount = cashback_amount.GetHashCode();
+            int hashCoin = coin == null ? 0 : coin.GetHashCode();
+            int hashId = id.GetHashCode();
+
+            //Calculate the hash code for the object.
+            return hashCreated_at ^ hashBlock_number ^ hashAmount ^ hashCashback_amount ^ hashCoin ^ hashId;
+        }
+
     }
 
-    public class EzilBalance
+    public class MiningBalance
     {
         public float eth
         {
@@ -134,7 +167,7 @@ namespace CryptoStats
         }
     }
 
-    public class EzilStats
+    public class MiningStats
     {
         public DateTime time
         {
@@ -175,7 +208,7 @@ namespace CryptoStats
     }
 
 
-    public class EzilCurrentStats
+    public class MiningCurrentStats
     {
         public Eth eth
         {
